@@ -124,7 +124,7 @@ class myThread1(threading.Thread):
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
-                print flow_abcd1
+                print bc_abcd1
 
             except (ValueError,IndexError) as e:
                continue
@@ -218,7 +218,9 @@ class myThread2(threading.Thread):
 
             try:
                 
-                bc_ae16 = float(values_ae16[2])
+                bc1 = float(values_ae16[2])
+                bc_ae16 = bc1/1000
+                
                 atn_ae16 = float(values_ae16[9])
 ##                print bc_ae16
             except(ValueError,IndexError) as e:
@@ -307,7 +309,9 @@ class myThread3(threading.Thread):
             values_ae33 = ser3.split('\n')[0].split(',')
 
             try:
-                bc_ae33 = float(values_ae33[9])
+                bc2 = float(values_ae33[9])
+                bc_ae33 = bc2/1000
+                
 ##                print bc_ae33
             except(ValueError,IndexError) as e:
                 continue
@@ -698,7 +702,8 @@ class myThread7(threading.Thread):
             values_ma300 = ser7.split('\n')[0].split(',')
 
             try:
-                bc_ma300 = float(values_ma300[44])
+                bc3 = float(values_ma300[44])
+                bc_ma300 = bc3/1000
 
             except (ValueError, IndexError) as e:
                continue
@@ -902,7 +907,8 @@ class myThread9(threading.Thread):
             values_caps = ser9.split('\n')[0].split(',')
 
             try:
-                nox_caps = float(values_caps[1])
+                nox1 = float(values_caps[1])
+                nox_caps = nox1/1000
 
             except (ValueError, IndexError) as e:
                continue
