@@ -1094,7 +1094,7 @@ class myThread10(threading.Thread):
             with open(self.logfile10, "a") as fp:
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
 conf_file = "local_server.yaml"
-test_client = Influx_Dataframe_Client(conf_file,'local_db_config')
+test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1(serial1)
 ##thread2=myThread2(serial2)
 ##thread3=myThread3(serial3)
