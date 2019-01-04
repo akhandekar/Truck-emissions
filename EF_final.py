@@ -9,6 +9,8 @@ import os, sys, csv, re, math
 
 
 
+
+
 def serialGeneric(device,baudrate):
     ser = serial.Serial (port=device,
     baudrate=baudrate,
@@ -72,7 +74,7 @@ serial1=serialGeneric("/dev/ttyUSB0",57600)  ##abcd
 ##serial7=serialGeneric("/dev/ttyUSB8",1000000)  ##ma300
 ##serial8=serialGeneric("/dev/ttyUSB9",19200)  ##vaisala
 ##serial9=serialGeneric("/dev/ttyUSB1",9600)  ##caps
-        
+
 ##ucb
 ##serial10= serial.Serial (port='/dev/ttyUSB0',
 ##        baudrate=9600,
@@ -114,6 +116,7 @@ class myThread1(threading.Thread):
     def run(self):
         i = 0
         #while i < 240:
+
         while True:
             ser1 = self.ser.readline()
             time_str1 = dt.datetime.now().strftime('%H:%M:%S')
@@ -124,6 +127,19 @@ class myThread1(threading.Thread):
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
+
+                json =   {
+                    'fields': {
+                        'atn_abcd': atn_abcd1,
+                        'bc_abcd': bc_abcd1,
+                        'flow_abcd': flow_abcd1
+                        },
+                    'time': time_str1,
+                    'tags': {
+                        'sensor_number': 1,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
                 print bc_abcd1
 
             except (ValueError,IndexError) as e:
@@ -158,7 +174,7 @@ class myThread1(threading.Thread):
                 self.xp_abcd1.append(time_str1)
 ##                print self.xp_abcd1
                 with open(self.logfile1, "a") as fp:
-                    fp.write("%s,%s,%s\n"%(time_str1,bc_abcd1,area_abcd))                    
+                    fp.write("%s,%s,%s\n"%(time_str1,bc_abcd1,area_abcd))
 
                 del self.yp_abcd1[:]
                 print("ABCD Peak finished")
@@ -217,15 +233,15 @@ class myThread2(threading.Thread):
             values_ae16 = ser2.split('\n')[0].split(',')
 
             try:
-                
+
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
-                
+
                 atn_ae16 = float(values_ae16[9])
 ##                print bc_ae16
             except(ValueError,IndexError) as e:
                 continue
-        
+
             run_avg2 = sum(self.ynp_ae16[-self.N2:])/float(self.N2)
 ##            print run_avg2
 
@@ -248,7 +264,7 @@ class myThread2(threading.Thread):
                     self.xp_ae16.append(time_str2)
                     with open(self.logfile2, "a") as fp:
                         fp.write("%s,%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16,area_ae16))
-                        
+
                     del self.yp_ae16[:]
                     print("AE16 Peak end")
 
@@ -262,7 +278,7 @@ class myThread2(threading.Thread):
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ae16.append(time_str2)
-                
+
                 self.polluting_ae16.append(True)
                 self.yp_ae16.append(bc_ae16)
 
@@ -311,17 +327,17 @@ class myThread3(threading.Thread):
             try:
                 bc2 = float(values_ae33[9])
                 bc_ae33 = bc2/1000
-                
+
 ##                print bc_ae33
             except(ValueError,IndexError) as e:
                 continue
 
-        
+
             run_avg3 = sum(self.ynp_ae33[-self.N3:])/float(self.N3)
 ##            print run_avg3
             dif3 = abs(run_avg3 - bc_ae33)
 ##            print dif3
-            
+
             self.ym_ae33.append(run_avg3)
 
             self.xs_ae33.append(time_str3)
@@ -338,7 +354,7 @@ class myThread3(threading.Thread):
                     self.xp_ae33.append(time_str3)
 ##                    print time_str3
                     with open(self.logfile3, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str3,bc_ae33,area_ae33))                    
+                        fp.write("%s,%s, %s\n"%(time_str3,bc_ae33,area_ae33))
 
                     del self.yp_ae33[:]
                     print("AE33 Peak end")
@@ -397,13 +413,13 @@ class myThread4(threading.Thread):
             ser4 = self.ser.readline()
 ##            print ser4
             time_str4 = dt.datetime.now().strftime('%H:%M:%S')
-            
+
             try:
                 values_li820 = re.split(r'[<>]', ser4)
 
                 co2_li820 = float(values_li820[14])
 ##                print co2_li820
-                
+
             except(ValueError,IndexError) as e:
                 continue
 
@@ -414,14 +430,14 @@ class myThread4(threading.Thread):
 ##            print run_avg4
             dif4 = abs(run_avg4 - co2_li820)
 ##            print dif4
-        
+
             self.ym_li820.append(run_avg4)
 
             self.xs_li820.append(time_str4)
             self.ys_li820.append(co2_li820)
             self.thresh_li820 = 0.7* run_avg4
-            
-            
+
+
 
             if dif4 < self.thresh_li820:
                 # No event
@@ -434,7 +450,7 @@ class myThread4(threading.Thread):
 ##                    print self.li820_areas
                     self.xp_li820.append(time_str4)
                     with open(self.logfile4, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str4,co2_li820,area_li820))                    
+                        fp.write("%s,%s, %s\n"%(time_str4,co2_li820,area_li820))
 
                     del self.yp_li820[:]
                     print("LI820 Peak end")
@@ -442,10 +458,10 @@ class myThread4(threading.Thread):
                 self.polluting_li820.append(False)
                 self.ynp_li820.append(co2_li820)
 ##                print self.ynp_li820
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_li820[-1] == False:
                     print("LI820 Peak start")
                     # Just started polluting
@@ -453,16 +469,16 @@ class myThread4(threading.Thread):
                     self.xp_li820.append(time_str4)
 
                 self.polluting_li820.append(True)
-                self.yp_li820.append(co2_li820) 
+                self.yp_li820.append(co2_li820)
 ##                self.peak_li820(time_str,co2_li820)
 ##                print self.yp_li820
-            
+
             m+= 1
 
             with open(self.logfile4, "a") as fp:
                 fp.write("%s,%s\n"%(time_str4,co2_li820))
-                
-        
+
+
 
 
 class myThread5(threading.Thread):
@@ -489,9 +505,9 @@ class myThread5(threading.Thread):
         self.ym_li7000 = []
         # Polluting state
         self.polluting_li7000 = [False]
-    
+
         self.thresh_li7000 = 700
-        
+
         self.logfile5 = "li7000_readings.csv"
 
 
@@ -509,7 +525,7 @@ class myThread5(threading.Thread):
             except (ValueError,IndexError) as e:
                continue
 
-            
+
             self.ys_li7000.append(co2_li7000)
 ##            print ys_li7000
 
@@ -517,13 +533,13 @@ class myThread5(threading.Thread):
 ##            print run_avg5
             dif5 = abs(run_avg5 - co2_li7000)
 ##            print dif5
-        
+
             self.ym_li7000.append(run_avg5)
 
             self.xs_li7000.append(time_str5)
             self.ys_li7000.append(co2_li7000)
             self.thresh_li7000 = 0.7* run_avg5
-            
+
 
             if dif5 < self.thresh_li7000:
                 # No event
@@ -536,17 +552,17 @@ class myThread5(threading.Thread):
 ##                    print self.li7000_areas
                     self.xp_li7000.append(time_str5)
                     with open(self.logfile5, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str5,co2_li7000,area_li7000))                    
+                        fp.write("%s,%s, %s\n"%(time_str5,co2_li7000,area_li7000))
                     del self.yp_li7000[:]
                     print("LI7000 Peak end")
 
                 self.polluting_li7000.append(False)
                 self.ynp_li7000.append(co2_li7000)
 ##                print self.ynp_li7000
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_li7000[-1] == False:
                     print("LI7000 Peak start")
                     # Just started polluting
@@ -554,16 +570,16 @@ class myThread5(threading.Thread):
                     self.xp_li7000.append(time_str5)
 
                 self.polluting_li7000.append(True)
-                self.yp_li7000.append(co2_li7000) 
+                self.yp_li7000.append(co2_li7000)
 ##                self.peak_li7000(time_str5,co2_li7000)
 ##                print self.yp_li7000
-            
+
             n+= 1
 
             with open(self.logfile5, "a") as fp:
                 fp.write("%s,%s\n"%(time_str5,co2_li7000))
-                
-            
+
+
 class myThread6(threading.Thread):
     def __init__(self, ser):
         threading.Thread.__init__(self)
@@ -588,9 +604,9 @@ class myThread6(threading.Thread):
         self.ym_sba5 = []
         # Polluting state
         self.polluting_sba5 = [False]
-    
+
         self.thresh_sba5 = 700
-        
+
         self.logfile6 = "sba5_readings.csv"
 
 ##
@@ -608,7 +624,7 @@ class myThread6(threading.Thread):
             except (ValueError, IndexError) as e:
                continue
 
-            
+
             self.ys_sba5.append(co2_sba5)
 ##            print self.ys_sba5
 
@@ -616,13 +632,13 @@ class myThread6(threading.Thread):
 ##            print run_avg6
             dif6 = abs(run_avg6 - co2_sba5)
 ##            print dif6
-        
+
             self.ym_sba5.append(run_avg6)
 
             self.xs_sba5.append(time_str6)
             self.ys_sba5.append(co2_sba5)
             self.thresh_sba5 = 0.7* run_avg6
-            
+
 
             if dif6 < self.thresh_sba5:
                 # No event
@@ -635,7 +651,7 @@ class myThread6(threading.Thread):
 ##                    print self.sba5_areas
                     self.xp_sba5.append(time_str6)
                     with open(self.logfile6, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str6,co2_sba5,area_sba5))                    
+                        fp.write("%s,%s, %s\n"%(time_str6,co2_sba5,area_sba5))
 
                     del self.yp_sba5[:]
                     print("SBA5 Peak end")
@@ -643,10 +659,10 @@ class myThread6(threading.Thread):
                 self.polluting_sba5.append(False)
                 self.ynp_sba5.append(co2_sba5)
 ##                print self.ynp_sba5
-                
+
             else:
                 # Pollution event
-##                
+##
                 if self.polluting_sba5[-1] == False:
                     print("SBA5 Peak start")
                     # Just started polluting
@@ -654,15 +670,15 @@ class myThread6(threading.Thread):
                     self.xp_sba5.append(time_str6)
 
                 self.polluting_sba5.append(True)
-                self.yp_sba5.append(co2_sba5) 
+                self.yp_sba5.append(co2_sba5)
 ##                self.peak_sba5(time_str6,co2_sba5)
 ##                print self.yp_sba5
-            
+
             o+= 1
 
             with open(self.logfile6, "a") as fp:
                 fp.write("%s,%s\n"%(time_str6,co2_sba5))
-                
+
 class myThread7(threading.Thread):
     def __init__(self, ser):
         threading.Thread.__init__(self)
@@ -687,9 +703,9 @@ class myThread7(threading.Thread):
         self.ym_ma300 = []
         # Polluting state
         self.polluting_ma300 = [False]
-    
+
         self.thresh_ma300 = 5000
-        
+
         self.logfile7 = "ma300_readings.csv"
 
 ##
@@ -708,7 +724,7 @@ class myThread7(threading.Thread):
             except (ValueError, IndexError) as e:
                continue
 
-            
+
             self.ys_ma300.append(bc_ma300)
 ##                print self.ys_ma300
 
@@ -716,13 +732,13 @@ class myThread7(threading.Thread):
 ##            print run_avg7
             dif7 = abs(run_avg7 - bc_ma300)
 ##            print dif7
-        
+
             self.ym_ma300.append(run_avg7)
 
             self.xs_ma300.append(time_str7)
             self.ys_ma300.append(bc_ma300)
 ##            self.thresh_ma300 = 0.7* run_avg5
-            
+
 
             if dif7 < self.thresh_ma300:
                 # No event
@@ -736,7 +752,7 @@ class myThread7(threading.Thread):
                     self.xp_ma300.append(time_str7)
 ##                    print time_str7
                     with open(self.logfile7, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str7,bc_ma300,area_ma300))                    
+                        fp.write("%s,%s, %s\n"%(time_str7,bc_ma300,area_ma300))
 
                     del self.yp_ma300[:]
                     print("MA300 Peak end")
@@ -744,21 +760,21 @@ class myThread7(threading.Thread):
                 self.polluting_ma300.append(False)
                 self.ynp_ma300.append(bc_ma300)
 ##                print self.ynp_ma300
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_ma300[-1] == False:
                     print("MA300 Peak start")
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ma300.append(time_str7)
 ##                    print time_str7
-                    
+
                 self.polluting_ma300.append(True)
-                self.yp_ma300.append(bc_ma300) 
-##                
-            
+                self.yp_ma300.append(bc_ma300)
+##
+
             p+= 1
 
             with open(self.logfile7, "a") as fp:
@@ -789,9 +805,9 @@ class myThread8(threading.Thread):
         self.ym_vco2 = []
         # Polluting state
         self.polluting_vco2 = [False]
-    
+
         self.thresh_vco2 = 700
-        
+
         self.logfile8 = "vco2_readings.csv"
 
 ##
@@ -801,7 +817,7 @@ class myThread8(threading.Thread):
         self.ser.write("R\r\n")
         response=self.ser.readline()
         print response
-        
+
         while True:
             ser8 = self.ser.readline()
             time_str8 = dt.datetime.now().strftime('%H:%M:%S')
@@ -813,7 +829,7 @@ class myThread8(threading.Thread):
             except (ValueError, IndexError) as e:
                continue
 
-            
+
             self.ys_vco2.append(vco2)
 ##                print self.ys_ma300
 
@@ -821,13 +837,13 @@ class myThread8(threading.Thread):
 ##            print run_avg8
             dif8 = abs(run_avg8 - vco2)
 ##            print dif8
-        
+
             self.ym_vco2.append(run_avg8)
 
             self.xs_vco2.append(time_str8)
             self.ys_vco2.append(vco2)
 ##            self.thresh_ma300 = 0.7* run_avg5
-            
+
 
             if dif8 < self.thresh_vco2:
                 # No event
@@ -840,7 +856,7 @@ class myThread8(threading.Thread):
 ##                    print self.vco2_areas
                     self.xp_vco2.append(time_str8)
                     with open(self.logfile8, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str8,vco2,area_vco2))                    
+                        fp.write("%s,%s, %s\n"%(time_str8,vco2,area_vco2))
 
                     del self.yp_vco2[:]
                     print("VCO2 Peak end")
@@ -848,10 +864,10 @@ class myThread8(threading.Thread):
                 self.polluting_vco2.append(False)
                 self.ynp_vco2.append(vco2)
 ##                print self.ynp_vco2
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_vco2[-1] == False:
                     print("VCO2 Peak start")
                     # Just started polluting
@@ -859,9 +875,9 @@ class myThread8(threading.Thread):
                     self.xp_vco2.append(time_str8)
 
                 self.polluting_vco2.append(True)
-                self.yp_vco2.append(vco2) 
-##                
-            
+                self.yp_vco2.append(vco2)
+##
+
             q+= 1
 
             with open(self.logfile8, "a") as fp:
@@ -891,16 +907,16 @@ class myThread9(threading.Thread):
         self.ym_caps = []
         # Polluting state
         self.polluting_caps = [False]
-    
+
         self.thresh_caps = 100
-        
+
         self.logfile9 = "caps_readings.csv"
 
 ##
 ##
     def run(self):
         r=0
-        
+
         while True:
             ser9 = self.ser.readline()
             time_str9 = dt.datetime.now().strftime('%H:%M:%S')
@@ -913,7 +929,7 @@ class myThread9(threading.Thread):
             except (ValueError, IndexError) as e:
                continue
 
-            
+
             self.ys_caps.append(nox_caps)
 ##                print self.ys_caps
 
@@ -921,13 +937,13 @@ class myThread9(threading.Thread):
 ##            print run_avg9
             dif9 = abs(run_avg9 - nox_caps)
 ##            print dif8
-        
+
             self.ym_caps.append(run_avg9)
 
             self.xs_caps.append(time_str9)
             self.ys_caps.append(nox_caps)
 ##            self.thresh_ma300 = 0.7* run_avg5
-            
+
 
             if dif9 < self.thresh_caps:
                 # No event
@@ -940,7 +956,7 @@ class myThread9(threading.Thread):
 ##                    print self.caps_areas
                     self.xp_caps.append(time_str9)
                     with open(self.logfile9, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str9,nox_caps,area_caps))                    
+                        fp.write("%s,%s, %s\n"%(time_str9,nox_caps,area_caps))
 
                     del self.yp_caps[:]
                     print("CAPS Peak end")
@@ -948,10 +964,10 @@ class myThread9(threading.Thread):
                 self.polluting_caps.append(False)
                 self.ynp_caps.append(nox_caps)
 ##                print self.ynp_caps
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_caps[-1] == False:
                     print("CAPS Peak start")
                     # Just started polluting
@@ -959,9 +975,9 @@ class myThread9(threading.Thread):
                     self.xp_caps.append(time_str9)
 
                 self.polluting_caps.append(True)
-                self.yp_caps.append(nox_caps) 
-##                
-            
+                self.yp_caps.append(nox_caps)
+##
+
             r+= 1
 
             with open(self.logfile9, "a") as fp:
@@ -992,25 +1008,25 @@ class myThread10(threading.Thread):
         self.ym_ucb = []
         # Polluting state
         self.polluting_ucb = [False]
-    
+
         self.thresh_ucb = 0.1
-        
+
         self.logfile10 = "ucb_readings.csv"
 
 ##
 ##
     def run(self):
         s=0
-        
+
         while True:
-           
+
             serial10.write(b'\x0201RD0\x03\x26')
             ser10 = serial10.readline()
         ##    print ser10
             time_str10 = dt.datetime.now().strftime('%H:%M:%S')
-            
 
-            try:    
+
+            try:
                 output_ucb = ser10.decode('ascii')
 ##                print output_ucb
                 values_ucb = output_ucb.split('\n')[0].split(',')
@@ -1023,7 +1039,7 @@ class myThread10(threading.Thread):
                 print (e)
                 continue
 
-            
+
             self.ys_ucb.append(nox_ucb)
 ##            print self.ys_ucb
 ##
@@ -1031,13 +1047,13 @@ class myThread10(threading.Thread):
 ##            print run_avg10
             dif10 = abs(run_avg10 - nox_ucb)
 ##            print dif10
-##        
+##
             self.ym_ucb.append(run_avg10)
-##            print run_avg10    
+##            print run_avg10
             self.xs_ucb.append(time_str10)
             self.ys_ucb.append(nox_ucb)
 ####            self.thresh_ucb = 0.7* run_avg5
-##            
+##
 ##
             if dif10 < self.thresh_ucb:
                 # No event
@@ -1050,7 +1066,7 @@ class myThread10(threading.Thread):
 ##                    print self.ucb_areas
                     self.xp_ucb.append(time_str10)
                     with open(self.logfile10, "a") as fp:
-                        fp.write("%s,%s, %s\n"%(time_str10,nox_ucb,area_ucb))                    
+                        fp.write("%s,%s, %s\n"%(time_str10,nox_ucb,area_ucb))
 
                     del self.yp_ucb[:]
                     print("UCB Peak end")
@@ -1058,10 +1074,10 @@ class myThread10(threading.Thread):
                 self.polluting_ucb.append(False)
                 self.ynp_ucb.append(nox_ucb)
 ##                print self.ynp_ucb
-                
+
             else:
                 # Pollution event
-                
+
                 if self.polluting_ucb[-1] == False:
                     print("UCB Peak start")
                     # Just started polluting
@@ -1069,9 +1085,9 @@ class myThread10(threading.Thread):
                     self.xp_ucb.append(time_str10)
 
                 self.polluting_ucb.append(True)
-                self.yp_ucb.append(nox_ucb) 
-##                
-            
+                self.yp_ucb.append(nox_ucb)
+##
+
             s+= 1
 
             with open(self.logfile10, "a") as fp:
@@ -1101,4 +1117,3 @@ thread1.start()
 ##thread9.start()
 ##thread10.start()
 ##thread11.start()
-
