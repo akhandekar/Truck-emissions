@@ -6,6 +6,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
+from Influx_Dataframe_Client import Influx_Dataframe_Client
 
 
 
@@ -132,7 +133,7 @@ class myThread1(threading.Thread):
                     'fields': {
                         'atn_abcd': atn_abcd1,
                         'bc_abcd': bc_abcd1,
-                        'flow_abcd': flow_abcd1
+                        'flow_abcd': flow_abcd1xz
                         },
                     'time': time_str1,
                     'tags': {
