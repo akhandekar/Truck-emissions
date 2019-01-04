@@ -133,7 +133,7 @@ class myThread1(threading.Thread):
                     'fields': {
                         'atn_abcd': atn_abcd1,
                         'bc_abcd': bc_abcd1,
-                        'flow_abcd': flow_abcd1xz
+                        'flow_abcd': flow_abcd1
                         },
                     'time': time_str1,
                     'tags': {
