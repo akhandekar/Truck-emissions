@@ -1,6 +1,6 @@
 DB_config:
     host: localhost
-    database: wifi_test
+    database: truck_test
     protocol: json
     port: 8086
     use_ssl: False

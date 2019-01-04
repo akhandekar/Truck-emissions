@@ -141,6 +141,7 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
+                print(test_client.write_json(json,'truck_test'))
                 print bc_abcd1
 
             except (ValueError,IndexError) as e:
