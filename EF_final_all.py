@@ -290,6 +290,25 @@ class myThread2(threading.Thread):
                 self.polluting_ae16.append(True)
                 self.yp_ae16.append(bc_ae16)
 
+            try:
+                json =   {
+                    'fields': {
+                        'bc_ae16': bc_ae16,
+                        'atn_ae16': atn_ae16,
+                        'area_ae16': area_ae16
+                        },
+                    'time': time_str2,
+                    'tags': {
+                        'sensor_number': 2,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
+
             j+= 1
 
             with open(self.logfile2, "a") as fp:
@@ -379,6 +398,25 @@ class myThread3(threading.Thread):
 ##                    print time_str3
                 self.polluting_ae33.append(True)
                 self.yp_ae33.append(bc_ae33)
+
+            try:
+                json =   {
+                    'fields': {
+                        'bc2': bc2,
+                        'bc_ae33': bc_ae33,
+                        'area_ae33': area_ae33
+                        },
+                    'time': time_str3,
+                    'tags': {
+                        'sensor_number': 3,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             l+= 1
 
@@ -601,6 +639,23 @@ class myThread5(threading.Thread):
                 self.yp_li7000.append(co2_li7000)
 ##                self.peak_li7000(time_str5,co2_li7000)
 ##                print self.yp_li7000
+            try:
+                json =   {
+                    'fields': {
+                        'co2_li7000': co2_li7000,
+                        'area_li7000': area_li7000
+                        },
+                    'time': time_str5,
+                    'tags': {
+                        'sensor_number': 5,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             n+= 1
 
@@ -701,6 +756,23 @@ class myThread6(threading.Thread):
                 self.yp_sba5.append(co2_sba5)
 ##                self.peak_sba5(time_str6,co2_sba5)
 ##                print self.yp_sba5
+            try:
+                json =   {
+                    'fields': {
+                        'co2_sba5': co2_sba5,
+                        'area_sba5': area_li7000
+                        },
+                    'time': time_str6,
+                    'tags': {
+                        'sensor_number': 6,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             o+= 1
 
@@ -802,6 +874,24 @@ class myThread7(threading.Thread):
                 self.polluting_ma300.append(True)
                 self.yp_ma300.append(bc_ma300)
 ##
+            try:
+                json =   {
+                    'fields': {
+                        'bc3': bc3,
+                        'bc_ma300': bc_ma300,
+                        'area_ma300': area_ma300
+                        },
+                    'time': time_str7,
+                    'tags': {
+                        'sensor_number': 7,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             p+= 1
 
@@ -905,6 +995,23 @@ class myThread8(threading.Thread):
                 self.polluting_vco2.append(True)
                 self.yp_vco2.append(vco2)
 ##
+            try:
+                json =   {
+                    'fields': {
+                        'vco2': vco2,
+                        'area_vco2': area_vco2
+                        },
+                    'time': time_str8,
+                    'tags': {
+                        'sensor_number': 8,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             q+= 1
 
@@ -1005,6 +1112,24 @@ class myThread9(threading.Thread):
                 self.polluting_caps.append(True)
                 self.yp_caps.append(nox_caps)
 ##
+            try:
+                json =   {
+                    'fields': {
+                        'nox1': nox1,
+                        'nox_caps': nox_caps,
+                        'area_caps': area_caps
+                        },
+                    'time': time_str9,
+                    'tags': {
+                        'sensor_number': 9,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             r+= 1
 
@@ -1115,14 +1240,44 @@ class myThread10(threading.Thread):
                 self.polluting_ucb.append(True)
                 self.yp_ucb.append(nox_ucb)
 ##
+            try:
+                json =   {
+                    'fields': {
+                        'nox_ucb': nox_ucb,
+                        'area_ucb': area_ucb
+                        },
+                    'time': time_str10,
+                    'tags': {
+                        'sensor_number': 10,
+                        },
+                    'measurement': 'truck_sensor'
+                    }
+
+                print(test_client.write_json(json,'truck_test'))
+
+            except(ValueError,IndexError) as e:
+                continue
 
             s+= 1
 
             with open(self.logfile10, "a") as fp:
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
+class myThread12(threading.Thread):
+    def __init__(self):
+        print("Started influx thread")
+##
+##
+    def run(self):
+        while True:
+        b.wait()
+        time.sleep()
+
+
+
 
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
+b = Barrier(2, timeout=5)
 thread1=myThread1(serial1)
 ##thread2=myThread2(serial2)
 ##thread3=myThread3(serial3)
@@ -1134,6 +1289,7 @@ thread1=myThread1(serial1)
 ##thread9=myThread9(serial9)
 ##thread10=myThread10(serial10)
 ##thread11=myThread11(serial11)
+thread12=myThread11()
 
 
 thread1.start()
