@@ -150,7 +150,7 @@ class myThread1(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                print bc_abcd1
+                print(bc_abcd1)
 
             except (ValueError,IndexError) as e:
                continue
@@ -936,7 +936,7 @@ class myThread8(threading.Thread):
         q=0
         self.ser.write("R\r\n")
         response=self.ser.readline()
-        print response
+        print(response)
 
         while True:
             ser8 = self.ser.readline()
@@ -1191,7 +1191,7 @@ class myThread10(threading.Thread):
 
 
             except Exception as e:
-                print (e)
+                print(e)
                 continue
 
 
