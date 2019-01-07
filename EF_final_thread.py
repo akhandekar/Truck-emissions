@@ -1266,6 +1266,7 @@ class myThread10(threading.Thread):
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
 class myThread12(threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self)
         print("Started influx thread")
 ##
 ##
