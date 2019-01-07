@@ -7,7 +7,7 @@ import numpy as np
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
 from Influx_Dataframe_Client import Influx_Dataframe_Client
-
+b = threading.Barrier(2, timeout=5)
 
 
 
@@ -1279,7 +1279,7 @@ class myThread12(threading.Thread):
 
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-b = threading.Barrier(2, timeout=5)
+#b = threading.Barrier(2, timeout=5)
 thread1=myThread1(serial1)
 ##thread2=myThread2(serial2)
 ##thread3=myThread3(serial3)
