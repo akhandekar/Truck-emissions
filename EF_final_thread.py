@@ -125,7 +125,8 @@ class myThread1(threading.Thread):
             ser1 = self.ser.readline()
             time_str1 = dt.datetime.now().strftime('%H:%M:%S')
 ##            print ser1
-            values_abcd1 = ser1.split('\n')[0].split(',')
+            print(ser1)
+            #values_abcd1 = ser1.split('\n')[0].split(',')
 
 ##            print(bc_abcd1)
             self.peak_abcd(time_str1,bc_abcd1)
