@@ -440,13 +440,13 @@ class myThread2(threading.Thread):
 
     def run(self):
         j=0
+        area_ae16 = 0.0
         while True:
             ser2 = self.ser.readline()
             time_str2 = datetime.now().strftime('%H:%M:%S')
             values_ae16 = ser2.split('\n')[0].split(',')
 
             try:
-
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
                 atn_ae16 = float(values_ae16[9])
