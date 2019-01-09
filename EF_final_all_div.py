@@ -47,20 +47,6 @@ class area_container:
         self.area_time_ucb = []
 
 
-'''
-    def push_abcd(self,area_time_abcd1):
-        self.area_time_abcd1_queue.put(area_time_abcd1)
-    def push_caps(self,area_time_caps):
-        self.area_time_caps_queue.put(area_time_caps)
-    def push_vco2(self,area_time_vco2):
-        self.area_time_vco2_queue.put(area_time_vco2)
-    def push_sba5(self,area_time_sba5):
-        self.area_time_sba5_queue.put(area_time_sba5)
-    def push_li7000(self,area_time_li7000):
-        self.area_time_li7000_queue.put(area_time_li7000)
-    def push_li820(self,area_time_li820):
-        self.area_time_abcd1_queue.put(area_time_li820)
-'''
     # Go through each item in the list and check to see if the timestamps match,
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
@@ -244,62 +230,62 @@ if not os.path.isfile("abcd_readings.csv"):
     with open("abcd_readings.csv", "w") as fp:
         fp.write("timestamp,ATN_abcd,BC_abcd,Flowrate_abcd,Area_abcd\n")
 
-##if not os.path.isfile("ae16_readings.csv"):
-##    with open("ae16_readings.csv", "w") as fp:
-##        fp.write("timestamp,BC_ae16,ATN_ae16,Area_ae16\n")
-##
-##if not os.path.isfile("ae33_readings.csv"):
-##    with open("ae33_readings.csv", "w") as fp:
-##        fp.write("timestamp,BC_ae33,ATN_ae33,Area_ae33\n")
-##
-##if not os.path.isfile("li820_readings.csv"):
-##    with open("li820_readings.csv", "w") as fp:
-##        fp.write("timestamp,CO2_li820,Pressure_li820,Temp_li820,Area_li820\n")
-##
-##if not os.path.isfile("li7000_readings.csv"):
-##    with open("li7000_readings.csv", "w") as fp:
-##        fp.write("timestamp,CO2_li7000,Pressure_li7000,Area_LI7000\n")
-##
-##if not os.path.isfile("sba5_readings.csv"):
-##    with open("sba5_readings.csv", "w") as fp:
-##        fp.write("timestamp,CO2_sba5,Area_sba5\n")
-##
-##if not os.path.isfile("ma300_readings.csv"):
-##    with open("ma300_readings.csv", "w") as fp:
-##        fp.write("timestamp,BC_ma300,Area_ma300\n")
-##
-##if not os.path.isfile("vco2_readings.csv"):
-##    with open("vco2_readings.csv", "w") as fp:
-##        fp.write("timestamp,VCO2,Area_vco2\n")
-##
-##if not os.path.isfile("caps_readings.csv"):
-##    with open("caps_readings.csv", "w") as fp:
-##        fp.write("timestamp,NOX_caps,Area_caps\n")
-##
-##if not os.path.isfile("ucb_readings.csv"):
-##    with open("ucb_readings.csv", "w") as fp:
-##        fp.write("timestamp,NOX_ucb,Area_ucb\n")
+if not os.path.isfile("ae16_readings.csv"):
+    with open("ae16_readings.csv", "w") as fp:
+        fp.write("timestamp,BC_ae16,ATN_ae16,Area_ae16\n")
 
-##if not os.path.isfile("ae51_readings.csv"):
-##    with open("ae51_readings.csv", "w") as fp:
-##        fp.write("timestamp,bc_ae51,Area_ae51\n")
+if not os.path.isfile("ae33_readings.csv"):
+    with open("ae33_readings.csv", "w") as fp:
+        fp.write("timestamp,BC_ae33,ATN_ae33,Area_ae33\n")
+
+if not os.path.isfile("li820_readings.csv"):
+    with open("li820_readings.csv", "w") as fp:
+        fp.write("timestamp,CO2_li820,Pressure_li820,Temp_li820,Area_li820\n")
+
+if not os.path.isfile("li7000_readings.csv"):
+    with open("li7000_readings.csv", "w") as fp:
+        fp.write("timestamp,CO2_li7000,Pressure_li7000,Area_LI7000\n")
+
+if not os.path.isfile("sba5_readings.csv"):
+    with open("sba5_readings.csv", "w") as fp:
+        fp.write("timestamp,CO2_sba5,Area_sba5\n")
+
+if not os.path.isfile("ma300_readings.csv"):
+    with open("ma300_readings.csv", "w") as fp:
+        fp.write("timestamp,BC_ma300,Area_ma300\n")
+
+if not os.path.isfile("vco2_readings.csv"):
+    with open("vco2_readings.csv", "w") as fp:
+        fp.write("timestamp,VCO2,Area_vco2\n")
+
+if not os.path.isfile("caps_readings.csv"):
+    with open("caps_readings.csv", "w") as fp:
+        fp.write("timestamp,NOX_caps,Area_caps\n")
+
+if not os.path.isfile("ucb_readings.csv"):
+    with open("ucb_readings.csv", "w") as fp:
+        fp.write("timestamp,NOX_ucb,Area_ucb\n")
+
+if not os.path.isfile("ae51_readings.csv"):
+    with open("ae51_readings.csv", "w") as fp:
+        fp.write("timestamp,bc_ae51,Area_ae51\n")
 
 
 serial1=serialGeneric("/dev/ttyUSB0",57600)  ##abcd
-##serial2=serialGeneric("/dev/ttyUSB3",9600)  ##ae16
-##serial3=serialGeneric("/dev/ttyUSB4",9600)  ##ae33
-##serial4=serialGeneric("/dev/ttyUSB5",9600)  ##li820
-##serial5=serialGeneric("/dev/ttyUSB6",9600)  ##li7000
-##serial6=serialGeneric("/dev/ttyUSB7",19200)  ##sba5
-##serial7=serialGeneric("/dev/ttyUSB8",1000000)  ##ma300
-##serial8=serialGeneric("/dev/ttyUSB9",19200)  ##vaisala
-##serial9=serialGeneric("/dev/ttyUSB1",9600)  ##caps
+serial2=serialGeneric("/dev/ttyUSB3",9600)  ##ae16
+serial3=serialGeneric("/dev/ttyUSB4",9600)  ##ae33
+serial4=serialGeneric("/dev/ttyUSB5",9600)  ##li820
+serial5=serialGeneric("/dev/ttyUSB6",9600)  ##li7000
+serial6=serialGeneric("/dev/ttyUSB7",19200)  ##sba5
+serial7=serialGeneric("/dev/ttyUSB8",1000000)  ##ma300
+serial8=serialGeneric("/dev/ttyUSB9",19200)  ##vaisala
+serial9=serialGeneric("/dev/ttyUSB1",9600)  ##caps
 
-##ucb
-##serial10= serial.Serial (port='/dev/ttyUSB0',
-##        baudrate=9600,
-##        timeout = 1,
-##        bytesize=serial.SEVENBITS)
+#ucb
+serial10= serial.Serial (port='/dev/ttyUSB0',
+        baudrate=9600,
+        timeout = 1,
+        bytesize=serial.SEVENBITS)
 
 ##serial11=serialGeneric("/dev/ttyUSB0",9600)  ##ae51
 
@@ -1414,7 +1400,7 @@ thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
 thread11=myThread11(serial11,all_area)
-area_thread=areaThread(all_area)
+#area_thread=areaThread(all_area)
 thread1.start()
 thread2.start()
 thread3.start()
@@ -1426,4 +1412,4 @@ thread8.start()
 thread9.start()
 thread10.start()
 thread11.start()
-area_thread.start()
+#area_thread.start()
