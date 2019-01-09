@@ -547,7 +547,7 @@ class myThread3(threading.Thread):
         l=0
         while True:
             ser3 = self.ser.readline()
-            time_str3 = dt.datetime.now().strftime('%H:%M:%S')
+            time_str3 = datetime.now().strftime('%H:%M:%S')
             values_ae33 = ser3.split('\n')[0].split(',')
 
             try:
