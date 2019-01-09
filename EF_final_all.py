@@ -329,14 +329,20 @@ class myThread1(threading.Thread):
             ser1 = self.ser.readline()
             time_str1 = dt.datetime.now().strftime('%H:%M:%S')
             values_abcd1 = ser1.split('\n')[0].split(',')
-            self.peak_abcd(time_str1,bc_abcd1)
-            i += 1
+
 
             try:
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
 
+
+            except (ValueError,IndexError) as e:
+               continue
+
+            self.peak_abcd(time_str1,bc_abcd1)
+
+            try:
                 json =   {
                     'fields': {
                         'atn_abcd': atn_abcd1,
@@ -349,7 +355,7 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                new_time = area_time(area_abcd,time_str1)
+                new_time = area_time(self.area_temp,time_str1)
                 all_area.area_time_abcd1.append(new_time)
 
                 print(test_client.write_json(json,'truck_test'))
@@ -357,6 +363,7 @@ class myThread1(threading.Thread):
 
             except (ValueError,IndexError) as e:
                continue
+            i += 1
 
             with open(self.logfile1, "a") as fp:
                 fp.write("%s,%s,%s,%s\n"%(time_str1,atn_abcd1,bc_abcd1,flow_abcd1))
