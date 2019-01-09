@@ -2,6 +2,7 @@ import serial
 from time import time
 import threading
 import datetime as dt
+from datetime import datetime
 from datetime import timedelta
 import numpy as np
 #import matplotlib.pyplot as plt
@@ -327,7 +328,7 @@ class myThread1(threading.Thread):
 
         while True:
             ser1 = self.ser.readline()
-            time_str1 = dt.datetime.now().strftime('%H:%M:%S')
+            time_str1 = datetime.now().strftime('%H:%M:%S')
             values_abcd1 = ser1.split('\n')[0].split(',')
 
 
@@ -441,7 +442,7 @@ class myThread2(threading.Thread):
         j=0
         while True:
             ser2 = self.ser.readline()
-            time_str2 = dt.datetime.now().strftime('%H:%M:%S')
+            time_str2 = datetime.datetime.now().strftime('%H:%M:%S')
             values_ae16 = ser2.split('\n')[0].split(',')
 
             try:
