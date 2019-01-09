@@ -292,7 +292,7 @@ serial10= serial.Serial (port='/dev/ttyUSB9',
 
 class myThread1(threading.Thread):
 
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N1 = 20
