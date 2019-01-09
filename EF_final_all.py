@@ -1,12 +1,231 @@
-import serial
+ import serial
 from time import time
 import threading
 import datetime as dt
+from datetime import timedelta
 import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
+import Queue
 from Influx_Dataframe_Client import Influx_Dataframe_Client
+
+class area_time:
+    #switch to lists so we don't have to save elements
+    def __init__(self,area,time):
+        # Create Area_Time object
+        self.area = area
+        self.time = dt.strptime(time)
+
+
+class area_container:
+    #switch to lists so we don't have to save elements
+    def __init__(self):
+        '''
+        self.area_time_li820_queue = Queue.LifoQueue()
+        self.area_time_li7000_queue = Queue.LifoQueue()
+        self.area_time_sba5_queue = Queue.LifoQueue()
+        self.area_time_vco2_queue = Queue.LifoQueue()
+        self.area_time_caps_queue = Queue.LifoQueue()
+        self.area_time_abcd1_queue = Queue.LifoQueue()
+        '''
+
+        # create all area lists
+
+        # CO2 Area Values
+        self.area_time_li820  = []
+        self.area_time_li7000  = []
+        self.area_time_sba5  = []
+        self.area_time_vco2  = []
+        # BC Area Values
+        self.area_time_abcd1  = []
+        self.area_time_ae16 = []
+        self.area_time_ae33 = []
+        self.area_time_ma300 = []
+        # NOx Area Values
+        self.area_time_caps  = []
+        self.area_time_ucb = []
+
+
+'''
+    def push_abcd(self,area_time_abcd1):
+        self.area_time_abcd1_queue.put(area_time_abcd1)
+    def push_caps(self,area_time_caps):
+        self.area_time_caps_queue.put(area_time_caps)
+    def push_vco2(self,area_time_vco2):
+        self.area_time_vco2_queue.put(area_time_vco2)
+    def push_sba5(self,area_time_sba5):
+        self.area_time_sba5_queue.put(area_time_sba5)
+    def push_li7000(self,area_time_li7000):
+        self.area_time_li7000_queue.put(area_time_li7000)
+    def push_li820(self,area_time_li820):
+        self.area_time_abcd1_queue.put(area_time_li820)
+'''
+    # Go through each item in the list and check to see if the timestamps match,
+    # if they do push to influx, if the member of the list doesn't match with anything
+    # else...then remove it make sure to only check through the current members of the list
+    #
+    def EF_calc():
+        # Retrieve lengths for all lists
+
+        # CO2 Area_Time lengths
+        li820_len = len(self.area_time_li820)
+        li7000_len = len(self.area_time_li7000)
+        sba5_len = len(self.area_time_sba5)
+        vco2_len = len(self.area_time_vco2)
+        # BC Area_Time lengths
+        abcd1_len = len(self.area_time_abcd1)
+        ae16_len = len(self.area_time_ae16)
+        ae33_len = len(self.area_time_ae33)
+        ma300_len = len(self.area_time_ma300)
+        # NOx Area_Time length
+        caps_len = len(self.area_time_caps)
+        ucb_len = len(self.area_time_ucb)
+
+
+        for x in range(abcd1_len):
+            for y in range(li820_len):
+                difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF1 = self.area_time_abcd1[x].area / self.area_time_li820[y].area
+                    json =   {
+                        'fields': {
+                            'EF1': EF1
+                            },
+                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(li7000_len):
+                difference = self.area_time_abcd1[x].time - self.area_time_li7000[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF2 = self.area_time_abcd1[x].area / self.area_time_li7000[y].area
+                    json =   {
+                        'fields': {
+                            'EF2': EF2
+                            },
+                        'time': self.area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(sba5_len):
+                difference = self.area_time_abcd1[x].time - area_time_sba5[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF3 = self.area_time_abcd1[x].area / self.area_time_sba5[y].area
+                    json =   {
+                        'fields': {
+                            'EF1': EF3
+                            },
+                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(vco2_len):
+                difference = self.area_time_abcd1[x].time - area_time_vco2[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF4 = self.area_time_abcd1[x].area / self.area_time_vco2[y].area
+                    json =   {
+                        'fields': {
+                            'EF4': EF4
+                            },
+                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+        for x in range(caps_len):
+            for y in range(li820_len):
+                difference = self.area_time_caps[x].time - self.area_time_li820[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF5 = self.area_time_caps[x].area / self.area_time_li820[y].area
+                    json =   {
+                        'fields': {
+                            'EF5': EF5
+                            },
+                        'time': area_time_caps.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(li7000_len):
+                difference = self.area_time_caps[x].time - self.area_time_li7000[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF6 = self.area_time_caps[x].area / self.area_time_li7000[y].area
+                    json =   {
+                        'fields': {
+                            'EF6': EF6
+                            },
+                        'time': self.area_time_caps.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(sba5_len):
+                difference = self.area_time_caps[x].time - area_time_sba5[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF7 = self.area_time_caps[x].area / self.area_time_sba5[y].area
+                    json =   {
+                        'fields': {
+                            'EF7': EF7
+                            },
+                        'time': self.area_time_caps.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+            for y in range(vco2_len):
+                difference = self.area_time_caps[x].time - area_time_vco2[y].time
+                if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    EF8 = self.area_time_caps[x].area / self.area_time_vco2[y].area
+                    json =   {
+                        'fields': {
+                            'EF8': EF8
+                            },
+                        'time': area_time_caps.time.strftime('%H:%M:%S'),
+                        'tags': {
+                            'sensor_number': 1,
+                            },
+                        'measurement': 'truck_sensor'
+                        }
+                    print(test_client.write_json(json,'truck_test'))
+
+
+
+                # Check to see if timestamp matches
+                # Convert to
+
+    # Removes elements from from beginning to the amount of elements that were
+    # in the list before hand
+    del self.area_time_li820[0:li820_len]
+    del self.area_time_li700[0:li700_len]
+    del self.area_time_sba5[0:sba5_len]
+    del self.area_time_vco2[0:vco2_len]
+
+    del self.area_time_abcd1[0:abcd1_len]
+    # del self.area_time_[0:_len]
+    # del self.area_time_[0:_len]
+
+    del self.area_time_caps[0:caps_len]
+    # del self.area_time_[0:_len]
+
+
 
 
 
@@ -123,10 +342,7 @@ class myThread1(threading.Thread):
         while True:
             ser1 = self.ser.readline()
             time_str1 = dt.datetime.now().strftime('%H:%M:%S')
-##            print ser1
             values_abcd1 = ser1.split('\n')[0].split(',')
-
-##            print(bc_abcd1)
             self.peak_abcd(time_str1,bc_abcd1)
             i += 1
 
@@ -147,6 +363,8 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
+                new_time = area_time(area_abcd,time_str1)
+                all_area.area_time_abcd1.append(new_time)
 
                 print(test_client.write_json(json,'truck_test'))
                 print bc_abcd1
@@ -159,9 +377,7 @@ class myThread1(threading.Thread):
 
 
     def peak_abcd(self,time_str1, bc_abcd1):
-
         run_avg1 = sum(self.ynp_abcd1[-self.N1:])/float(self.N1)
-##        print run_avg1
         self.ym_abcd1.append(run_avg1)
 
         self.xs_abcd1.append(time_str1)
@@ -177,9 +393,7 @@ class myThread1(threading.Thread):
                 area_abcd = np.trapz(self.yp_abcd1, dx=1)
                 self.area_temp = area_abcd
                 self.abcd_areas.append(area_abcd)
-##                print self.abcd_areas
                 self.xp_abcd1.append(time_str1)
-##                print self.xp_abcd1
                 with open(self.logfile1, "a") as fp:
                     fp.write("%s,%s,%s\n"%(time_str1,bc_abcd1,area_abcd))
 
@@ -188,7 +402,6 @@ class myThread1(threading.Thread):
 
             self.polluting_abcd.append(False)
             self.ynp_abcd1.append(bc_abcd1)
-##            print self.ynp_abcd1
         else:
             # Pollution event
             if self.polluting_abcd[-1] == False:
@@ -202,7 +415,6 @@ class myThread1(threading.Thread):
 
         with open(self.logfile1, "a") as fp:
              fp.write("%s,%s\n"%(time_str1,bc_abcd1))
-
 
 class myThread2(threading.Thread):
     def __init__(self, ser):
@@ -231,7 +443,7 @@ class myThread2(threading.Thread):
 
         self.thresh_ae16 = 5000
         self.logfile2 = "ae16_readings.csv"
-##
+
     def run(self):
         j=0
         while True:
@@ -243,18 +455,14 @@ class myThread2(threading.Thread):
 
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
-
                 atn_ae16 = float(values_ae16[9])
-##                print bc_ae16
 
             except(ValueError,IndexError) as e:
                 continue
 
             run_avg2 = sum(self.ynp_ae16[-self.N2:])/float(self.N2)
-##            print run_avg2
 
             dif2 = abs(run_avg2 - bc_ae16)
-##            print dif2
             self.ym_ae16.append(run_avg2)
 
             self.xs_ae16.append(time_str2)
@@ -268,7 +476,6 @@ class myThread2(threading.Thread):
                     # Record ending timestamp
                     area_ae16 = np.trapz(self.yp_ae16, dx=1)
                     self.ae16_areas.append(area_ae16)
-##                    print area_ae16
                     self.xp_ae16.append(time_str2)
                     with open(self.logfile2, "a") as fp:
                         fp.write("%s,%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16,area_ae16))
@@ -278,7 +485,6 @@ class myThread2(threading.Thread):
 
                 self.polluting_ae16.append(False)
                 self.ynp_ae16.append(bc_ae16)
-##                print self.ynp_ae16
             else:
                 # Pollution event
                 if self.polluting_ae16[-1] == False:
@@ -303,8 +509,9 @@ class myThread2(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_ae16,time_str2)
+                all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -313,8 +520,6 @@ class myThread2(threading.Thread):
 
             with open(self.logfile2, "a") as fp:
                 fp.write("%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16))
-
-
 
 class myThread3(threading.Thread):
     def __init__(self, ser):
@@ -355,16 +560,12 @@ class myThread3(threading.Thread):
                 bc2 = float(values_ae33[9])
                 bc_ae33 = bc2/1000
 
-##                print bc_ae33
             except(ValueError,IndexError) as e:
                 continue
 
 
             run_avg3 = sum(self.ynp_ae33[-self.N3:])/float(self.N3)
-##            print run_avg3
             dif3 = abs(run_avg3 - bc_ae33)
-##            print dif3
-
             self.ym_ae33.append(run_avg3)
 
             self.xs_ae33.append(time_str3)
@@ -379,7 +580,6 @@ class myThread3(threading.Thread):
                     area_ae33 = np.trapz(self.yp_ae33, dx=1)
                     self.ae33_areas.append(area_ae33)
                     self.xp_ae33.append(time_str3)
-##                    print time_str3
                     with open(self.logfile3, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str3,bc_ae33,area_ae33))
 
@@ -395,7 +595,6 @@ class myThread3(threading.Thread):
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ae33.append(time_str3)
-##                    print time_str3
                 self.polluting_ae33.append(True)
                 self.yp_ae33.append(bc_ae33)
 
@@ -414,7 +613,8 @@ class myThread3(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-
+                new_time = area_time(area_ae33,time_str3)
+                all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
                 continue
 
@@ -422,7 +622,6 @@ class myThread3(threading.Thread):
 
             with open(self.logfile3, "a") as fp:
                 fp.write("%s,%s\n"%(time_str3,bc_ae33))
-
 
 class myThread4(threading.Thread):
     def __init__(self, ser):
@@ -436,7 +635,6 @@ class myThread4(threading.Thread):
         self.ys_li820 = []
         # No pollution data
         self.ynp_li820 = [450 for m in range(self.N4)]
-##        print self.ynp_li820
         # Timestamps for pollution data
         self.xp_li820 = []
         # Pollution data (temp, data held in memory to calculate area)
@@ -459,25 +657,19 @@ class myThread4(threading.Thread):
         m = 0
         while True:
             ser4 = self.ser.readline()
-##            print ser4
             time_str4 = dt.datetime.now().strftime('%H:%M:%S')
 
             try:
                 values_li820 = re.split(r'[<>]', ser4)
 
                 co2_li820 = float(values_li820[14])
-##                print co2_li820
 
             except(ValueError,IndexError) as e:
                 continue
 
             self.ys_li820.append(co2_li820)
-##            print self.ys_li820
-
             run_avg4 = sum(self.ynp_li820[-self.N4:])/float(self.N4)
-##            print run_avg4
             dif4 = abs(run_avg4 - co2_li820)
-##            print dif4
 
             self.ym_li820.append(run_avg4)
 
@@ -496,7 +688,6 @@ class myThread4(threading.Thread):
                     area_li820 = np.trapz(self.yp_li820, dx=1)
                     #self.temp_area_li820 = area_li820
                     self.li820_areas.append(area_li820)
-##                    print self.li820_areas
                     self.xp_li820.append(time_str4)
                     with open(self.logfile4, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str4,co2_li820,area_li820))
@@ -506,8 +697,6 @@ class myThread4(threading.Thread):
 
                 self.polluting_li820.append(False)
                 self.ynp_li820.append(co2_li820)
-##                print self.ynp_li820
-
             else:
                 # Pollution event
 
@@ -519,8 +708,6 @@ class myThread4(threading.Thread):
 
                 self.polluting_li820.append(True)
                 self.yp_li820.append(co2_li820)
-##                self.peak_li820(time_str,co2_li820)
-##                print self.yp_li820
 
             m+= 1
             try:
@@ -529,23 +716,22 @@ class myThread4(threading.Thread):
                         'co2_li820': co2_li820,
                         'area_li820': area_li820
                         },
-                    'time': time_str1,
+                    'time': time_str4,
                     'tags': {
-                        'sensor_number': 1,
+                        'sensor_number': 4,
                         },
                     'measurement': 'truck_sensor'
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_li820,time_str4)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
 
             with open(self.logfile4, "a") as fp:
                 fp.write("%s,%s\n"%(time_str4,co2_li820))
-
-
-
 
 class myThread5(threading.Thread):
     def __init__(self, ser):
@@ -576,8 +762,6 @@ class myThread5(threading.Thread):
 
         self.logfile5 = "li7000_readings.csv"
 
-
-
     def run(self):
         n=0
         while True:
@@ -593,13 +777,8 @@ class myThread5(threading.Thread):
 
 
             self.ys_li7000.append(co2_li7000)
-##            print ys_li7000
-
             run_avg5 = sum(self.ynp_li7000[-self.N5:])/float(self.N5)
-##            print run_avg5
             dif5 = abs(run_avg5 - co2_li7000)
-##            print dif5
-
             self.ym_li7000.append(run_avg5)
 
             self.xs_li7000.append(time_str5)
@@ -615,7 +794,6 @@ class myThread5(threading.Thread):
                     # Record ending timestamp
                     area_li7000 = np.trapz(self.yp_li7000, dx=0.2)
                     self.li7000_areas.append(area_li7000)
-##                    print self.li7000_areas
                     self.xp_li7000.append(time_str5)
                     with open(self.logfile5, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str5,co2_li7000,area_li7000))
@@ -624,8 +802,6 @@ class myThread5(threading.Thread):
 
                 self.polluting_li7000.append(False)
                 self.ynp_li7000.append(co2_li7000)
-##                print self.ynp_li7000
-
             else:
                 # Pollution event
 
@@ -637,8 +813,6 @@ class myThread5(threading.Thread):
 
                 self.polluting_li7000.append(True)
                 self.yp_li7000.append(co2_li7000)
-##                self.peak_li7000(time_str5,co2_li7000)
-##                print self.yp_li7000
             try:
                 json =   {
                     'fields': {
@@ -653,6 +827,8 @@ class myThread5(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_li7000,time_str5)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -661,7 +837,6 @@ class myThread5(threading.Thread):
 
             with open(self.logfile5, "a") as fp:
                 fp.write("%s,%s\n"%(time_str5,co2_li7000))
-
 
 class myThread6(threading.Thread):
     def __init__(self, ser):
@@ -692,8 +867,6 @@ class myThread6(threading.Thread):
 
         self.logfile6 = "sba5_readings.csv"
 
-##
-##
     def run(self):
         o=0
         while True:
@@ -709,12 +882,9 @@ class myThread6(threading.Thread):
 
 
             self.ys_sba5.append(co2_sba5)
-##            print self.ys_sba5
 
             run_avg6 = sum(self.ynp_sba5[-self.N6:])/float(self.N6)
-##            print run_avg6
             dif6 = abs(run_avg6 - co2_sba5)
-##            print dif6
 
             self.ym_sba5.append(run_avg6)
 
@@ -731,7 +901,6 @@ class myThread6(threading.Thread):
                     # Record ending timestamp
                     area_sba5 = np.trapz(self.yp_sba5, dx=1)
                     self.sba5_areas.append(area_sba5)
-##                    print self.sba5_areas
                     self.xp_sba5.append(time_str6)
                     with open(self.logfile6, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str6,co2_sba5,area_sba5))
@@ -741,11 +910,9 @@ class myThread6(threading.Thread):
 
                 self.polluting_sba5.append(False)
                 self.ynp_sba5.append(co2_sba5)
-##                print self.ynp_sba5
 
             else:
                 # Pollution event
-##
                 if self.polluting_sba5[-1] == False:
                     print("SBA5 Peak start")
                     # Just started polluting
@@ -754,13 +921,11 @@ class myThread6(threading.Thread):
 
                 self.polluting_sba5.append(True)
                 self.yp_sba5.append(co2_sba5)
-##                self.peak_sba5(time_str6,co2_sba5)
-##                print self.yp_sba5
             try:
                 json =   {
                     'fields': {
                         'co2_sba5': co2_sba5,
-                        'area_sba5': area_li7000
+                        'area_sba5': area_sba5
                         },
                     'time': time_str6,
                     'tags': {
@@ -770,6 +935,8 @@ class myThread6(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_sba5,time_str6)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -808,8 +975,6 @@ class myThread7(threading.Thread):
 
         self.logfile7 = "ma300_readings.csv"
 
-##
-##
     def run(self):
         p=0
         while True:
@@ -826,18 +991,13 @@ class myThread7(threading.Thread):
 
 
             self.ys_ma300.append(bc_ma300)
-##                print self.ys_ma300
-
             run_avg7 = sum(self.ynp_ma300[-self.N7:])/float(self.N7)
-##            print run_avg7
             dif7 = abs(run_avg7 - bc_ma300)
-##            print dif7
 
             self.ym_ma300.append(run_avg7)
 
             self.xs_ma300.append(time_str7)
             self.ys_ma300.append(bc_ma300)
-##            self.thresh_ma300 = 0.7* run_avg5
 
 
             if dif7 < self.thresh_ma300:
@@ -848,9 +1008,7 @@ class myThread7(threading.Thread):
                     # Record ending timestamp
                     area_ma300 = np.trapz(self.yp_ma300, dx=1)
                     self.ma300_areas.append(area_ma300)
-##                    print self.ma300_areas
                     self.xp_ma300.append(time_str7)
-##                    print time_str7
                     with open(self.logfile7, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str7,bc_ma300,area_ma300))
 
@@ -859,7 +1017,6 @@ class myThread7(threading.Thread):
 
                 self.polluting_ma300.append(False)
                 self.ynp_ma300.append(bc_ma300)
-##                print self.ynp_ma300
 
             else:
                 # Pollution event
@@ -869,11 +1026,9 @@ class myThread7(threading.Thread):
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ma300.append(time_str7)
-##                    print time_str7
 
                 self.polluting_ma300.append(True)
                 self.yp_ma300.append(bc_ma300)
-##
             try:
                 json =   {
                     'fields': {
@@ -889,6 +1044,8 @@ class myThread7(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_ma300,time_str7)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -897,7 +1054,6 @@ class myThread7(threading.Thread):
 
             with open(self.logfile7, "a") as fp:
                 fp.write("%s,%s\n"%(time_str7,bc_ma300))
-
 
 class myThread8(threading.Thread):
     def __init__(self, ser):
@@ -928,8 +1084,6 @@ class myThread8(threading.Thread):
 
         self.logfile8 = "vco2_readings.csv"
 
-##
-##
     def run(self):
         q=0
         self.ser.write("R\r\n")
@@ -949,18 +1103,14 @@ class myThread8(threading.Thread):
 
 
             self.ys_vco2.append(vco2)
-##                print self.ys_ma300
 
             run_avg8 = sum(self.ynp_vco2[-self.N8:])/float(self.N8)
-##            print run_avg8
             dif8 = abs(run_avg8 - vco2)
-##            print dif8
 
             self.ym_vco2.append(run_avg8)
 
             self.xs_vco2.append(time_str8)
             self.ys_vco2.append(vco2)
-##            self.thresh_ma300 = 0.7* run_avg5
 
 
             if dif8 < self.thresh_vco2:
@@ -971,7 +1121,6 @@ class myThread8(threading.Thread):
                     # Record ending timestamp
                     area_vco2 = np.trapz(self.yp_vco2, dx=1)
                     self.vco2_areas.append(area_vco2)
-##                    print self.vco2_areas
                     self.xp_vco2.append(time_str8)
                     with open(self.logfile8, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str8,vco2,area_vco2))
@@ -981,7 +1130,6 @@ class myThread8(threading.Thread):
 
                 self.polluting_vco2.append(False)
                 self.ynp_vco2.append(vco2)
-##                print self.ynp_vco2
 
             else:
                 # Pollution event
@@ -994,7 +1142,6 @@ class myThread8(threading.Thread):
 
                 self.polluting_vco2.append(True)
                 self.yp_vco2.append(vco2)
-##
             try:
                 json =   {
                     'fields': {
@@ -1009,6 +1156,8 @@ class myThread8(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_vco2,time_str8)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1047,8 +1196,6 @@ class myThread9(threading.Thread):
 
         self.logfile9 = "caps_readings.csv"
 
-##
-##
     def run(self):
         r=0
 
@@ -1066,20 +1213,13 @@ class myThread9(threading.Thread):
 
 
             self.ys_caps.append(nox_caps)
-##                print self.ys_caps
 
             run_avg9 = sum(self.ynp_caps[-self.N9:])/float(self.N9)
-##            print run_avg9
             dif9 = abs(run_avg9 - nox_caps)
-##            print dif8
-
             self.ym_caps.append(run_avg9)
 
             self.xs_caps.append(time_str9)
             self.ys_caps.append(nox_caps)
-##            self.thresh_ma300 = 0.7* run_avg5
-
-
             if dif9 < self.thresh_caps:
                 # No event
                 if self.polluting_caps[-1] == True:
@@ -1088,7 +1228,6 @@ class myThread9(threading.Thread):
                     # Record ending timestamp
                     area_caps = np.trapz(self.yp_caps, dx=1)
                     self.caps_areas.append(area_caps)
-##                    print self.caps_areas
                     self.xp_caps.append(time_str9)
                     with open(self.logfile9, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str9,nox_caps,area_caps))
@@ -1098,8 +1237,6 @@ class myThread9(threading.Thread):
 
                 self.polluting_caps.append(False)
                 self.ynp_caps.append(nox_caps)
-##                print self.ynp_caps
-
             else:
                 # Pollution event
 
@@ -1111,7 +1248,6 @@ class myThread9(threading.Thread):
 
                 self.polluting_caps.append(True)
                 self.yp_caps.append(nox_caps)
-##
             try:
                 json =   {
                     'fields': {
@@ -1125,7 +1261,8 @@ class myThread9(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                new_time = area_time(area_caps,time_str9)
+                all_area.area_time_ae33.append(new_time)
                 print(test_client.write_json(json,'truck_test'))
 
             except(ValueError,IndexError) as e:
@@ -1135,7 +1272,6 @@ class myThread9(threading.Thread):
 
             with open(self.logfile9, "a") as fp:
                 fp.write("%s,%s\n"%(time_str9,nox_caps))
-
 
 class myThread10(threading.Thread):
     def __init__(self, ser):
@@ -1166,8 +1302,7 @@ class myThread10(threading.Thread):
 
         self.logfile10 = "ucb_readings.csv"
 
-##
-##
+
     def run(self):
         s=0
 
@@ -1181,11 +1316,9 @@ class myThread10(threading.Thread):
 
             try:
                 output_ucb = ser10.decode('ascii')
-##                print output_ucb
                 values_ucb = output_ucb.split('\n')[0].split(',')
                 if float(values_ucb[1])!=0:
                     nox_ucb = float(values_ucb[1])
-##                    print nox_ucb
 
 
             except Exception as e:
@@ -1194,20 +1327,11 @@ class myThread10(threading.Thread):
 
 
             self.ys_ucb.append(nox_ucb)
-##            print self.ys_ucb
-##
             run_avg10 = sum(self.ynp_ucb[-self.N10:])/float(self.N10)
-##            print run_avg10
             dif10 = abs(run_avg10 - nox_ucb)
-##            print dif10
-##
             self.ym_ucb.append(run_avg10)
-##            print run_avg10
             self.xs_ucb.append(time_str10)
             self.ys_ucb.append(nox_ucb)
-####            self.thresh_ucb = 0.7* run_avg5
-##
-##
             if dif10 < self.thresh_ucb:
                 # No event
                 if self.polluting_ucb[-1] == True:
@@ -1216,7 +1340,6 @@ class myThread10(threading.Thread):
                     # Record ending timestamp
                     area_ucb = np.trapz(self.yp_ucb, dx=1)
                     self.ucb_areas.append(area_ucb)
-##                    print self.ucb_areas
                     self.xp_ucb.append(time_str10)
                     with open(self.logfile10, "a") as fp:
                         fp.write("%s,%s, %s\n"%(time_str10,nox_ucb,area_ucb))
@@ -1226,7 +1349,6 @@ class myThread10(threading.Thread):
 
                 self.polluting_ucb.append(False)
                 self.ynp_ucb.append(nox_ucb)
-##                print self.ynp_ucb
 
             else:
                 # Pollution event
@@ -1239,7 +1361,6 @@ class myThread10(threading.Thread):
 
                 self.polluting_ucb.append(True)
                 self.yp_ucb.append(nox_ucb)
-##
             try:
                 json =   {
                     'fields': {
@@ -1254,6 +1375,9 @@ class myThread10(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
+                new_time = area_time(area_caps,time_str10)
+                all_area.area_time_ae33.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1262,44 +1386,44 @@ class myThread10(threading.Thread):
 
             with open(self.logfile10, "a") as fp:
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
-class myThread12(threading.Thread):
+
+class areaThread(threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self,all_area)
         print("Started influx thread")
-##
-##
+
     def run(self):
+        i = 0
         while True:
-        b.wait()
-        time.sleep()
+            time.sleep(5)
+            all_area.EF_calc()
+            i+=1
 
 
-
-
+all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-b = Barrier(2, timeout=5)
-thread1=myThread1(serial1)
-##thread2=myThread2(serial2)
-##thread3=myThread3(serial3)
-##thread4=myThread4(serial4)
-##thread5=myThread5(serial5)
-##thread6=myThread6(serial6)
-##thread7=myThread7(serial7)
-##thread8=myThread8(serial8)
-##thread9=myThread9(serial9)
-##thread10=myThread10(serial10)
-##thread11=myThread11(serial11)
-thread12=myThread11()
-
-
+thread1=myThread1(serial1,all_area)
+thread2=myThread2(serial2,all_area)
+thread3=myThread3(serial3,all_area)
+thread4=myThread4(serial4,all_area)
+thread5=myThread5(serial5,all_area)
+thread6=myThread6(serial6,all_area)
+thread7=myThread7(serial7,all_area)
+thread8=myThread8(serial8,all_area)
+thread9=myThread9(serial9,all_area)
+thread10=myThread10(serial10,all_area)
+thread11=myThread11(serial11,all_area)
+#area_thread=areaThread(all_area)
 thread1.start()
-##thread2.start()
-##thread3.start()
-##thread4.start()
-##thread5.start()
-##thread6.start()
-##thread7.start()
-##thread8.start()
-##thread9.start()
-##thread10.start()
-##thread11.start()
+thread2.start()
+thread3.start()
+thread4.start()
+thread5.start()
+thread6.start()
+thread7.start()
+thread8.start()
+thread9.start()
+thread10.start()
+thread11.start()
+#area_thread.start()
