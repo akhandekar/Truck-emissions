@@ -1305,6 +1305,7 @@ class myThread10(threading.Thread):
     def run(self):
         s=0
         area_ucb = 0.0
+        nox_ucb = 0.0
         while True:
 
             serial10.write(b'\x0201RD0\x03\x26')
