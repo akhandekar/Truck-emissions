@@ -442,7 +442,7 @@ class myThread2(threading.Thread):
         j=0
         while True:
             ser2 = self.ser.readline()
-            time_str2 = datetime.datetime.now().strftime('%H:%M:%S')
+            time_str2 = datetime.now().strftime('%H:%M:%S')
             values_ae16 = ser2.split('\n')[0].split(',')
 
             try:
