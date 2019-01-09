@@ -356,8 +356,8 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                new_time = area_time(self.area_temp,time_str1)
-                all_area.area_time_abcd1.append(new_time)
+                #new_time = area_time(self.area_temp,time_str1)
+                # all_area.area_time_abcd1.append(new_time)
 
                 print(test_client.write_json(json,'truck_test'))
                 print bc_abcd1
