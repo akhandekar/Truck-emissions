@@ -1,4 +1,4 @@
- import serial
+import serial
 from time import time
 import threading
 import datetime as dt
@@ -272,17 +272,17 @@ if not os.path.isfile("ae51_readings.csv"):
 
 
 serial1=serialGeneric("/dev/ttyUSB0",57600)  ##abcd
-serial2=serialGeneric("/dev/ttyUSB3",9600)  ##ae16
-serial3=serialGeneric("/dev/ttyUSB4",9600)  ##ae33
-serial4=serialGeneric("/dev/ttyUSB5",9600)  ##li820
-serial5=serialGeneric("/dev/ttyUSB6",9600)  ##li7000
-serial6=serialGeneric("/dev/ttyUSB7",19200)  ##sba5
-serial7=serialGeneric("/dev/ttyUSB8",1000000)  ##ma300
-serial8=serialGeneric("/dev/ttyUSB9",19200)  ##vaisala
-serial9=serialGeneric("/dev/ttyUSB1",9600)  ##caps
+serial2=serialGeneric("/dev/ttyUSB1",9600)  ##ae16
+serial3=serialGeneric("/dev/ttyUSB2",9600)  ##ae33
+serial4=serialGeneric("/dev/ttyUSB3",9600)  ##li820
+serial5=serialGeneric("/dev/ttyUSB4",9600)  ##li7000
+serial6=serialGeneric("/dev/ttyUSB5",19200)  ##sba5
+serial7=serialGeneric("/dev/ttyUSB6",1000000)  ##ma300
+serial8=serialGeneric("/dev/ttyUSB7",19200)  ##vaisala
+serial9=serialGeneric("/dev/ttyUSB8",9600)  ##caps
 
 #ucb
-serial10= serial.Serial (port='/dev/ttyUSB0',
+serial10= serial.Serial (port='/dev/ttyUSB9',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
