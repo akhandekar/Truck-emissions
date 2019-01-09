@@ -44,7 +44,7 @@ class area_container:
         self.area_time_ma300 = []
         # NOx Area Values
         self.area_time_caps  = []
-        self.area_time_ucb = []
+        self.area_timze_ucb = []
 
 
     # Go through each item in the list and check to see if the timestamps match,
@@ -197,19 +197,19 @@ class area_container:
                 # Check to see if timestamp matches
                 # Convert to
 
-    # Removes elements from from beginning to the amount of elements that were
-    # in the list before hand
-    del self.area_time_li820[0:li820_len]
-    del self.area_time_li700[0:li700_len]
-    del self.area_time_sba5[0:sba5_len]
-    del self.area_time_vco2[0:vco2_len]
+        # Removes elements from from beginning to the amount of elements that were
+        # in the list before hand
+        del self.area_time_li820[0:li820_len]
+        del self.area_time_li700[0:li700_len]
+        del self.area_time_sba5[0:sba5_len]
+        del self.area_time_vco2[0:vco2_len]
 
-    del self.area_time_abcd1[0:abcd1_len]
-    # del self.area_time_[0:_len]
-    # del self.area_time_[0:_len]
+        del self.area_time_abcd1[0:abcd1_len]
+        # del self.area_time_[0:_len]
+        # del self.area_time_[0:_len]
 
-    del self.area_time_caps[0:caps_len]
-    # del self.area_time_[0:_len]
+        del self.area_time_caps[0:caps_len]
+        # del self.area_time_[0:_len]
 
 
 
