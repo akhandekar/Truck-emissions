@@ -16,7 +16,7 @@ class area_time:
     def __init__(self,area,time):
         # Create Area_Time object
         self.area = area
-        self.time = dt.strptime(time)
+        self.time = datetime.strptime(time)
 
 
 class area_container:
