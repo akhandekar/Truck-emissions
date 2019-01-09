@@ -1,4 +1,4 @@
- import serial
+import serial
 from time import time
 import threading
 import datetime as dt
