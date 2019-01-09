@@ -403,7 +403,7 @@ class myThread1(threading.Thread):
              fp.write("%s,%s\n"%(time_str1,bc_abcd1))
 
 class myThread2(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N2 = 20
@@ -508,7 +508,7 @@ class myThread2(threading.Thread):
                 fp.write("%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16))
 
 class myThread3(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N3 = 20
@@ -610,7 +610,7 @@ class myThread3(threading.Thread):
                 fp.write("%s,%s\n"%(time_str3,bc_ae33))
 
 class myThread4(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N4 = 20
@@ -720,7 +720,7 @@ class myThread4(threading.Thread):
                 fp.write("%s,%s\n"%(time_str4,co2_li820))
 
 class myThread5(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N5 = 20
@@ -825,7 +825,7 @@ class myThread5(threading.Thread):
                 fp.write("%s,%s\n"%(time_str5,co2_li7000))
 
 class myThread6(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N6 = 20
@@ -933,7 +933,7 @@ class myThread6(threading.Thread):
                 fp.write("%s,%s\n"%(time_str6,co2_sba5))
 
 class myThread7(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N7 = 20
@@ -1042,7 +1042,7 @@ class myThread7(threading.Thread):
                 fp.write("%s,%s\n"%(time_str7,bc_ma300))
 
 class myThread8(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N8 = 20
@@ -1154,7 +1154,7 @@ class myThread8(threading.Thread):
                 fp.write("%s,%s\n"%(time_str8,vco2))
 
 class myThread9(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N9 = 20
@@ -1260,7 +1260,7 @@ class myThread9(threading.Thread):
                 fp.write("%s,%s\n"%(time_str9,nox_caps))
 
 class myThread10(threading.Thread):
-    def __init__(self, ser):
+    def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N10 = 20
