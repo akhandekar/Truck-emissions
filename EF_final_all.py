@@ -650,7 +650,7 @@ class myThread4(threading.Thread):
 
     def run(self):
         m = 0
-        area = 0.0
+        area_li820 = 0.0
         while True:
             ser4 = self.ser.readline()
             time_str4 = datetime.now().strftime('%H:%M:%S')
