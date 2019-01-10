@@ -328,7 +328,10 @@ class myThread1(threading.Thread):
 
         while True:
             ser1 = self.ser.readline()
-            time_str1 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+
+            time_str1 = dt_object.strftime('%H:%M:%S')
+
             values_abcd1 = ser1.split('\n')[0].split(',')
 
 
@@ -443,7 +446,8 @@ class myThread2(threading.Thread):
         area_ae16 = 0.0
         while True:
             ser2 = self.ser.readline()
-            time_str2 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str2 = dt_object.strftime('%H:%M:%S')
             values_ae16 = ser2.split('\n')[0].split(',')
 
             try:
@@ -548,7 +552,8 @@ class myThread3(threading.Thread):
         area_ae33 = 0.0
         while True:
             ser3 = self.ser.readline()
-            time_str3 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str3 = dt_object.strftime('%H:%M:%S')
             values_ae33 = ser3.split('\n')[0].split(',')
 
             try:
@@ -653,7 +658,8 @@ class myThread4(threading.Thread):
         area_li820 = 0.0
         while True:
             ser4 = self.ser.readline()
-            time_str4 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str4 = dt_object.strftime('%H:%M:%S')
 
             try:
                 values_li820 = re.split(r'[<>]', ser4)
@@ -763,7 +769,8 @@ class myThread5(threading.Thread):
         area_li7000 = 0.0
         while True:
             ser5 = self.ser.readline()
-            time_str5 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str5 = dt_object.strftime('%H:%M:%S')
             try:
                 values_li7000 = ser5.split('\n')[0].split('\t')
                 co2_li7000 = float(values_li7000[2])
@@ -869,7 +876,8 @@ class myThread6(threading.Thread):
         area_sba5 = 0.0
         while True:
             ser6 = self.ser.readline()
-            time_str6 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str6 = dt_object.strftime('%H:%M:%S')
             values_sba5 = ser6.split('\n')[0].split(' ')
 
             try:
@@ -977,7 +985,8 @@ class myThread7(threading.Thread):
         area_ma300 = 0.0
         while True:
             ser7 = self.ser.readline()
-            time_str7 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str7 = dt_object.strftime('%H:%M:%S')
             values_ma300 = ser7.split('\n')[0].split(',')
 
             try:
@@ -1091,7 +1100,8 @@ class myThread8(threading.Thread):
 
         while True:
             ser8 = self.ser.readline()
-            time_str8 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str8 = dt_object.strftime('%H:%M:%S')
             values_vco2 = ser8.split('\n')[0].split('\t')
 
             try:
@@ -1200,7 +1210,8 @@ class myThread9(threading.Thread):
         area_caps = 0.0
         while True:
             ser9 = self.ser.readline()
-            time_str9 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str9 = dt_object.strftime('%H:%M:%S')
             values_caps = ser9.split('\n')[0].split(',')
 
             try:
@@ -1310,8 +1321,8 @@ class myThread10(threading.Thread):
 
             serial10.write(b'\x0201RD0\x03\x26')
             ser10 = serial10.readline()
-        ##    print ser10
-            time_str10 = datetime.now().strftime('%H:%M:%S')
+            dt_object = datetime.now()
+            time_str10 = dt_object.strftime('%H:%M:%S')
 
 
             try:
