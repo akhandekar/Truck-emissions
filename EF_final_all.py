@@ -210,7 +210,7 @@ class area_container:
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
         del self.area_time_li820[0:li820_len]
-        del self.area_time_li700[0:li700_len]
+        del self.area_time_li7000[0:li700_len]
         del self.area_time_sba5[0:sba5_len]
         del self.area_time_vco2[0:vco2_len]
 
