@@ -53,7 +53,7 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def EF_calc():
+    def EF_calc(self):
         # Retrieve lengths for all lists
 
         # CO2 Area_Time lengths
