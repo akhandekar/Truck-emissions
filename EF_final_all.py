@@ -1,5 +1,6 @@
 import serial
-from time import time
+#from time import time
+import time
 import threading
 import datetime as dt
 from datetime import datetime
