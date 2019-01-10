@@ -74,6 +74,7 @@ class area_container:
         for x in range(abcd1_len):
             for y in range(li820_len):
                 difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
+                print(difference.total_seconds())
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF1")
                     EF1 = self.area_time_abcd1[x].area / self.area_time_li820[y].area
