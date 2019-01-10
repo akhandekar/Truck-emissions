@@ -74,6 +74,7 @@ class area_container:
             for y in range(li820_len):
                 difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF1")
                     EF1 = self.area_time_abcd1[x].area / self.area_time_li820[y].area
                     json =   {
                         'fields': {
@@ -89,6 +90,7 @@ class area_container:
             for y in range(li7000_len):
                 difference = self.area_time_abcd1[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF2")
                     EF2 = self.area_time_abcd1[x].area / self.area_time_li7000[y].area
                     json =   {
                         'fields': {
@@ -104,6 +106,7 @@ class area_container:
             for y in range(sba5_len):
                 difference = self.area_time_abcd1[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF3")
                     EF3 = self.area_time_abcd1[x].area / self.area_time_sba5[y].area
                     json =   {
                         'fields': {
@@ -119,6 +122,7 @@ class area_container:
             for y in range(vco2_len):
                 difference = self.area_time_abcd1[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF4")
                     EF4 = self.area_time_abcd1[x].area / self.area_time_vco2[y].area
                     json =   {
                         'fields': {
@@ -135,6 +139,7 @@ class area_container:
             for y in range(li820_len):
                 difference = self.area_time_caps[x].time - self.area_time_li820[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF5")
                     EF5 = self.area_time_caps[x].area / self.area_time_li820[y].area
                     json =   {
                         'fields': {
@@ -150,6 +155,7 @@ class area_container:
             for y in range(li7000_len):
                 difference = self.area_time_caps[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF6")
                     EF6 = self.area_time_caps[x].area / self.area_time_li7000[y].area
                     json =   {
                         'fields': {
@@ -165,6 +171,7 @@ class area_container:
             for y in range(sba5_len):
                 difference = self.area_time_caps[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF7")
                     EF7 = self.area_time_caps[x].area / self.area_time_sba5[y].area
                     json =   {
                         'fields': {
@@ -180,6 +187,7 @@ class area_container:
             for y in range(vco2_len):
                 difference = self.area_time_caps[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference <= timedelta(seconds=1):
+                    print("We have a match at EF8")
                     EF8 = self.area_time_caps[x].area / self.area_time_vco2[y].area
                     json =   {
                         'fields': {
@@ -1425,7 +1433,7 @@ thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
 
 #thread11=myThread11(serial11,all_area)
-#area_thread=areaThread(all_area)
+area_thread=areaThread(all_area)
 thread1.start()
 thread2.start()
 thread3.start()
@@ -1437,4 +1445,4 @@ thread8.start()
 thread9.start()
 thread10.start()
 #thread11.start()
-#area_thread.start()
+area_thread.start()
