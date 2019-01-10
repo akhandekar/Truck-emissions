@@ -1422,6 +1422,7 @@ all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1(serial1,all_area)
+"""
 thread2=myThread2(serial2,all_area)
 thread3=myThread3(serial3,all_area)
 thread4=myThread4(serial4,all_area)
@@ -1431,10 +1432,11 @@ thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
-
+"""
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
+"""
 thread2.start()
 thread3.start()
 thread4.start()
@@ -1444,5 +1446,6 @@ thread7.start()
 thread8.start()
 thread9.start()
 thread10.start()
+"""
 #thread11.start()
 area_thread.start()
