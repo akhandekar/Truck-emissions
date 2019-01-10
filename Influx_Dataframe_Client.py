@@ -1,6 +1,6 @@
 #import configparser
-import pandas as pd
-import numpy as np
+#import pandas as pd
+#import numpy as np
 from influxdb import InfluxDBClient
 from influxdb import DataFrameClient
 import yaml
@@ -164,9 +164,11 @@ class Influx_Dataframe_Client(object):
         self.client = InfluxDBClient(host=self.host, port=self.port,
                     username=self.username, password=self.password,
                     database=self.database,ssl=self.use_ssl, verify_ssl=self.verify_ssl_is_on)
+        '''
         self.df_client = DataFrameClient(host=self.host, port=self.port,
                     username=self.username, password=self.password,
                     database=self.database,ssl=self.use_ssl, verify_ssl=self.verify_ssl_is_on)
+        '''
 
     def __build_json(self,data, tags, fields, measurement):
         '''
