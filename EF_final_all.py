@@ -16,7 +16,7 @@ class area_time:
     def __init__(self,area,time):
         # Create Area_Time object
         self.area = area
-        self.time = datetime.strptime(time)
+        self.time = time
 
 
 class area_container:
@@ -329,7 +329,6 @@ class myThread1(threading.Thread):
         while True:
             ser1 = self.ser.readline()
             dt_object = datetime.now()
-
             time_str1 = dt_object.strftime('%H:%M:%S')
 
             values_abcd1 = ser1.split('\n')[0].split(',')
@@ -359,8 +358,8 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                #new_time = area_time(self.area_temp,time_str1)
-                # all_area.area_time_abcd1.append(new_time)
+                new_time = area_time(self.area_temp,dt_object)
+                all_area.area_time_abcd1.append(new_time)
 
                 print(test_client.write_json(json,'truck_test'))
                 print bc_abcd1
@@ -508,8 +507,8 @@ class myThread2(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_ae16,time_str2)
-                # all_area.area_time_ae16.append(new_time)
+                new_time = area_time(area_ae16,dt_object)
+                all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -613,8 +612,8 @@ class myThread3(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_ae33,time_str3)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_ae33,dt_object)
+                all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
                 continue
 
@@ -726,8 +725,8 @@ class myThread4(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_li820,time_str4)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_li820,dt_object)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -831,8 +830,8 @@ class myThread5(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_li7000,time_str5)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_li7000,time_str5)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -941,8 +940,8 @@ class myThread6(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_sba5,time_str6)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_sba5,dt_object)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1051,8 +1050,8 @@ class myThread7(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_ma300,time_str7)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_ma300,dt_object)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1165,8 +1164,8 @@ class myThread8(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_vco2,time_str8)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_vco2,dt_object)
+                all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1271,8 +1270,8 @@ class myThread9(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                # new_time = area_time(area_caps,time_str9)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_caps,dt_object)
+                all_area.area_time_ae33.append(new_time)
                 print(test_client.write_json(json,'truck_test'))
 
             except(ValueError,IndexError) as e:
@@ -1386,8 +1385,8 @@ class myThread10(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                # new_time = area_time(area_caps,time_str10)
-                # all_area.area_time_ae33.append(new_time)
+                new_time = area_time(area_caps,dt_object)
+                all_area.area_time_ae33.append(new_time)
 
 
             except(ValueError,IndexError) as e:
