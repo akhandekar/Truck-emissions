@@ -1105,7 +1105,7 @@ class myThread8(threading.Thread):
         area_vco2 = 0.0
         self.ser.write("R\r\n")
         response=self.ser.readline()
-        print response
+        #print response
 
         while True:
             ser8 = self.ser.readline()
