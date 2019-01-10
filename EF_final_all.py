@@ -9,7 +9,6 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
-import Queue
 from Influx_Dataframe_Client import Influx_Dataframe_Client
 
 class area_time:
@@ -1105,7 +1104,6 @@ class myThread8(threading.Thread):
         area_vco2 = 0.0
         self.ser.write("R\r\n")
         response=self.ser.readline()
-        print response
 
         while True:
             ser8 = self.ser.readline()
