@@ -71,7 +71,7 @@ class area_container:
         caps_len = len(self.area_time_caps)
         ucb_len = len(self.area_time_ucb)
 
-
+        print(abcd1_len)
         for x in range(abcd1_len):
             for y in range(li820_len):
                 difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
