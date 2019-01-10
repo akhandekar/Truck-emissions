@@ -1385,7 +1385,7 @@ class myThread10(threading.Thread):
                     }
 
                 print(test_client.write_json(json,'truck_test'))
-                new_time = area_time(area_caps,dt_object)
+                new_time = area_time(area_ucb,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
 
