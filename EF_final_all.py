@@ -46,7 +46,7 @@ class area_container:
         self.area_time_ma300 = []
         # NOx Area Values
         self.area_time_caps  = []
-        self.area_timze_ucb = []
+        self.area_time_ucb = []
 
 
     # Go through each item in the list and check to see if the timestamps match,
