@@ -2,6 +2,7 @@ import serial
 #from time import time
 import time
 import threading
+from Influx_Dataframe_Client import Influx_Dataframe_Client
 import datetime as dt
 from datetime import datetime
 #from datetime import timedelta
@@ -9,7 +10,6 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
-from Influx_Dataframe_Client import Influx_Dataframe_Client
 
 class area_time:
     #switch to lists so we don't have to save elements
