@@ -348,7 +348,7 @@ class myThread1(threading.Thread):
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
-
+                print(bc_abcd1)    
 
             except (ValueError,IndexError) as e:
                continue

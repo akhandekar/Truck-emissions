@@ -2,15 +2,14 @@ import serial
 #from time import time
 import time
 import threading
+from Influx_Dataframe_Client import Influx_Dataframe_Client
 import datetime as dt
 from datetime import datetime
-from datetime import timedelta
+#from datetime import timedelta
 import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
-import Queue
-from Influx_Dataframe_Client import Influx_Dataframe_Client
 
 class area_time:
     #switch to lists so we don't have to save elements
@@ -71,7 +70,7 @@ class area_container:
         caps_len = len(self.area_time_caps)
         ucb_len = len(self.area_time_ucb)
 
-
+        print(abcd1_len)
         for x in range(abcd1_len):
             for y in range(li820_len):
                 difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
@@ -349,7 +348,7 @@ class myThread1(threading.Thread):
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
-
+                print(bc_abcd1)
 
             except (ValueError,IndexError) as e:
                continue
@@ -463,6 +462,7 @@ class myThread2(threading.Thread):
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
                 atn_ae16 = float(values_ae16[9])
+                print(bc_ae16)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -568,6 +568,7 @@ class myThread3(threading.Thread):
             try:
                 bc2 = float(values_ae33[9])
                 bc_ae33 = bc2/1000
+                print(bc_ae33)
 
             except(ValueError,IndexError) as e:
                 continue
@@ -733,7 +734,7 @@ class myThread4(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(co2_li820)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_li820,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -838,7 +839,7 @@ class myThread5(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(co2_li7000)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_li7000,time_str5)
                 all_area.area_time_ae33.append(new_time)
@@ -948,7 +949,7 @@ class myThread6(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(co2_sba2)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_sba5,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1058,7 +1059,7 @@ class myThread7(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(bc_ma300)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_ma300,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1105,7 +1106,6 @@ class myThread8(threading.Thread):
         area_vco2 = 0.0
         self.ser.write("R\r\n")
         response=self.ser.readline()
-        #print response
 
         while True:
             ser8 = self.ser.readline()
@@ -1172,7 +1172,7 @@ class myThread8(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(vco2)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_vco2,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1280,6 +1280,7 @@ class myThread9(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
+                print(nox_caps)
                 new_time = area_time(area_caps,dt_object)
                 all_area.area_time_ae33.append(new_time)
                 test_client.write_json(json,'truck_test')
@@ -1393,7 +1394,7 @@ class myThread10(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-
+                print(nox_ucb)
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_ucb,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1433,7 +1434,6 @@ thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
-
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
