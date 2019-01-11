@@ -396,7 +396,7 @@ class myThread1(threading.Thread):
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
                 print("The bc_abcd1 is: "+ str(bc_abcd1))
-                test_client.write_json(json,'truck_time_5')
+                test_client.write_json(json,'truck_test_2')
 
             except (ValueError,IndexError) as e:
                 print("issue in push?")
