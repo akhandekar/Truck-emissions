@@ -12,7 +12,7 @@ import numpy as np
 import os, sys, csv, re, math
 import pytz
 
-local_tz = pytz.timezone('Etc/GMT') # use your local timezone name here
+local_tz = pytz.timezone('Etc/GMT+8') # use your local timezone name here
 
 
 def utc_to_local(utc_dt):
@@ -372,7 +372,7 @@ class myThread1(threading.Thread):
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
                 print("The bc_abcd1 is: "+ str(bc_abcd1))
-                test_client.write_json(json,'truck_time_2')
+                test_client.write_json(json,'truck_time_3')
 
             except (ValueError,IndexError) as e:
                 print("issue in push?")
