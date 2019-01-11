@@ -1445,13 +1445,10 @@ thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
-'''
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
-#thread1.start()
-
+thread1.start()
 thread2.start()
-'''
 thread3.start()
 thread4.start()
 thread5.start()
