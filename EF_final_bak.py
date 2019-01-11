@@ -957,7 +957,6 @@ class myThread6(threading.Thread):
 
                 self.polluting_sba5.append(False)
                 self.ynp_sba5.append(co2_sba5)
-
             else:
                 # Pollution event
                 if self.polluting_sba5[-1] == False:
@@ -980,7 +979,7 @@ class myThread6(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                print("The co2_sba2 value is: " +str(co2_sba2))
+                print("The co2_sba2 value is: " +str(co2_sba5))
                 test_client.write_json(json,'truck_test')
                 new_time = area_time(area_sba5,dt_object)
                 all_area.area_time_ae33.append(new_time)
