@@ -367,7 +367,7 @@ class myThread1(threading.Thread):
                     'tags': {
                         'sensor_number': 1,
                         },
-                    'measurement': 'truck_time'
+                    'measurement': 'truck_sensor'
                     }
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
