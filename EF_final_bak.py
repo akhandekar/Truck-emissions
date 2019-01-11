@@ -226,13 +226,13 @@ class area_container:
         self.caps_len = len(self.area_time_caps)
         self.ucb_len = len(self.area_time_ucb)
 
-        self.EF_calc_bc(self.area_time_abcd1,'bc_abcd1')
-        self.EF_calc_bc(self.area_time_ae16,'bc_ae16')
-        self.EF_calc_bc(self.area_time_ae33,'bc_ae33')
-        self.EF_calc_bc(self.area_time_ma300,'bc_ma300')
+        self.EF_calc_bc(self.area_time_abcd1,self.abcd1_len,'bc_abcd1')
+        self.EF_calc_bc(self.area_time_ae16,self.ae16_len,'bc_ae16')
+        self.EF_calc_bc(self.area_time_ae33,self.ae33_len,'bc_ae33')
+        self.EF_calc_bc(self.area_time_ma300,self.ma300_len,'bc_ma300')
 
-        self.EF_calc_nox(self.area_time_caps,'nox_caps')
-        self.EF_calc_nox(self.area_time_nox,'nox_ucb')
+        self.EF_calc_nox(self.area_time_caps,self.caps_len,'nox_caps')
+        self.EF_calc_nox(self.area_time_nox,self.ucb_len,'nox_ucb')
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
