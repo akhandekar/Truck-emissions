@@ -547,7 +547,7 @@ class myThread2(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("bc_ae16 value is: " +str(bc_ae16))
-                test_client.write_json(json,'truck_time')
+                test_client.write_json(json,'truck_test')
                 new_time = area_time(area_ae16,dt_object)
                 all_area.area_time_ae16.append(new_time)
 
