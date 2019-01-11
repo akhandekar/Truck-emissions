@@ -1,6 +1,6 @@
 DB_config:
     host: localhost
-    database: truck_time
+    database: truck_time_1
     protocol: json
     port: 8086
     use_ssl: False
