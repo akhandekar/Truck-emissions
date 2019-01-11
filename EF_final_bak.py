@@ -400,7 +400,7 @@ class myThread1(threading.Thread):
                 area_abcd = np.trapz(self.yp_abcd1, dx=1)
                 base_line_y = [self.thresh_abcd for s in range(len(self.yp_abcd1))]
                 base_area = np.trapz(base_line_y, dx=1)
-                area_ucb = area_ucb - base_area
+                area_abcd = area_abcd - base_area
                 self.area_temp = area_abcd
                 self.abcd_areas.append(area_abcd)
                 self.xp_abcd1.append(time_str1)
