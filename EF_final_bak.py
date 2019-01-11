@@ -1450,7 +1450,7 @@ class areaThread(threading.Thread):
         i = 0
         while True:
             time.sleep(5)
-            all_area.EF_calc()
+            all_area.EF_calc_all()
             i+=1
 
 
