@@ -246,8 +246,8 @@ class area_container:
         del self.area_time_ae33[0:self.ae33_len]
         del self.area_time_ma300[0:self.ma300_len]
 
-        del self.area_time_caps[0:caps_len]
-        del self.area_time_ucb[0:ucb_len]
+        del self.area_time_caps[0:self.caps_len]
+        del self.area_time_ucb[0:self.ucb_len]
 
 
 def serialGeneric(device,baudrate):
