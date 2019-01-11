@@ -232,7 +232,7 @@ class area_container:
         self.EF_calc_bc(self.area_time_ma300,self.ma300_len,'bc_ma300')
 
         self.EF_calc_nox(self.area_time_caps,self.caps_len,'nox_caps')
-        self.EF_calc_nox(self.area_time_nox,self.ucb_len,'nox_ucb')
+        self.EF_calc_nox(self.area_time_ucb,self.ucb_len,'nox_ucb')
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
