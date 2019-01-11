@@ -304,18 +304,18 @@ if not os.path.isfile("ae51_readings.csv"):
         fp.write("timestamp,bc_ae51,Area_ae51\n")
 
 
-serial1=serialGeneric("/dev/ttyUSB10",57600)  ##abcd
-serial2=serialGeneric("/dev/ttyUSB0",9600)  ##ae16
-serial3=serialGeneric("/dev/ttyUSB1",9600)  ##ae33
-serial4=serialGeneric("/dev/ttyUSB2",9600)  ##li820
-serial5=serialGeneric("/dev/ttyUSB3",9600)  ##li7000
-serial6=serialGeneric("/dev/ttyUSB4",19200)  ##sba5
-serial7=serialGeneric("/dev/ttyUSB5",1000000)  ##ma300
-serial8=serialGeneric("/dev/ttyUSB6",19200)  ##vaisala
-serial9=serialGeneric("/dev/ttyUSB7",9600)  ##caps
+serial1=serialGeneric("/dev/ttyUSB9",57600)  ##abcd
+serial2=serialGeneric("/dev/ttyUSB11",9600)  ##ae16
+serial3=serialGeneric("/dev/ttyUSB12",9600)  ##ae33
+serial4=serialGeneric("/dev/ttyUSB13",9600)  ##li820
+serial5=serialGeneric("/dev/ttyUSB14",9600)  ##li7000
+serial6=serialGeneric("/dev/ttyUSB15",19200)  ##sba5
+serial7=serialGeneric("/dev/ttyUSB16",1000000)  ##ma300
+serial8=serialGeneric("/dev/ttyUSB17",19200)  ##vaisala
+serial9=serialGeneric("/dev/ttyUSB18",9600)  ##caps
 
 #ucb
-serial10= serial.Serial (port='/dev/ttyUSB8',
+serial10= serial.Serial (port='/dev/ttyUSB19',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
