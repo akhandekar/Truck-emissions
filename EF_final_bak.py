@@ -26,7 +26,6 @@ class area_time:
         self.area = area
         self.time = time
 
-
 class area_container:
     #switch to lists so we don't have to save elements
     def __init__(self):
@@ -46,185 +45,209 @@ class area_container:
         self.area_time_caps  = []
         self.area_time_ucb = []
 
+        # CO2 Area_Time lengths
+        self.li820_len = 0
+        self.li7000_len = 0
+        self.sba5_len = 0
+        self.vco2_len = 0
+        # BC Area_Time lengths
+        self.abcd1_len = 0
+        self.ae16_len = 0
+        self.ae33_len = 0
+        self.ma300_len = 0
+        # NOx Area_Time length
+        self.caps_len = 0
+        self.ucb_len = 0
+
 
     # Go through each item in the list and check to see if the timestamps match,
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def EF_calc(self):
-        print("Entered into EF_calc")
-        # Retrieve lengths for all lists
-
-        # CO2 Area_Time lengths
-        li820_len = len(self.area_time_li820)
-        li7000_len = len(self.area_time_li7000)
-        sba5_len = len(self.area_time_sba5)
-        vco2_len = len(self.area_time_vco2)
-        # BC Area_Time lengths
-        abcd1_len = len(self.area_time_abcd1)
-        ae16_len = len(self.area_time_ae16)
-        ae33_len = len(self.area_time_ae33)
-        ma300_len = len(self.area_time_ma300)
-        # NOx Area_Time length
-        caps_len = len(self.area_time_caps)
-        ucb_len = len(self.area_time_ucb)
-
+    def EF_calc_bc(self,area_time_quot,numerator):
         print(abcd1_len)
         for x in range(abcd1_len):
             for y in range(li820_len):
-                difference = self.area_time_abcd1[x].time - self.area_time_li820[y].time
+                difference = area_time_quot[x].time - self.area_time_li820[y].time
                 print(difference.total_seconds())
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF1")
-                    EF1 = self.area_time_abcd1[x].area / self.area_time_li820[y].area
+                    EF1 = area_time_quot[x].area / self.area_time_li820[y].area
                     json =   {
                         'fields': {
-                            'EF1': EF1
+                            'EF': EF1
                             },
                         'time': area_time_abcd1.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF1'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(li7000_len):
-                difference = self.area_time_abcd1[x].time - self.area_time_li7000[y].time
+                difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF2")
-                    EF2 = self.area_time_abcd1[x].area / self.area_time_li7000[y].area
+                    EF2 = area_time_quot[x].area / self.area_time_li7000[y].area
                     json =   {
                         'fields': {
-                            'EF2': EF2
+                            'EF': EF2
                             },
-                        'time': self.area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF2'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(sba5_len):
-                difference = self.area_time_abcd1[x].time - area_time_sba5[y].time
+                difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF3")
-                    EF3 = self.area_time_abcd1[x].area / self.area_time_sba5[y].area
+                    EF3 = area_time_quot[x].area / self.area_time_sba5[y].area
                     json =   {
                         'fields': {
-                            'EF1': EF3
+                            'EF': EF3
                             },
                         'time': area_time_abcd1.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF3'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(vco2_len):
-                difference = self.area_time_abcd1[x].time - area_time_vco2[y].time
+                difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF4")
-                    EF4 = self.area_time_abcd1[x].area / self.area_time_vco2[y].area
+                    EF4 = area_time_quot[x].area / self.area_time_vco2[y].area
                     json =   {
                         'fields': {
-                            'EF4': EF4
+                            'EF': EF4
                             },
-                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF4'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
+
+    def EF_calc_nox(self,area_time_quot,numerator):
         for x in range(caps_len):
             for y in range(li820_len):
-                difference = self.area_time_caps[x].time - self.area_time_li820[y].time
+                difference = area_time_quot[x].time - self.area_time_li820[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF5")
-                    EF5 = self.area_time_caps[x].area / self.area_time_li820[y].area
+                    EF5 = area_time_quot[x].area / self.area_time_li820[y].area
                     json =   {
                         'fields': {
-                            'EF5': EF5
+                            'EF': EF5
                             },
-                        'time': area_time_caps.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF5'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(li7000_len):
-                difference = self.area_time_caps[x].time - self.area_time_li7000[y].time
+                difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF6")
-                    EF6 = self.area_time_caps[x].area / self.area_time_li7000[y].area
+                    EF6 = area_time_quot[x].area / self.area_time_li7000[y].area
                     json =   {
                         'fields': {
-                            'EF6': EF6
+                            'EF': EF6
                             },
-                        'time': self.area_time_caps.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF6'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(sba5_len):
-                difference = self.area_time_caps[x].time - area_time_sba5[y].time
+                difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF7")
-                    EF7 = self.area_time_caps[x].area / self.area_time_sba5[y].area
+                    EF7 = area_time_quot[x].area / self.area_time_sba5[y].area
                     json =   {
                         'fields': {
-                            'EF7': EF7
+                            'EF': EF7
                             },
-                        'time': self.area_time_caps.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF7'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
             for y in range(vco2_len):
-                difference = self.area_time_caps[x].time - area_time_vco2[y].time
+                difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF8")
-                    EF8 = self.area_time_caps[x].area / self.area_time_vco2[y].area
+                    EF8 = area_time_quot[x].area / self.area_time_vco2[y].area
                     json =   {
                         'fields': {
-                            'EF8': EF8
+                            'EF': EF8
                             },
-                        'time': area_time_caps.time.strftime('%H:%M:%S'),
+                        'time': area_time_quot.time.strftime('%H:%M:%S'),
                         'tags': {
-                            'sensor_number': 1,
+                            'sensor_numerator': numerator,
+                            'EF_num': 'EF8'
                             },
-                        'measurement': 'truck_sensor'
+                        'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
 
+    def EF_calc_all(self):
+        print("Entered into EF_calc_all")
+        # Retrieve lengths for all lists
 
+        # CO2 Area_Time lengths
+        self.li820_len = len(self.area_time_li820)
+        self.li7000_len = len(self.area_time_li7000)
+        self.sba5_len = len(self.area_time_sba5)
+        self.vco2_len = len(self.area_time_vco2)
+        # BC Area_Time lengths
+        self.abcd1_len = len(self.area_time_abcd1)
+        self.ae16_len = len(self.area_time_ae16)
+        self.ae33_len = len(self.area_time_ae33)
+        self.ma300_len = len(self.area_time_ma300)
+        # NOx Area_Time length
+        self.caps_len = len(self.area_time_caps)
+        self.ucb_len = len(self.area_time_ucb)
 
-                # Check to see if timestamp matches
-                # Convert to
+        self.EF_calc_bc(self.area_time_abcd1,'bc_abcd1')
+        self.EF_calc_bc(self.area_time_ae16,'bc_ae16')
+        self.EF_calc_bc(self.area_time_ae33,'bc_ae33')
+        self.EF_calc_bc(self.area_time_ma300,'bc_ma300')
+
+        self.EF_calc_nox(self.area_time_caps,'nox_caps')
+        self.EF_calc_nox(self.area_time_nox,'nox_ucb')
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
-        del self.area_time_li820[0:li820_len]
-        del self.area_time_li7000[0:li7000_len]
-        del self.area_time_sba5[0:sba5_len]
-        del self.area_time_vco2[0:vco2_len]
+        del self.area_time_li820[0:self.li820_len]
+        del self.area_time_li7000[0:self.li7000_len]
+        del self.area_time_sba5[0:self.sba5_len]
+        del self.area_time_vco2[0:self.vco2_len]
 
-        del self.area_time_abcd1[0:abcd1_len]
-        # del self.area_time_[0:_len]
-        # del self.area_time_[0:_len]
+        del self.area_time_abcd1[0:self.abcd1_len]
+        del self.area_time_[0:self.ae16_len]
+        del self.area_time_[0:self.ae33_len]
+        del self.area_time_[0:self.ma300_len]
 
         del self.area_time_caps[0:caps_len]
-        # del self.area_time_[0:_len]
-
-
-
-
-
+        del self.area_time_[0:ucb_len]
 
 
 def serialGeneric(device,baudrate):
