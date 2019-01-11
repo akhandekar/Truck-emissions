@@ -84,7 +84,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -101,7 +101,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -118,7 +118,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -135,7 +135,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
 
     def EF_calc_nox(self,area_time_quot,quot_len,numerator):
         for x in range(quot_len):
@@ -155,7 +155,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -172,7 +172,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -189,7 +189,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -206,7 +206,7 @@ class area_container:
                             },
                         'measurement': 'emission_factor'
                         }
-                    print(test_client.write_json(json,'truck_test'))
+                    print(test_client.write_json(json,'truck_test_2'))
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
@@ -484,7 +484,7 @@ class myThread2(threading.Thread):
         while True:
             print("Entering thread2")
             ser2 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             #dt_object = utc_to_local(dt_object)
             time_str2 = dt_object.strftime('%H:%M:%S')
             values_ae16 = ser2.split('\n')[0].split(',')
@@ -548,7 +548,7 @@ class myThread2(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("bc_ae16 value is: " +str(bc_ae16))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ae16,dt_object)
                 all_area.area_time_ae16.append(new_time)
 
@@ -593,7 +593,7 @@ class myThread3(threading.Thread):
         area_ae33 = 0.0
         while True:
             ser3 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str3 = dt_object.strftime('%H:%M:%S')
             values_ae33 = ser3.split('\n')[0].split(',')
 
@@ -654,7 +654,7 @@ class myThread3(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The value for bc_ae33 is: " + str(bc_ae33))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ae33,dt_object)
                 all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
@@ -700,7 +700,7 @@ class myThread4(threading.Thread):
         area_li820 = 0.0
         while True:
             ser4 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str4 = dt_object.strftime('%H:%M:%S')
 
             try:
@@ -767,7 +767,7 @@ class myThread4(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The co2_li820 value is: " + str(co2_li820))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_li820,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
@@ -811,7 +811,7 @@ class myThread5(threading.Thread):
         area_li7000 = 0.0
         while True:
             ser5 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str5 = dt_object.strftime('%H:%M:%S')
             try:
                 values_li7000 = ser5.split('\n')[0].split('\t')
@@ -872,7 +872,7 @@ class myThread5(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The co2_li7000 value is: "+ str(co2_li7000))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_li7000,time_str5)
                 all_area.area_time_ae33.append(new_time)
 
@@ -918,7 +918,7 @@ class myThread6(threading.Thread):
         area_sba5 = 0.0
         while True:
             ser6 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str6 = dt_object.strftime('%H:%M:%S')
             values_sba5 = ser6.split('\n')[0].split(' ')
 
@@ -981,7 +981,7 @@ class myThread6(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The co2_sba2 value is: " +str(co2_sba5))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_sba5,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
@@ -1026,7 +1026,7 @@ class myThread7(threading.Thread):
         area_ma300 = 0.0
         while True:
             ser7 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str7 = dt_object.strftime('%H:%M:%S')
             values_ma300 = ser7.split('\n')[0].split(',')
 
@@ -1091,7 +1091,7 @@ class myThread7(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The bc_ma300 value is: " + str(bc_ma300))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ma300,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
@@ -1140,7 +1140,7 @@ class myThread8(threading.Thread):
 
         while True:
             ser8 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str8 = dt_object.strftime('%H:%M:%S')
             values_vco2 = ser8.split('\n')[0].split('\t')
 
@@ -1204,7 +1204,7 @@ class myThread8(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The vco2 value is: " + str(vco2))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_vco2,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
@@ -1250,7 +1250,7 @@ class myThread9(threading.Thread):
         area_caps = 0.0
         while True:
             ser9 = self.ser.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str9 = dt_object.strftime('%H:%M:%S')
             values_caps = ser9.split('\n')[0].split(',')
 
@@ -1314,7 +1314,7 @@ class myThread9(threading.Thread):
                 print("The nox_caps value is: " + str(nox_caps))
                 new_time = area_time(area_caps,dt_object)
                 all_area.area_time_ae33.append(new_time)
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
 
             except(ValueError,IndexError) as e:
                 continue
@@ -1362,7 +1362,7 @@ class myThread10(threading.Thread):
 
             serial10.write(b'\x0201RD0\x03\x26')
             ser10 = serial10.readline()
-            dt_object = datetime.now()
+            dt_object = datetime.utcnow()
             time_str10 = dt_object.strftime('%H:%M:%S')
 
 
@@ -1429,7 +1429,7 @@ class myThread10(threading.Thread):
                     'measurement': 'truck_sensor'
                     }
                 print("The nox_ucb value is: " + str(nox_ucb))
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ucb,dt_object)
                 all_area.area_time_ae33.append(new_time)
 
@@ -1459,7 +1459,6 @@ all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1(serial1,all_area)
-'''
 thread2=myThread2(serial2,all_area)
 thread3=myThread3(serial3,all_area)
 thread4=myThread4(serial4,all_area)
@@ -1469,11 +1468,9 @@ thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
-'''
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
-'''
 thread2.start()
 thread3.start()
 thread4.start()
@@ -1483,6 +1480,5 @@ thread7.start()
 thread8.start()
 thread9.start()
 thread10.start()
-'''
 #thread11.start()
 area_thread.start()
