@@ -451,7 +451,7 @@ class myThread2(threading.Thread):
         # Polluting state
         self.polluting_ae16 = [False]
 
-        self.thresh_ae16 = 5000
+        self.thresh_ae16 = 5
         self.logfile2 = "ae16_readings.csv"
 
     def run(self):
@@ -561,7 +561,7 @@ class myThread3(threading.Thread):
         # Polluting state
         self.polluting_ae33 = [False]
 
-        self.thresh_ae33 = 5000
+        self.thresh_ae33 = 5
         self.logfile3 = "ae33_readings.csv"
 
     def run(self):
@@ -695,7 +695,7 @@ class myThread4(threading.Thread):
 
             self.xs_li820.append(time_str4)
             self.ys_li820.append(co2_li820)
-            self.thresh_li820 = 0.7* run_avg4
+            self.thresh_li820 = 1.07* run_avg4
 
 
 
@@ -805,7 +805,7 @@ class myThread5(threading.Thread):
 
             self.xs_li7000.append(time_str5)
             self.ys_li7000.append(co2_li7000)
-            self.thresh_li7000 = 0.7* run_avg5
+            self.thresh_li7000 = 1.07* run_avg5
 
 
             if dif5 < self.thresh_li7000:
@@ -914,7 +914,7 @@ class myThread6(threading.Thread):
 
             self.xs_sba5.append(time_str6)
             self.ys_sba5.append(co2_sba5)
-            self.thresh_sba5 = 0.7* run_avg6
+            self.thresh_sba5 = 1.07* run_avg6
 
 
             if dif6 < self.thresh_sba5:
@@ -1218,7 +1218,7 @@ class myThread9(threading.Thread):
         # Polluting state
         self.polluting_caps = [False]
 
-        self.thresh_caps = 100
+        self.thresh_caps = .1
 
         self.logfile9 = "caps_readings.csv"
 
