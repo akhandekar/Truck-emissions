@@ -1457,6 +1457,5 @@ thread7.start()
 thread8.start()
 thread9.start()
 thread10.start()
-'''
 #thread11.start()
 area_thread.start()
