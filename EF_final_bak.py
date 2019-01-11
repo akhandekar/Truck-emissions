@@ -64,10 +64,10 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def EF_calc_bc(self,area_time_quot,numerator):
-        print(abcd1_len)
-        for x in range(abcd1_len):
-            for y in range(li820_len):
+    def EF_calc_bc(self,area_time_quot,quot_len,numerator):
+        print(quot_len)
+        for x in range(quot_len):
+            for y in range(self.li820_len):
                 difference = area_time_quot[x].time - self.area_time_li820[y].time
                 print(difference.total_seconds())
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
@@ -85,7 +85,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(li7000_len):
+            for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF2")
@@ -102,7 +102,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(sba5_len):
+            for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF3")
@@ -119,7 +119,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(vco2_len):
+            for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF4")
@@ -137,9 +137,9 @@ class area_container:
                         }
                     print(test_client.write_json(json,'truck_test'))
 
-    def EF_calc_nox(self,area_time_quot,numerator):
-        for x in range(caps_len):
-            for y in range(li820_len):
+    def EF_calc_nox(self,area_time_quot,quot_len,numerator):
+        for x in range(quot_len):
+            for y in range(self.li820_len):
                 difference = area_time_quot[x].time - self.area_time_li820[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF5")
@@ -156,7 +156,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(li7000_len):
+            for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF6")
@@ -173,7 +173,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(sba5_len):
+            for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF7")
@@ -190,7 +190,7 @@ class area_container:
                         'measurement': 'emission_factor'
                         }
                     print(test_client.write_json(json,'truck_test'))
-            for y in range(vco2_len):
+            for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
                 if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
                     print("We have a match at EF8")
