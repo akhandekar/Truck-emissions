@@ -398,7 +398,7 @@ class myThread1(threading.Thread):
                 # Record ending timestamp
                 # Add this to influx as well
                 area_abcd = np.trapz(self.yp_abcd1, dx=1)
-                base_line_y = [self.thresh_ucb for s in range(len(self.yp_abcd1))]
+                base_line_y = [self.thresh_abcd for s in range(len(self.yp_abcd1))]
                 base_area = np.trapz(base_line_y, dx=1)
                 area_ucb = area_ucb - base_area
                 self.area_temp = area_abcd
