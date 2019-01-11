@@ -336,6 +336,7 @@ class myThread1(threading.Thread):
         #while i < 240:
 
         while True:
+            print("Entering thread 1")
             ser1 = self.ser.readline()
             dt_object = datetime.now()
             dt_object = utc_to_local(dt_object)
@@ -374,7 +375,8 @@ class myThread1(threading.Thread):
                 test_client.write_json(json,'truck_test')
 
             except (ValueError,IndexError) as e:
-               continue
+                print("issue in push?")
+                continue
             i += 1
 
             with open(self.logfile1, "a") as fp:
