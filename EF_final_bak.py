@@ -10,6 +10,14 @@ import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib.animation as animation
 import os, sys, csv, re, math
+import pytz
+
+local_tz = pytz.timezone('America/Los_Angeles') # use your local timezone name here
+
+
+def utc_to_local(utc_dt):
+    local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    return local_tz.normalize(local_dt) # .normalize might be unnecessary
 
 class area_time:
     #switch to lists so we don't have to save elements
@@ -22,15 +30,6 @@ class area_time:
 class area_container:
     #switch to lists so we don't have to save elements
     def __init__(self):
-        '''
-        self.area_time_li820_queue = Queue.LifoQueue()
-        self.area_time_li7000_queue = Queue.LifoQueue()
-        self.area_time_sba5_queue = Queue.LifoQueue()
-        self.area_time_vco2_queue = Queue.LifoQueue()
-        self.area_time_caps_queue = Queue.LifoQueue()
-        self.area_time_abcd1_queue = Queue.LifoQueue()
-        '''
-
         # create all area lists
 
         # CO2 Area Values
@@ -339,6 +338,7 @@ class myThread1(threading.Thread):
         while True:
             ser1 = self.ser.readline()
             dt_object = datetime.now()
+            dt_object = utc_to_local(dt_object)
             time_str1 = dt_object.strftime('%H:%M:%S')
 
             values_abcd1 = ser1.split('\n')[0].split(',')
@@ -1431,6 +1431,7 @@ all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1(serial1,all_area)
+'''
 thread2=myThread2(serial2,all_area)
 thread3=myThread3(serial3,all_area)
 thread4=myThread4(serial4,all_area)
@@ -1440,9 +1441,11 @@ thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
+'''
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
+'''
 thread2.start()
 thread3.start()
 thread4.start()
@@ -1452,5 +1455,6 @@ thread7.start()
 thread8.start()
 thread9.start()
 thread10.start()
+'''
 #thread11.start()
 area_thread.start()
