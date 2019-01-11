@@ -366,11 +366,11 @@ class myThread1(threading.Thread):
                     'tags': {
                         'sensor_number': 1,
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'truck_time'
                     }
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
-
+                print(bc_abcd1)
                 test_client.write_json(json,'truck_test')
 
             except (ValueError,IndexError) as e:
@@ -519,7 +519,7 @@ class myThread2(threading.Thread):
                         },
                     'measurement': 'truck_sensor'
                     }
-                test_client.write_json(json,'truck_test')
+                test_client.write_json(json,'truck_time')
                 new_time = area_time(area_ae16,dt_object)
                 all_area.area_time_ae16.append(new_time)
 
