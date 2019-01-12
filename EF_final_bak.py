@@ -70,7 +70,7 @@ class area_container:
             for y in range(self.li820_len):
                 difference = area_time_quot[x].time - self.area_time_li820[y].time
                 print(difference.total_seconds())
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF1")
                     EF1 = area_time_quot[x].area / self.area_time_li820[y].area
                     json =   {
@@ -87,7 +87,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF2")
                     EF2 = area_time_quot[x].area / self.area_time_li7000[y].area
                     json =   {
@@ -104,7 +104,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF3")
                     EF3 = area_time_quot[x].area / self.area_time_sba5[y].area
                     json =   {
@@ -121,7 +121,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF4")
                     EF4 = area_time_quot[x].area / self.area_time_vco2[y].area
                     json =   {
@@ -141,7 +141,7 @@ class area_container:
         for x in range(quot_len):
             for y in range(self.li820_len):
                 difference = area_time_quot[x].time - self.area_time_li820[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF5")
                     EF5 = area_time_quot[x].area / self.area_time_li820[y].area
                     json =   {
@@ -158,7 +158,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.li7000_len):
                 difference = area_time_quot[x].time - self.area_time_li7000[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF6")
                     EF6 = area_time_quot[x].area / self.area_time_li7000[y].area
                     json =   {
@@ -175,7 +175,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.sba5_len):
                 difference = area_time_quot[x].time - area_time_sba5[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF7")
                     EF7 = area_time_quot[x].area / self.area_time_sba5[y].area
                     json =   {
@@ -192,7 +192,7 @@ class area_container:
                     print(test_client.write_json(json,'truck_test_2'))
             for y in range(self.vco2_len):
                 difference = area_time_quot[x].time - area_time_vco2[y].time
-                if timedelta(seconds=-1) <= difference.total_seconds() <= timedelta(seconds=1):
+                if timedelta(seconds=-5) <= difference.total_seconds() <= timedelta(seconds=5):
                     print("We have a match at EF8")
                     EF8 = area_time_quot[x].area / self.area_time_vco2[y].area
                     json =   {
