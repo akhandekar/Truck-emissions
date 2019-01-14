@@ -40,9 +40,11 @@ class myThread1(threading.Thread):
         i = 0
         #while i < 240:
 
-        while True:
+        while not stop_requested:
             print("Continuing thread 1")
             time.sleep(5)
+        sys.stdout.write("run exited\n")
+        sys.stdout.flush()
 
 
 
@@ -55,3 +57,8 @@ test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1()
 
 thread1.start()
+'''
+while (True):
+    if stop_requested == True:
+        exit()
+'''
