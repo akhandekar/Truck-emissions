@@ -52,7 +52,6 @@ class myThread1(threading.Thread):
 signal.signal(signal.SIGTERM, sig_handler)
 signal.signal(signal.SIGINT, sig_handler)
 
-all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
 thread1=myThread1(serial1,all_area)
