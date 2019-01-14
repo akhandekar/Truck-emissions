@@ -32,8 +32,6 @@ class myThread1(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        self.ser = ser
-        self.N1 = 20
 
         # Timestamps for all data
         self.xs_abcd1 = []
