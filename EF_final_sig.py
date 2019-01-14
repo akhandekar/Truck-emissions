@@ -1,4 +1,5 @@
 import serial
+import signal
 #from time import time
 import time
 import threading
