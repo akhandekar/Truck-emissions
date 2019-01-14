@@ -30,7 +30,7 @@ def utc_to_local(utc_dt):
 
 class myThread1(threading.Thread):
 
-    def __init__(self, ser,all_area):
+    def __init__(self):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N1 = 20
@@ -54,6 +54,6 @@ signal.signal(signal.SIGINT, sig_handler)
 
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-thread1=myThread1(serial1,all_area)
+thread1=myThread1()
 
 thread1.start()
