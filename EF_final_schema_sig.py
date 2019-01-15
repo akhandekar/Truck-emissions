@@ -326,7 +326,7 @@ serial8=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
 serial9=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
 #ucb
-serial10= serial.Serial (port='/dev/ttyUSB_nox_ucb ',
+serial10= serial.Serial (port='/dev/ttyUSB_nox_ucb',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
