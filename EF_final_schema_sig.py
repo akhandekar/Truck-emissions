@@ -312,18 +312,20 @@ if not os.path.isfile("ae51_readings.csv"):
         fp.write("timestamp,bc_ae51,Area_ae51\n")
 
 
-serial1=serialGeneric("/dev/ttyUSB9",57600)  ##abcd
-serial2=serialGeneric("/dev/ttyUSB0",9600)  ##ae16
-serial3=serialGeneric("/dev/ttyUSB1",9600)  ##ae33
-serial4=serialGeneric("/dev/ttyUSB2",9600)  ##li820
-serial5=serialGeneric("/dev/ttyUSB3",9600)  ##li7000
-serial6=serialGeneric("/dev/ttyUSB4",19200)  ##sba5
-serial7=serialGeneric("/dev/ttyUSB5",1000000)  ##ma300
-serial8=serialGeneric("/dev/ttyUSB6",19200)  ##vaisala
-serial9=serialGeneric("/dev/ttyUSB7",9600)  ##caps
+
+
+serial1=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
+serial2=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
+serial3=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
+serial4=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
+serial5=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
+serial6=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
+serial7=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
+serial8=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
+serial9=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
 #ucb
-serial10= serial.Serial (port='/dev/ttyUSB8',
+serial10= serial.Serial (port='/dev/ttyUSB_nox_ucb ',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
