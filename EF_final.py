@@ -307,7 +307,7 @@ if not os.path.isfile("ae51_readings.csv"):
 serial1=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 serial2=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 serial3=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
-serial4=serialGeneric("/dev/ttyUSB_Li820",9600)  ##li820
+serial4=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
 serial5=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
 serial6=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
 serial7=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
