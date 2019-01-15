@@ -41,7 +41,8 @@ class myThread1(threading.Thread):
         #while i < 240:
 
         while not stop_requested:
-            dt_object = datetime.now()
+            #dt_object = datetime.now()
+            dt_object = datetime.utcnow() + timedelta(days=1)
             time_str1 = dt_object.strftime('%H:%M:%S')
             json =   {
                 'fields': {
