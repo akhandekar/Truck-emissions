@@ -43,15 +43,18 @@ class myThread1(threading.Thread):
 
         while not stop_requested:
             #dt_object = datetime.now()
+            """
             dt_object = datetime.utcnow() + timedelta(days=1)
             time_str1 = dt_object.strftime('%H:%M:%S')
             e_time = (dt_object - datetime(1970,1,1)).total_seconds()
-            print(e_time)
+            """
+            time_now=time.time()*1000000000
+            print(time_now)
             #e_time = e_time
             json =   {
                 'fields': {
                     'count': i                       },
-                'time': e_time,
+                'time': time_now,
                 'tags': {
                     'sensor_name': 'bc_acbd1',
                     },
