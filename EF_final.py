@@ -304,24 +304,21 @@ if not os.path.isfile("ae51_readings.csv"):
     with open("ae51_readings.csv", "w") as fp:
         fp.write("timestamp,bc_ae51,Area_ae51\n")
 
-
-#serial1=serialGeneric("/dev/ttyUSB9",57600)  ##abcd
-#serial2=serialGeneric("/dev/ttyUSB0",9600)  ##ae16
-#serial3=serialGeneric("/dev/ttyUSB1",9600)  ##ae33
+serial1=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
+serial2=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
+serial3=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 serial4=serialGeneric("/dev/ttyUSB_Li820",9600)  ##li820
-#serial5=serialGeneric("/dev/ttyUSB3",9600)  ##li7000
-#serial6=serialGeneric("/dev/ttyUSB4",19200)  ##sba5
-#serial7=serialGeneric("/dev/ttyUSB5",1000000)  ##ma300
-#serial8=serialGeneric("/dev/ttyUSB6",19200)  ##vaisala
-#serial9=serialGeneric("/dev/ttyUSB7",9600)  ##caps
+serial5=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
+serial6=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
+serial7=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
+serial8=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
+serial9=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
 #ucb
-'''
 serial10= serial.Serial (port='/dev/ttyUSB8',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
-'''
 ##serial11=serialGeneric("/dev/ttyUSB0",9600)  ##ae51
 
 
@@ -1464,35 +1461,27 @@ class areaThread(threading.Thread):
 all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-'''
 thread1=myThread1(serial1,all_area)
 thread2=myThread2(serial2,all_area)
 thread3=myThread3(serial3,all_area)
-'''
 thread4=myThread4(serial4,all_area)
-'''
 thread5=myThread5(serial5,all_area)
 thread6=myThread6(serial6,all_area)
 thread7=myThread7(serial7,all_area)
 thread8=myThread8(serial8,all_area)
 thread9=myThread9(serial9,all_area)
 thread10=myThread10(serial10,all_area)
-'''
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
-'''
 thread1.start()
 thread2.start()
 thread3.start()
-'''
 thread4.start()
-'''
 thread5.start()
 thread6.start()
 thread7.start()
 thread8.start()
 thread9.start()
 thread10.start()
-'''
 #thread11.start()
 area_thread.start()
