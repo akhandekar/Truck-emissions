@@ -29,11 +29,11 @@ def sig_handler(signum, frame):
 
 class area_time:
     #switch to lists so we don't have to save elements
-    def __init__(self,area,start_time,end_time):
+    def __init__(self,area,time):
         # Create Area_Time object
         self.area = area
-        self.start_time = start_time
-        self.end_time = end_time
+        self.time = time
+        #self.end_time = end_time
 
 class area_container:
     #switch to lists so we don't have to save elements
