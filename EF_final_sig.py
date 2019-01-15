@@ -48,7 +48,7 @@ class myThread1(threading.Thread):
                     'count': i                       },
                 'time': time_str1,
                 'tags': {
-                    'sensor_name': bc_acbd1,
+                    'sensor_name': 'bc_acbd1',
                     },
                 'measurement': 'truck_sensor'
                 }
