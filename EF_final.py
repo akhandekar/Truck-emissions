@@ -365,8 +365,6 @@ class myThread1(threading.Thread):
             #dt_object = datetime.now()
             dt_object = datetime.now()
             #dt_object = utc_to_local(dt_object)
-            time_str1 = dt_object.strftime('%H:%M:%S')
-
             values_abcd1 = ser1.split('\n')[0].split(',')
             #print(values_abcd1)
 
