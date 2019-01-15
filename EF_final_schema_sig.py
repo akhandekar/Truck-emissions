@@ -491,7 +491,7 @@ class myThread2(threading.Thread):
         j=0
         area_ae16 = 0.0
         while not stop_requested:
-            print("Entering thread2")
+            #print("Entering thread2")
             ser2 = self.ser.readline()
             dt_object = datetime.now()
             #dt_object = utc_to_local(dt_object)
@@ -557,7 +557,7 @@ class myThread2(threading.Thread):
                         },
                     'measurement': 'bc'
                     }
-                print("bc_ae16 value is: " +str(bc_ae16))
+                #print("bc_ae16 value is: " +str(bc_ae16))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_ae16,dt_object)
                 all_area.area_time_ae16.append(new_time)
@@ -662,7 +662,7 @@ class myThread3(threading.Thread):
                         },
                     'measurement': 'bc'
                     }
-                print("The value for bc_ae33 is: " + str(bc_ae33))
+                #print("The value for bc_ae33 is: " + str(bc_ae33))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_ae33,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -775,7 +775,7 @@ class myThread4(threading.Thread):
                         },
                     'measurement': 'co2'
                     }
-                print("The co2_li820 value is: " + str(co2_li820))
+                #print("The co2_li820 value is: " + str(co2_li820))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_li820,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -881,7 +881,7 @@ class myThread5(threading.Thread):
                         },
                     'measurement': 'co2'
                     }
-                print("The co2_li7000 value is: "+ str(co2_li7000))
+                #print("The co2_li7000 value is: "+ str(co2_li7000))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_li7000,time_str5)
                 all_area.area_time_ae33.append(new_time)
@@ -991,7 +991,7 @@ class myThread6(threading.Thread):
                         },
                     'measurement': 'co2'
                     }
-                print("The co2_sba2 value is: " +str(co2_sba5))
+                #print("The co2_sba2 value is: " +str(co2_sba5))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_sba5,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1101,7 +1101,7 @@ class myThread7(threading.Thread):
                         },
                     'measurement': 'bc'
                     }
-                print("The bc_ma300 value is: " + str(bc_ma300))
+                #print("The bc_ma300 value is: " + str(bc_ma300))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_ma300,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1215,7 +1215,7 @@ class myThread8(threading.Thread):
                         },
                     'measurement': 'co2'
                     }
-                print("The vco2 value is: " + str(vco2))
+                #print("The vco2 value is: " + str(vco2))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_vco2,dt_object)
                 all_area.area_time_ae33.append(new_time)
@@ -1323,7 +1323,7 @@ class myThread9(threading.Thread):
                         },
                     'measurement': 'nox'
                     }
-                print("The nox_caps value is: " + str(nox_caps))
+                #print("The nox_caps value is: " + str(nox_caps))
                 new_time = area_time(area_caps,dt_object)
                 all_area.area_time_ae33.append(new_time)
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1440,7 +1440,7 @@ class myThread10(threading.Thread):
                         },
                     'measurement': 'nox'
                     }
-                print("The nox_ucb value is: " + str(nox_ucb))
+                #print("The nox_ucb value is: " + str(nox_ucb))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_ucb,dt_object)
                 all_area.area_time_ae33.append(new_time)
