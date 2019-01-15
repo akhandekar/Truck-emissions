@@ -41,12 +41,21 @@ class myThread1(threading.Thread):
         #while i < 240:
 
         while not stop_requested:
+            json =   {
+                'fields': {
+                    'count': i                       },
+                'time': time_str1,
+                'tags': {
+                    'sensor_name': bc_acbd1,
+                    },
+                'measurement': 'truck_sensor'
+                }
             print("Continuing thread 1")
-            time.sleep(5)
+            print(test_client.write_json(json,'timestamp_test'))
+            time.sleep(1)
+            i+=1
         sys.stdout.write("run exited\n")
         sys.stdout.flush()
-
-
 
 
 signal.signal(signal.SIGTERM, sig_handler)
