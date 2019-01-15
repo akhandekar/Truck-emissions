@@ -382,15 +382,15 @@ class myThread1(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'atn_abcd': atn_abcd1,
-                        'bc_abcd': bc_abcd1,
-                        'flow_abcd': flow_abcd1,
-                        'area_abcd': self.area_temp                        },
+                        'bc': bc_abcd1,
+                        'atn': atn_abcd1,
+                        'flow': flow_abcd1,
+                        'area': self.area_temp                        },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_abcd1',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
@@ -537,15 +537,15 @@ class myThread2(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc_ae16': bc_ae16,
-                        'atn_ae16': atn_ae16,
-                        'area_ae16': area_ae16
+                        'bc': bc_ae16,
+                        'atn': atn_ae16,
+                        'area': area_ae16
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae16',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("bc_ae16 value is: " +str(bc_ae16))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -643,15 +643,14 @@ class myThread3(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc2': bc2,
-                        'bc_ae33': bc_ae33,
-                        'area_ae33': area_ae33
+                        'bc': bc_ae33,
+                        'area': area_ae33
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae33',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("The value for bc_ae33 is: " + str(bc_ae33))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -757,14 +756,14 @@ class myThread4(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li820': co2_li820,
-                        'area_li820': area_li820
+                        'co2': co2_li820,
+                        'area': area_li820
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li820',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_li820 value is: " + str(co2_li820))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -863,14 +862,14 @@ class myThread5(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li7000': co2_li7000,
-                        'area_li7000': area_li7000
+                        'co2': co2_li7000,
+                        'area': area_li7000
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li7000',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_li7000 value is: "+ str(co2_li7000))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -973,14 +972,14 @@ class myThread6(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_sba5': co2_sba5,
-                        'area_sba5': area_sba5
+                        'co2': co2_sba5,
+                        'area': area_sba5
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_sba5',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_sba2 value is: " +str(co2_sba5))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1083,15 +1082,14 @@ class myThread7(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc3': bc3,
-                        'bc_ma300': bc_ma300,
-                        'area_ma300': area_ma300
+                        'bc': bc_ma300,
+                        'area': area_ma300
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ma300',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("The bc_ma300 value is: " + str(bc_ma300))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1198,14 +1196,14 @@ class myThread8(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'vco2': vco2,
-                        'area_vco2': area_vco2
+                        'co2': vco2,
+                        'area': area_vco2
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'vco2',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The vco2 value is: " + str(vco2))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1306,15 +1304,14 @@ class myThread9(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox1': nox1,
-                        'nox_caps': nox_caps,
-                        'area_caps': area_caps
+                        'nox': nox_caps,
+                        'area': area_caps
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_caps',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
                 print("The nox_caps value is: " + str(nox_caps))
                 new_time = area_time(area_caps,dt_object)
@@ -1424,14 +1421,14 @@ class myThread10(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox_ucb': nox_ucb,
-                        'area_ucb': area_ucb
+                        'nox': nox_ucb,
+                        'area': area_ucb
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_ucb',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
                 print("The nox_ucb value is: " + str(nox_ucb))
                 print(test_client.write_json(json,'truck_test_2'))

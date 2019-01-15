@@ -13,11 +13,18 @@ import os, sys, csv, re, math
 import pytz
 
 local_tz = pytz.timezone('Etc/GMT+8') # use your local timezone name here
-
+stop_requested = False
 
 def utc_to_local(utc_dt):
     local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
     return local_tz.normalize(local_dt) # .normalize might be unnecessary
+
+def sig_handler(signum, frame):
+    sys.stdout.write("handling signal: %s\n" % signum)
+    sys.stdout.flush()
+
+    global stop_requested
+    stop_requested = True
 
 class area_time:
     #switch to lists so we don't have to save elements
@@ -359,7 +366,7 @@ class myThread1(threading.Thread):
         i = 0
         #while i < 240:
 
-        while True:
+        while not stop_requested:
             print("Entering thread 1")
             ser1 = self.ser.readline()
             #dt_object = datetime.now()
@@ -382,15 +389,15 @@ class myThread1(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'atn_abcd': atn_abcd1,
-                        'bc_abcd': bc_abcd1,
-                        'flow_abcd': flow_abcd1,
-                        'area_abcd': self.area_temp                        },
+                        'bc': bc_abcd1,
+                        'atn': atn_abcd1,
+                        'flow': flow_abcd1,
+                        'area': self.area_temp                        },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_abcd1',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 new_time = area_time(self.area_temp,dt_object)
                 all_area.area_time_abcd1.append(new_time)
@@ -480,7 +487,7 @@ class myThread2(threading.Thread):
     def run(self):
         j=0
         area_ae16 = 0.0
-        while True:
+        while not stop_requested:
             print("Entering thread2")
             ser2 = self.ser.readline()
             dt_object = datetime.now()
@@ -537,15 +544,15 @@ class myThread2(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc_ae16': bc_ae16,
-                        'atn_ae16': atn_ae16,
-                        'area_ae16': area_ae16
+                        'bc': bc_ae16,
+                        'atn': atn_ae16,
+                        'area': area_ae16
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae16',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("bc_ae16 value is: " +str(bc_ae16))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -591,7 +598,7 @@ class myThread3(threading.Thread):
     def run(self):
         l=0
         area_ae33 = 0.0
-        while True:
+        while not stop_requested:
             ser3 = self.ser.readline()
             dt_object = datetime.now()
             time_str3 = dt_object.strftime('%H:%M:%S')
@@ -643,15 +650,14 @@ class myThread3(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc2': bc2,
-                        'bc_ae33': bc_ae33,
-                        'area_ae33': area_ae33
+                        'bc': bc_ae33,
+                        'area': area_ae33
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae33',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("The value for bc_ae33 is: " + str(bc_ae33))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -698,7 +704,7 @@ class myThread4(threading.Thread):
     def run(self):
         m = 0
         area_li820 = 0.0
-        while True:
+        while not stop_requested:
             ser4 = self.ser.readline()
             dt_object = datetime.now()
             time_str4 = dt_object.strftime('%H:%M:%S')
@@ -757,14 +763,14 @@ class myThread4(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li820': co2_li820,
-                        'area_li820': area_li820
+                        'co2': co2_li820,
+                        'area': area_li820
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li820',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_li820 value is: " + str(co2_li820))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -809,7 +815,7 @@ class myThread5(threading.Thread):
     def run(self):
         n=0
         area_li7000 = 0.0
-        while True:
+        while not stop_requested:
             ser5 = self.ser.readline()
             dt_object = datetime.now()
             time_str5 = dt_object.strftime('%H:%M:%S')
@@ -863,14 +869,14 @@ class myThread5(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li7000': co2_li7000,
-                        'area_li7000': area_li7000
+                        'co2': co2_li7000,
+                        'area': area_li7000
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li7000',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_li7000 value is: "+ str(co2_li7000))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -917,7 +923,7 @@ class myThread6(threading.Thread):
     def run(self):
         o=0
         area_sba5 = 0.0
-        while True:
+        while not stop_requested:
             ser6 = self.ser.readline()
             dt_object = datetime.now()
             time_str6 = dt_object.strftime('%H:%M:%S')
@@ -973,14 +979,14 @@ class myThread6(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_sba5': co2_sba5,
-                        'area_sba5': area_sba5
+                        'co2': co2_sba5,
+                        'area': area_sba5
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_sba5',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The co2_sba2 value is: " +str(co2_sba5))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1026,7 +1032,7 @@ class myThread7(threading.Thread):
     def run(self):
         p=0
         area_ma300 = 0.0
-        while True:
+        while not stop_requested:
             ser7 = self.ser.readline()
             dt_object = datetime.now()
             time_str7 = dt_object.strftime('%H:%M:%S')
@@ -1083,15 +1089,14 @@ class myThread7(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc3': bc3,
-                        'bc_ma300': bc_ma300,
-                        'area_ma300': area_ma300
+                        'bc': bc_ma300,
+                        'area': area_ma300
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ma300',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
                 print("The bc_ma300 value is: " + str(bc_ma300))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1141,7 +1146,7 @@ class myThread8(threading.Thread):
         self.ser.write("R\r\n")
         response=self.ser.readline()
 
-        while True:
+        while not stop_requested:
             ser8 = self.ser.readline()
             dt_object = datetime.now()
             time_str8 = dt_object.strftime('%H:%M:%S')
@@ -1198,14 +1203,14 @@ class myThread8(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'vco2': vco2,
-                        'area_vco2': area_vco2
+                        'co2': vco2,
+                        'area': area_vco2
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'vco2',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
                 print("The vco2 value is: " + str(vco2))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1252,7 +1257,7 @@ class myThread9(threading.Thread):
     def run(self):
         r=0
         area_caps = 0.0
-        while True:
+        while not stop_requested:
             ser9 = self.ser.readline()
             dt_object = datetime.now()
             time_str9 = dt_object.strftime('%H:%M:%S')
@@ -1306,15 +1311,14 @@ class myThread9(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox1': nox1,
-                        'nox_caps': nox_caps,
-                        'area_caps': area_caps
+                        'nox': nox_caps,
+                        'area': area_caps
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_caps',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
                 print("The nox_caps value is: " + str(nox_caps))
                 new_time = area_time(area_caps,dt_object)
@@ -1363,7 +1367,7 @@ class myThread10(threading.Thread):
         s=0
         area_ucb = 0.0
         nox_ucb = 0.0
-        while True:
+        while not stop_requested:
 
             serial10.write(b'\x0201RD0\x03\x26')
             ser10 = serial10.readline()
@@ -1424,14 +1428,14 @@ class myThread10(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox_ucb': nox_ucb,
-                        'area_ucb': area_ucb
+                        'nox': nox_ucb,
+                        'area': area_ucb
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_ucb',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
                 print("The nox_ucb value is: " + str(nox_ucb))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -1454,10 +1458,14 @@ class areaThread(threading.Thread):
 
     def run(self):
         i = 0
-        while True:
+        while not stop_requested:
             time.sleep(5)
             all_area.EF_calc_all()
             i+=1
+
+signal.signal(signal.SIGTERM, sig_handler)
+signal.signal(signal.SIGINT, sig_handler)
+
 
 
 all_area=area_container()
@@ -1487,3 +1495,7 @@ thread9.start()
 thread10.start()
 #thread11.start()
 area_thread.start()
+while not stop_requested:
+    time.sleep(1)
+
+exit()

@@ -14,7 +14,6 @@ import numpy as np
 import os, sys, csv, re, math
 import pytz
 
-local_tz = pytz.timezone('Etc/GMT+8') # use your local timezone name here
 stop_requested = False
 
 def sig_handler(signum, frame):
