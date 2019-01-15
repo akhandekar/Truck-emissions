@@ -388,7 +388,7 @@ class myThread1(threading.Thread):
                         'area_abcd': self.area_temp                        },
                     'time': time_str1,
                     'tags': {
-                        'sensor_number': 1,
+                        'sensor_name': 'bc_abcd1',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -542,7 +542,7 @@ class myThread2(threading.Thread):
                         },
                     'time': time_str2,
                     'tags': {
-                        'sensor_number': 2,
+                        'sensor_name': 'bc_ae16',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -648,7 +648,7 @@ class myThread3(threading.Thread):
                         },
                     'time': time_str3,
                     'tags': {
-                        'sensor_number': 3,
+                        'sensor_name': 'bc_ae33',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -761,7 +761,7 @@ class myThread4(threading.Thread):
                         },
                     'time': time_str4,
                     'tags': {
-                        'sensor_number': 4,
+                        'sensor_name': 'co2_li820',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -866,7 +866,7 @@ class myThread5(threading.Thread):
                         },
                     'time': time_str5,
                     'tags': {
-                        'sensor_number': 5,
+                        'sensor_name': 'co2_li7000',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -975,7 +975,7 @@ class myThread6(threading.Thread):
                         },
                     'time': time_str6,
                     'tags': {
-                        'sensor_number': 6,
+                        'sensor_name': 'co2_sba5',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -1085,7 +1085,7 @@ class myThread7(threading.Thread):
                         },
                     'time': time_str7,
                     'tags': {
-                        'sensor_number': 7,
+                        'sensor_name': 'bc_ma300',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -1198,7 +1198,7 @@ class myThread8(threading.Thread):
                         },
                     'time': time_str8,
                     'tags': {
-                        'sensor_number': 8,
+                        'sensor_name': 'vco2',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -1306,7 +1306,7 @@ class myThread9(threading.Thread):
                         },
                     'time': time_str9,
                     'tags': {
-                        'sensor_number': 9,
+                        'sensor_name': 'nox_caps',
                         },
                     'measurement': 'truck_sensor'
                     }
@@ -1423,7 +1423,7 @@ class myThread10(threading.Thread):
                         },
                     'time': time_str10,
                     'tags': {
-                        'sensor_number': 10,
+                        'sensor_name': 'nox_ucb',
                         },
                     'measurement': 'truck_sensor'
                     }
