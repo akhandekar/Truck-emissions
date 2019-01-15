@@ -1,6 +1,6 @@
 import serial
 import signal
-from datetime import timedelta 
+from datetime import timedelta
 #from time import time
 import time
 import threading
@@ -45,10 +45,13 @@ class myThread1(threading.Thread):
             #dt_object = datetime.now()
             dt_object = datetime.utcnow() + timedelta(days=1)
             time_str1 = dt_object.strftime('%H:%M:%S')
+            e_time = (dt_object - datetime.datetime(1970,1,1)).total_seconds()
+            print(e_time)
+            e_time = e_time * 1000000000
             json =   {
                 'fields': {
                     'count': i                       },
-                'time': time_str1,
+                'time': e_time,
                 'tags': {
                     'sensor_name': 'bc_acbd1',
                     },
