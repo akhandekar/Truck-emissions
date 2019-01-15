@@ -48,7 +48,7 @@ class myThread1(threading.Thread):
             time_str1 = dt_object.strftime('%H:%M:%S')
             e_time = (dt_object - datetime(1970,1,1)).total_seconds()
             """
-            time_now=time.time()#*1000000000
+            time_now=time.time()*1000000#*1000000000
             print(time_now)
             #e_time = e_time
             json =   {
