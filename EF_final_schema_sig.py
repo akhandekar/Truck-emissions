@@ -378,6 +378,7 @@ class myThread1(threading.Thread):
             values_abcd1 = ser1.split('\n')[0].split(',')
             #print(values_abcd1)
             time_now=int(time.time()*1000000000)
+            time_str1 = dt_object.strftime('%H:%M:%S')
             try:
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
