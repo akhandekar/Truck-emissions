@@ -47,7 +47,7 @@ class myThread1(threading.Thread):
             time_str1 = dt_object.strftime('%H:%M:%S')
             e_time = (dt_object - datetime(1970,1,1)).total_seconds()
             print(e_time)
-            e_time = e_time * 1000000
+            #e_time = e_time
             json =   {
                 'fields': {
                     'count': i                       },
