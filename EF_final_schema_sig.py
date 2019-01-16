@@ -1657,6 +1657,7 @@ class myThread10(threading.Thread):
             try:
                 output_ucb = ser10.decode('ascii')
                 values_ucb = output_ucb.split('\n')[0].split(',')
+                print("values_ucb")
                 if float(values_ucb[1])!=0:
                     nox_ucb = float(values_ucb[1])
 
