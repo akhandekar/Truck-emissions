@@ -1,4 +1,5 @@
 import serial
+import signal
 #from time import time
 import time
 import threading
@@ -13,18 +14,27 @@ import os, sys, csv, re, math
 import pytz
 
 local_tz = pytz.timezone('Etc/GMT+8') # use your local timezone name here
-
+stop_requested = False
 
 def utc_to_local(utc_dt):
     local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
     return local_tz.normalize(local_dt) # .normalize might be unnecessary
 
+def sig_handler(signum, frame):
+    sys.stdout.write("handling signal: %s\n" % signum)
+    sys.stdout.flush()
+
+    global stop_requested
+    stop_requested = True
+
 class area_time:
     #switch to lists so we don't have to save elements
-    def __init__(self,area,time):
+    def __init__(self,area,start_time,end_time):
         # Create Area_Time object
         self.area = area
-        self.time = time
+        #self.time = time
+        self.start_time = start_time
+        self.end_time = end_time
 
 class area_container:
     #switch to lists so we don't have to save elements
@@ -304,6 +314,9 @@ if not os.path.isfile("ae51_readings.csv"):
     with open("ae51_readings.csv", "w") as fp:
         fp.write("timestamp,bc_ae51,Area_ae51\n")
 
+
+
+
 serial1=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 serial2=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 serial3=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
@@ -315,14 +328,15 @@ serial8=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
 serial9=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
 #ucb
-serial10= serial.Serial (port='/dev/ttyUSB8',
+serial10= serial.Serial (port='/dev/ttyUSB_nox_ucb',
         baudrate=9600,
         timeout = 1,
         bytesize=serial.SEVENBITS)
+
 ##serial11=serialGeneric("/dev/ttyUSB0",9600)  ##ae51
 
 
-class myThread1(threading.Thread):
+class abcd_thread(threading.Thread):
 
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
@@ -352,12 +366,14 @@ class myThread1(threading.Thread):
 
         self.thresh_abcd = 7
         self.logfile1 = "abcd_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         i = 0
         #while i < 240:
 
-        while True:
+        while not stop_requested:
             print("Entering thread 1")
             ser1 = self.ser.readline()
             #dt_object = datetime.now()
@@ -366,6 +382,7 @@ class myThread1(threading.Thread):
             values_abcd1 = ser1.split('\n')[0].split(',')
             #print(values_abcd1)
             time_now=int(time.time()*1000000000)
+            time_str1 = dt_object.strftime('%H:%M:%S')
             try:
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
@@ -373,30 +390,31 @@ class myThread1(threading.Thread):
                 print(bc_abcd1)
 
             except (ValueError,IndexError) as e:
-               continue
+                print("abcd index failure")
+                continue
 
             self.peak_abcd(time_str1,bc_abcd1)
 
             try:
                 json =   {
                     'fields': {
-                        'atn_abcd': atn_abcd1,
-                        'bc_abcd': bc_abcd1,
-                        'flow_abcd': flow_abcd1,
-                        'area_abcd': self.area_temp                        },
+                        'bc': bc_abcd1,
+                        'atn': atn_abcd1,
+                        'flow': flow_abcd1,
+                        'area': self.area_temp                        },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_abcd1',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
-                new_time = area_time(self.area_temp,dt_object)
+                new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
                 all_area.area_time_abcd1.append(new_time)
                 print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(test_client.write_json(json,'truck_test_2'))
 
             except (ValueError,IndexError) as e:
-                print("issue in push?")
+                print("abcd index failure")
                 continue
             i += 1
 
@@ -429,16 +447,41 @@ class myThread1(threading.Thread):
                     fp.write("%s,%s,%s\n"%(time_str1,bc_abcd1,area_abcd))
 
                 del self.yp_abcd1[:]
-                print("ABCD Peak finished")
+                self.peak_end = int(time.time()*1000000000)
+                #print("ABCD Peak finished")
+                json_start =   {
+                    'fields': {
+                        'peak_start_abcd': 1,
+                        },
+                    'time': self.peak_start,
+                    'tags': {
+                        'sensor_name': 'bc_abcd1',
+                        },
+                    'measurement': 'peak'
+                    }
+
+                json_end =   {
+                    'fields': {
+                        'peak_end_abcd': 1,
+                        },
+                    'time': self.peak_end,
+                    'tags': {
+                        'sensor_name': 'bc_abcd1',
+                        },
+                    'measurement': 'peak'
+                    }
+                print(test_client.write_json(json_start,'truck_test_2'))
+                print(test_client.write_json(json_end,'truck_test_2'))
 
             self.polluting_abcd.append(False)
             self.ynp_abcd1.append(bc_abcd1)
         else:
             # Pollution event
             if self.polluting_abcd[-1] == False:
-                print("ABCD Peak started")
+                #print("ABCD Peak started")
+                self.peak_start = int(time.time()*1000000000)
                 # Just started polluting
-                # Record starting timestamp
+                 # Record starting timestamp
                 self.xp_abcd1.append(time_str1)
 
             self.polluting_abcd.append(True)
@@ -447,12 +490,13 @@ class myThread1(threading.Thread):
         with open(self.logfile1, "a") as fp:
              fp.write("%s,%s\n"%(time_str1,bc_abcd1))
 
-class myThread2(threading.Thread):
+class ae16_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
         self.N2 = 20
 
+        #Could pass in an object here for all variables
         # Timestamps for all data
         self.xs_ae16 = []
         # All BC data
@@ -474,12 +518,14 @@ class myThread2(threading.Thread):
 
         self.thresh_ae16 = 5
         self.logfile2 = "ae16_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         j=0
         area_ae16 = 0.0
-        while True:
-            print("Entering thread2")
+        while not stop_requested:
+            #print("Entering thread2")
             ser2 = self.ser.readline()
             dt_object = datetime.now()
             #dt_object = utc_to_local(dt_object)
@@ -491,9 +537,12 @@ class myThread2(threading.Thread):
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
                 atn_ae16 = float(values_ae16[9])
+                #print("values for ae16 are:")
+                #print(values_ae16)
                 print(bc_ae16)
 
             except(ValueError,IndexError) as e:
+                print("ae16 index error")
                 continue
 
             run_avg2 = sum(self.ynp_ae16[-self.N2:])/float(self.N2)
@@ -518,6 +567,30 @@ class myThread2(threading.Thread):
 
                     del self.yp_ae16[:]
                     print("AE16 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_ae16': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'bc_ae16',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_ae16': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'bc_ae16',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_ae16.append(False)
                 self.ynp_ae16.append(bc_ae16)
@@ -525,6 +598,7 @@ class myThread2(threading.Thread):
                 # Pollution event
                 if self.polluting_ae16[-1] == False:
                     print("AE16 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ae16.append(time_str2)
@@ -535,22 +609,23 @@ class myThread2(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc_ae16': bc_ae16,
-                        'atn_ae16': atn_ae16,
-                        'area_ae16': area_ae16
+                        'bc': bc_ae16,
+                        'atn': atn_ae16,
+                        'area': area_ae16
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae16',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
-                print("bc_ae16 value is: " +str(bc_ae16))
+                #print("bc_ae16 value is: " +str(bc_ae16))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ae16,dt_object)
+                new_time = area_time(area_ae16,self.peak_start,self.peak_end)
                 all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("ae16 index failure")
                 continue
 
             j+= 1
@@ -558,7 +633,7 @@ class myThread2(threading.Thread):
             with open(self.logfile2, "a") as fp:
                 fp.write("%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16))
 
-class myThread3(threading.Thread):
+class ae33_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -585,11 +660,13 @@ class myThread3(threading.Thread):
 
         self.thresh_ae33 = 5
         self.logfile3 = "ae33_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         l=0
         area_ae33 = 0.0
-        while True:
+        while not stop_requested:
             ser3 = self.ser.readline()
             dt_object = datetime.now()
             time_str3 = dt_object.strftime('%H:%M:%S')
@@ -601,6 +678,7 @@ class myThread3(threading.Thread):
                 print(bc_ae33)
 
             except(ValueError,IndexError) as e:
+                print("ae33 index failure")
                 continue
 
 
@@ -624,14 +702,39 @@ class myThread3(threading.Thread):
                         fp.write("%s,%s, %s\n"%(time_str3,bc_ae33,area_ae33))
 
                     del self.yp_ae33[:]
-                    print("AE33 Peak end")
+                    #print("AE33 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_ae33': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'bc_ae33',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_ae33': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'bc_ae33',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_ae33.append(False)
                 self.ynp_ae33.append(bc_ae33)
             else:
                 # Pollution event
                 if self.polluting_ae33[-1] == False:
-                    print("AE33 Peak start")
+                    #print("AE33 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ae33.append(time_str3)
@@ -641,21 +744,21 @@ class myThread3(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc2': bc2,
-                        'bc_ae33': bc_ae33,
-                        'area_ae33': area_ae33
+                        'bc': bc_ae33,
+                        'area': area_ae33
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ae33',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
-                print("The value for bc_ae33 is: " + str(bc_ae33))
+                #print("The value for bc_ae33 is: " + str(bc_ae33))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ae33,dt_object)
+                new_time = area_time(area_ae33,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
+                print("ae33 index failure")
                 continue
 
             l+= 1
@@ -663,7 +766,7 @@ class myThread3(threading.Thread):
             with open(self.logfile3, "a") as fp:
                 fp.write("%s,%s\n"%(time_str3,bc_ae33))
 
-class myThread4(threading.Thread):
+class li820_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -691,22 +794,28 @@ class myThread4(threading.Thread):
         self.logfile4 = "li820_readings.csv"
 
         self.temp_area_li820 = 0.0
+        self.peak_start = 0
+        self.peak_end = 0
 
 
     def run(self):
         m = 0
         area_li820 = 0.0
-        while True:
+        while not stop_requested:
             ser4 = self.ser.readline()
             dt_object = datetime.now()
             time_str4 = dt_object.strftime('%H:%M:%S')
             time_now=int(time.time()*1000000000)
             try:
                 values_li820 = re.split(r'[<>]', ser4)
-
+                #print("The values for li820:")
+                #print(values_li820)
                 co2_li820 = float(values_li820[14])
+                temp_li820 = float(values_li820[6])
+                press_li820 = float(values_li820[10])
 
             except(ValueError,IndexError) as e:
+                print("li820 index failure")
                 continue
 
             self.ys_li820.append(co2_li820)
@@ -736,6 +845,30 @@ class myThread4(threading.Thread):
 
                     del self.yp_li820[:]
                     print("LI820 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_li820': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'co2_li820',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_li820': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'co2_li820',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_li820.append(False)
                 self.ynp_li820.append(co2_li820)
@@ -743,7 +876,8 @@ class myThread4(threading.Thread):
                 # Pollution event
 
                 if self.polluting_li820[-1] == False:
-                    print("LI820 Peak start")
+                    #print("LI820 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_li820.append(time_str4)
@@ -755,27 +889,30 @@ class myThread4(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li820': co2_li820,
-                        'area_li820': area_li820
+                        'co2': co2_li820,
+                        'area': area_li820,
+                        'temp': temp_li820,
+                        'pressure': press_li820
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li820',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
-                print("The co2_li820 value is: " + str(co2_li820))
+                #print("The co2_li820 value is: " + str(co2_li820))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_li820,dt_object)
+                new_time = area_time(area_li820,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("li820 index failure")
                 continue
 
             with open(self.logfile4, "a") as fp:
                 fp.write("%s,%s\n"%(time_str4,co2_li820))
 
-class myThread5(threading.Thread):
+class li7000_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -803,22 +940,29 @@ class myThread5(threading.Thread):
         self.thresh_li7000 = 700
 
         self.logfile5 = "li7000_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         n=0
         area_li7000 = 0.0
-        while True:
+        while not stop_requested:
             ser5 = self.ser.readline()
             dt_object = datetime.now()
             time_str5 = dt_object.strftime('%H:%M:%S')
             time_now=int(time.time()*1000000000)
             try:
                 values_li7000 = ser5.split('\n')[0].split('\t')
+                #print("The values for li700 are:")
+                #print(values_li7000)
                 co2_li7000 = float(values_li7000[2])
+                press_li7000 = float(values_li7000[4])
+                temp_li7000 = float(values_li7000[5])
 
 
             except (ValueError,IndexError) as e:
-               continue
+                print("li7000 index failure")
+                continue
 
 
             self.ys_li7000.append(co2_li7000)
@@ -845,6 +989,31 @@ class myThread5(threading.Thread):
                     del self.yp_li7000[:]
                     print("LI7000 Peak end")
 
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_li7000': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'co2_li7000',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_li7000': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'co2_li7000',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
+
                 self.polluting_li7000.append(False)
                 self.ynp_li7000.append(co2_li7000)
             else:
@@ -852,6 +1021,7 @@ class myThread5(threading.Thread):
 
                 if self.polluting_li7000[-1] == False:
                     print("LI7000 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_li7000.append(time_str5)
@@ -861,21 +1031,24 @@ class myThread5(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_li7000': co2_li7000,
-                        'area_li7000': area_li7000
+                        'co2': co2_li7000,
+                        'area': area_li7000,
+                        'temp': temp_li7000,
+                        'pressure': press_li7000
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_li7000',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
-                print("The co2_li7000 value is: "+ str(co2_li7000))
+                #print("The co2_li7000 value is: "+ str(co2_li7000))
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_li7000,time_str5)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("li7000 index failure")
                 continue
 
             n+= 1
@@ -883,7 +1056,7 @@ class myThread5(threading.Thread):
             with open(self.logfile5, "a") as fp:
                 fp.write("%s,%s\n"%(time_str5,co2_li7000))
 
-class myThread6(threading.Thread):
+class sba5_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -911,11 +1084,13 @@ class myThread6(threading.Thread):
         self.thresh_sba5 = 700
 
         self.logfile6 = "sba5_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         o=0
         area_sba5 = 0.0
-        while True:
+        while not stop_requested:
             ser6 = self.ser.readline()
             dt_object = datetime.now()
             time_str6 = dt_object.strftime('%H:%M:%S')
@@ -926,7 +1101,8 @@ class myThread6(threading.Thread):
                 co2_sba5 = float(values_sba5[3])
 
             except (ValueError, IndexError) as e:
-               continue
+                print("sba5 index failure")
+                continue
 
 
             self.ys_sba5.append(co2_sba5)
@@ -955,6 +1131,30 @@ class myThread6(threading.Thread):
 
                     del self.yp_sba5[:]
                     print("SBA5 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_sba5': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'co2_sba5',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_sba5': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'co2_sba5',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_sba5.append(False)
                 self.ynp_sba5.append(co2_sba5)
@@ -962,6 +1162,7 @@ class myThread6(threading.Thread):
                 # Pollution event
                 if self.polluting_sba5[-1] == False:
                     print("SBA5 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_sba5.append(time_str6)
@@ -971,21 +1172,22 @@ class myThread6(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'co2_sba5': co2_sba5,
-                        'area_sba5': area_sba5
+                        'co2': co2_sba5,
+                        'area': area_sba5
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'co2_sba5',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
-                print("The co2_sba2 value is: " +str(co2_sba5))
+                #print("The co2_sba2 value is: " +str(co2_sba5))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_sba5,dt_object)
+                new_time = area_time(area_sba5,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("sba5 index failure")
                 continue
 
             o+= 1
@@ -993,7 +1195,7 @@ class myThread6(threading.Thread):
             with open(self.logfile6, "a") as fp:
                 fp.write("%s,%s\n"%(time_str6,co2_sba5))
 
-class myThread7(threading.Thread):
+class ma300_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1020,11 +1222,13 @@ class myThread7(threading.Thread):
 
         self.thresh_ma300 = 5000
         self.logfile7 = "ma300_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         p=0
         area_ma300 = 0.0
-        while True:
+        while not stop_requested:
             ser7 = self.ser.readline()
             dt_object = datetime.now()
             time_str7 = dt_object.strftime('%H:%M:%S')
@@ -1036,7 +1240,8 @@ class myThread7(threading.Thread):
                 bc_ma300 = bc3/1000
 
             except (ValueError, IndexError) as e:
-               continue
+                print("ma300 index failure")
+                continue
 
 
             self.ys_ma300.append(bc_ma300)
@@ -1063,6 +1268,30 @@ class myThread7(threading.Thread):
 
                     del self.yp_ma300[:]
                     print("MA300 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_ma300': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'bc_ma300',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_ma300': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'bc_ma300',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_ma300.append(False)
                 self.ynp_ma300.append(bc_ma300)
@@ -1081,22 +1310,22 @@ class myThread7(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'bc3': bc3,
-                        'bc_ma300': bc_ma300,
-                        'area_ma300': area_ma300
+                        'bc': bc_ma300,
+                        'area': area_ma300
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'bc_ma300',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'bc'
                     }
-                print("The bc_ma300 value is: " + str(bc_ma300))
+                #print("The bc_ma300 value is: " + str(bc_ma300))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ma300,dt_object)
+                new_time = area_time(area_ma300,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("ma300 index failure")
                 continue
 
             p+= 1
@@ -1104,7 +1333,7 @@ class myThread7(threading.Thread):
             with open(self.logfile7, "a") as fp:
                 fp.write("%s,%s\n"%(time_str7,bc_ma300))
 
-class myThread8(threading.Thread):
+class vco2_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1132,6 +1361,8 @@ class myThread8(threading.Thread):
         self.thresh_vco2 = 700
 
         self.logfile8 = "vco2_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         q=0
@@ -1139,7 +1370,7 @@ class myThread8(threading.Thread):
         self.ser.write("R\r\n")
         response=self.ser.readline()
 
-        while True:
+        while not stop_requested:
             ser8 = self.ser.readline()
             dt_object = datetime.now()
             time_str8 = dt_object.strftime('%H:%M:%S')
@@ -1150,7 +1381,8 @@ class myThread8(threading.Thread):
                 vco2 = float(values_vco2[0])
 
             except (ValueError, IndexError) as e:
-               continue
+                print("vco2 index failure")
+                continue
 
 
             self.ys_vco2.append(vco2)
@@ -1178,6 +1410,30 @@ class myThread8(threading.Thread):
 
                     del self.yp_vco2[:]
                     print("VCO2 Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_vco2': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'vco2',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_vco2': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'vco2',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_vco2.append(False)
                 self.ynp_vco2.append(vco2)
@@ -1187,6 +1443,7 @@ class myThread8(threading.Thread):
 
                 if self.polluting_vco2[-1] == False:
                     print("VCO2 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_vco2.append(time_str8)
@@ -1196,21 +1453,22 @@ class myThread8(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'vco2': vco2,
-                        'area_vco2': area_vco2
+                        'co2': vco2,
+                        'area': area_vco2
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'vco2',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'co2'
                     }
-                print("The vco2 value is: " + str(vco2))
+                #print("The vco2 value is: " + str(vco2))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_vco2,dt_object)
+                new_time = area_time(area_vco2,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("vco2 index failure")
                 continue
 
             q+= 1
@@ -1218,7 +1476,7 @@ class myThread8(threading.Thread):
             with open(self.logfile8, "a") as fp:
                 fp.write("%s,%s\n"%(time_str8,vco2))
 
-class myThread9(threading.Thread):
+class caps_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1246,11 +1504,13 @@ class myThread9(threading.Thread):
         self.thresh_caps = .1
 
         self.logfile9 = "caps_readings.csv"
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         r=0
         area_caps = 0.0
-        while True:
+        while not stop_requested:
             ser9 = self.ser.readline()
             dt_object = datetime.now()
             time_str9 = dt_object.strftime('%H:%M:%S')
@@ -1262,7 +1522,8 @@ class myThread9(threading.Thread):
                 nox_caps = nox1/1000
 
             except (ValueError, IndexError) as e:
-               continue
+                print("caps index failure")
+                continue
 
 
             self.ys_caps.append(nox_caps)
@@ -1287,7 +1548,30 @@ class myThread9(threading.Thread):
 
                     del self.yp_caps[:]
                     print("CAPS Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_caps': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'nox_caps',
+                            },
+                        'measurement': 'peak'
+                        }
 
+                    json_end =   {
+                        'fields': {
+                            'peak_end_caps': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'nox_caps',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
                 self.polluting_caps.append(False)
                 self.ynp_caps.append(nox_caps)
             else:
@@ -1295,6 +1579,7 @@ class myThread9(threading.Thread):
 
                 if self.polluting_caps[-1] == False:
                     print("CAPS Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_caps.append(time_str9)
@@ -1304,22 +1589,22 @@ class myThread9(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox1': nox1,
-                        'nox_caps': nox_caps,
-                        'area_caps': area_caps
+                        'nox': nox_caps,
+                        'area': area_caps
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_caps',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
-                print("The nox_caps value is: " + str(nox_caps))
-                new_time = area_time(area_caps,dt_object)
+                #print("The nox_caps value is: " + str(nox_caps))
+                new_time = area_time(area_caps,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
                 print(test_client.write_json(json,'truck_test_2'))
 
             except(ValueError,IndexError) as e:
+                print("caps index failure")
                 continue
 
             r+= 1
@@ -1327,7 +1612,7 @@ class myThread9(threading.Thread):
             with open(self.logfile9, "a") as fp:
                 fp.write("%s,%s\n"%(time_str9,nox_caps))
 
-class myThread10(threading.Thread):
+class ucb_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1355,13 +1640,14 @@ class myThread10(threading.Thread):
         self.thresh_ucb = 0.1
 
         self.logfile10 = "ucb_readings.csv"
-
+        self.peak_start = 0
+        self.peak_end = 0
 
     def run(self):
         s=0
         area_ucb = 0.0
         nox_ucb = 0.0
-        while True:
+        while not stop_requested:
 
             serial10.write(b'\x0201RD0\x03\x26')
             ser10 = serial10.readline()
@@ -1372,11 +1658,14 @@ class myThread10(threading.Thread):
             try:
                 output_ucb = ser10.decode('ascii')
                 values_ucb = output_ucb.split('\n')[0].split(',')
+                print("values_ucb:")
+                print(values_ucb)
                 if float(values_ucb[1])!=0:
                     nox_ucb = float(values_ucb[1])
 
 
             except Exception as e:
+                print("ucb index failure")
                 print (e)
                 continue
 
@@ -1404,6 +1693,30 @@ class myThread10(threading.Thread):
 
                     del self.yp_ucb[:]
                     print("UCB Peak end")
+                    self.peak_end = int(time.time()*1000000000)
+                    json_start =   {
+                        'fields': {
+                            'peak_start_ucb': 1,
+                            },
+                        'time': self.peak_start,
+                        'tags': {
+                            'sensor_name': 'nox_ucb',
+                            },
+                        'measurement': 'peak'
+                        }
+
+                    json_end =   {
+                        'fields': {
+                            'peak_end_ucb': 1,
+                            },
+                        'time': self.peak_end,
+                        'tags': {
+                            'sensor_name': 'nox_ucb',
+                            },
+                        'measurement': 'peak'
+                        }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_ucb.append(False)
                 self.ynp_ucb.append(nox_ucb)
@@ -1413,6 +1726,7 @@ class myThread10(threading.Thread):
 
                 if self.polluting_ucb[-1] == False:
                     print("UCB Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ucb.append(time_str10)
@@ -1422,22 +1736,23 @@ class myThread10(threading.Thread):
             try:
                 json =   {
                     'fields': {
-                        'nox_ucb': nox_ucb,
-                        'area_ucb': area_ucb
+                        'nox': nox_ucb,
+                        'area': area_ucb
                         },
                     'time': time_now,
                     'tags': {
                         'sensor_name': 'nox_ucb',
                         },
-                    'measurement': 'truck_sensor'
+                    'measurement': 'nox'
                     }
-                print("The nox_ucb value is: " + str(nox_ucb))
+                #print("The nox_ucb value is: " + str(nox_ucb))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ucb,dt_object)
+                new_time = area_time(area_ucb,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
 
             except(ValueError,IndexError) as e:
+                print("ucb index failure push")
                 continue
 
             s+= 1
@@ -1452,25 +1767,29 @@ class areaThread(threading.Thread):
 
     def run(self):
         i = 0
-        while True:
+        while not stop_requested:
             time.sleep(5)
             all_area.EF_calc_all()
             i+=1
+
+signal.signal(signal.SIGTERM, sig_handler)
+signal.signal(signal.SIGINT, sig_handler)
+
 
 
 all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-thread1=myThread1(serial1,all_area)
-thread2=myThread2(serial2,all_area)
-thread3=myThread3(serial3,all_area)
-thread4=myThread4(serial4,all_area)
-thread5=myThread5(serial5,all_area)
-thread6=myThread6(serial6,all_area)
-thread7=myThread7(serial7,all_area)
-thread8=myThread8(serial8,all_area)
-thread9=myThread9(serial9,all_area)
-thread10=myThread10(serial10,all_area)
+thread1=abcd_thread(serial1,all_area)
+thread2=ae16_thread(serial2,all_area)
+thread3=ae33_thread(serial3,all_area)
+thread4=li820_thread(serial4,all_area)
+thread5=li7000(serial5,all_area)
+thread6=sba5_thread(serial6,all_area)
+thread7=ma300_thread(serial7,all_area)
+thread8=vco2_thread(serial8,all_area)
+thread9=caps_thread(serial9,all_area)
+thread10=ucb_thread(serial10,all_area)
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
@@ -1485,3 +1804,7 @@ thread9.start()
 thread10.start()
 #thread11.start()
 area_thread.start()
+while not stop_requested:
+    time.sleep(1)
+
+exit()
