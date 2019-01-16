@@ -1679,6 +1679,8 @@ class myThread10(threading.Thread):
                             },
                         'measurement': 'peak'
                         }
+                    print(test_client.write_json(json_start,'truck_test_2'))
+                    print(test_client.write_json(json_end,'truck_test_2'))
 
                 self.polluting_ucb.append(False)
                 self.ynp_ucb.append(nox_ucb)
