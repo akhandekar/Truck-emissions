@@ -449,7 +449,7 @@ class myThread1(threading.Thread):
                 #print("ABCD Peak finished")
                 json_start =   {
                     'fields': {
-                        'peak_start': 1,
+                        'peak_start_abcd': 1,
                         },
                     'time': self.peak_start,
                     'tags': {
@@ -460,7 +460,7 @@ class myThread1(threading.Thread):
 
                 json_end =   {
                     'fields': {
-                        'peak_end': 1,
+                        'peak_end_abcd': 1,
                         },
                     'time': self.peak_end,
                     'tags': {
@@ -494,6 +494,7 @@ class myThread2(threading.Thread):
         self.ser = ser
         self.N2 = 20
 
+        #Could pass in an object here for all variables
         # Timestamps for all data
         self.xs_ae16 = []
         # All BC data
@@ -564,7 +565,7 @@ class myThread2(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_ae16': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -575,7 +576,7 @@ class myThread2(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_ae16': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -592,7 +593,7 @@ class myThread2(threading.Thread):
                 # Pollution event
                 if self.polluting_ae16[-1] == False:
                     print("AE16 Peak start")
-                    self.peak_ = int(time.time()*1000000000)
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ae16.append(time_str2)
@@ -698,7 +699,7 @@ class myThread3(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_ae33': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -709,7 +710,7 @@ class myThread3(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_ae33': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -835,7 +836,7 @@ class myThread4(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_li820': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -846,7 +847,7 @@ class myThread4(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_li820': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -971,7 +972,7 @@ class myThread5(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_li820': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -982,7 +983,7 @@ class myThread5(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_li820': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1000,6 +1001,7 @@ class myThread5(threading.Thread):
 
                 if self.polluting_li7000[-1] == False:
                     print("LI7000 Peak start")
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_li7000.append(time_str5)
@@ -1108,7 +1110,7 @@ class myThread6(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_sba5': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1119,7 +1121,7 @@ class myThread6(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_sba5': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1136,7 +1138,7 @@ class myThread6(threading.Thread):
                 # Pollution event
                 if self.polluting_sba5[-1] == False:
                     print("SBA5 Peak start")
-                    self.peak_end = int(time.time()*1000000000)
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_sba5.append(time_str6)
@@ -1243,7 +1245,7 @@ class myThread7(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_ma300': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1254,7 +1256,7 @@ class myThread7(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_ma300': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1383,7 +1385,7 @@ class myThread8(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_vco2': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1394,7 +1396,7 @@ class myThread8(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_vco2': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1413,7 +1415,7 @@ class myThread8(threading.Thread):
 
                 if self.polluting_vco2[-1] == False:
                     print("VCO2 Peak start")
-                    self.peak_end = int(time.time()*1000000000)
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_vco2.append(time_str8)
@@ -1519,7 +1521,7 @@ class myThread9(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_caps': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1530,7 +1532,7 @@ class myThread9(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_caps': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1547,7 +1549,7 @@ class myThread9(threading.Thread):
 
                 if self.polluting_caps[-1] == False:
                     print("CAPS Peak start")
-                    self.peak_end = int(time.time()*1000000000)
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_caps.append(time_str9)
@@ -1660,7 +1662,7 @@ class myThread10(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start': 1,
+                            'peak_start_ucb': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1671,7 +1673,7 @@ class myThread10(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end': 1,
+                            'peak_end_ucb': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1690,7 +1692,7 @@ class myThread10(threading.Thread):
 
                 if self.polluting_ucb[-1] == False:
                     print("UCB Peak start")
-                    self.peak_end = int(time.time()*1000000000)
+                    self.peak_start = int(time.time()*1000000000)
                     # Just started polluting
                     # Record starting timestamp
                     self.xp_ucb.append(time_str10)
