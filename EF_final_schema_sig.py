@@ -29,11 +29,12 @@ def sig_handler(signum, frame):
 
 class area_time:
     #switch to lists so we don't have to save elements
-    def __init__(self,area,time):
+    def __init__(self,area,start_time,end_time):
         # Create Area_Time object
         self.area = area
-        self.time = time
-        #self.end_time = end_time
+        #self.time = time
+        self.start_time = start_time
+        self.end_time = end_time
 
 class area_container:
     #switch to lists so we don't have to save elements
@@ -335,7 +336,7 @@ serial10= serial.Serial (port='/dev/ttyUSB_nox_ucb',
 ##serial11=serialGeneric("/dev/ttyUSB0",9600)  ##ae51
 
 
-class myThread1(threading.Thread):
+class abcd_thread(threading.Thread):
 
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
@@ -407,7 +408,7 @@ class myThread1(threading.Thread):
                         },
                     'measurement': 'bc'
                     }
-                new_time = area_time(self.area_temp,time_now)
+                new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
                 all_area.area_time_abcd1.append(new_time)
                 print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(test_client.write_json(json,'truck_test_2'))
@@ -489,7 +490,7 @@ class myThread1(threading.Thread):
         with open(self.logfile1, "a") as fp:
              fp.write("%s,%s\n"%(time_str1,bc_abcd1))
 
-class myThread2(threading.Thread):
+class ae16_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -620,7 +621,7 @@ class myThread2(threading.Thread):
                     }
                 #print("bc_ae16 value is: " +str(bc_ae16))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ae16,time_now)
+                new_time = area_time(area_ae16,self.peak_start,self.peak_end)
                 all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
@@ -632,7 +633,7 @@ class myThread2(threading.Thread):
             with open(self.logfile2, "a") as fp:
                 fp.write("%s,%s,%s\n"%(time_str2,bc_ae16,atn_ae16))
 
-class myThread3(threading.Thread):
+class ae33_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -754,7 +755,7 @@ class myThread3(threading.Thread):
                     }
                 #print("The value for bc_ae33 is: " + str(bc_ae33))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ae33,time_now)
+                new_time = area_time(area_ae33,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
                 print("ae33 index failure")
@@ -765,7 +766,7 @@ class myThread3(threading.Thread):
             with open(self.logfile3, "a") as fp:
                 fp.write("%s,%s\n"%(time_str3,bc_ae33))
 
-class myThread4(threading.Thread):
+class li820_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -901,7 +902,7 @@ class myThread4(threading.Thread):
                     }
                 #print("The co2_li820 value is: " + str(co2_li820))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_li820,time_now)
+                new_time = area_time(area_li820,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
@@ -911,7 +912,7 @@ class myThread4(threading.Thread):
             with open(self.logfile4, "a") as fp:
                 fp.write("%s,%s\n"%(time_str4,co2_li820))
 
-class myThread5(threading.Thread):
+class li7000_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -991,7 +992,7 @@ class myThread5(threading.Thread):
                     self.peak_end = int(time.time()*1000000000)
                     json_start =   {
                         'fields': {
-                            'peak_start_li820': 1,
+                            'peak_start_li7000': 1,
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -1002,7 +1003,7 @@ class myThread5(threading.Thread):
 
                     json_end =   {
                         'fields': {
-                            'peak_end_li820': 1,
+                            'peak_end_li7000': 1,
                             },
                         'time': self.peak_end,
                         'tags': {
@@ -1055,7 +1056,7 @@ class myThread5(threading.Thread):
             with open(self.logfile5, "a") as fp:
                 fp.write("%s,%s\n"%(time_str5,co2_li7000))
 
-class myThread6(threading.Thread):
+class sba5_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1182,7 +1183,7 @@ class myThread6(threading.Thread):
                     }
                 #print("The co2_sba2 value is: " +str(co2_sba5))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_sba5,time_now)
+                new_time = area_time(area_sba5,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
@@ -1194,7 +1195,7 @@ class myThread6(threading.Thread):
             with open(self.logfile6, "a") as fp:
                 fp.write("%s,%s\n"%(time_str6,co2_sba5))
 
-class myThread7(threading.Thread):
+class ma300_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1320,7 +1321,7 @@ class myThread7(threading.Thread):
                     }
                 #print("The bc_ma300 value is: " + str(bc_ma300))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ma300,time_now)
+                new_time = area_time(area_ma300,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
@@ -1332,7 +1333,7 @@ class myThread7(threading.Thread):
             with open(self.logfile7, "a") as fp:
                 fp.write("%s,%s\n"%(time_str7,bc_ma300))
 
-class myThread8(threading.Thread):
+class vco2_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1463,7 +1464,7 @@ class myThread8(threading.Thread):
                     }
                 #print("The vco2 value is: " + str(vco2))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_vco2,time_now)
+                new_time = area_time(area_vco2,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
@@ -1475,7 +1476,7 @@ class myThread8(threading.Thread):
             with open(self.logfile8, "a") as fp:
                 fp.write("%s,%s\n"%(time_str8,vco2))
 
-class myThread9(threading.Thread):
+class caps_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1598,7 +1599,7 @@ class myThread9(threading.Thread):
                     'measurement': 'nox'
                     }
                 #print("The nox_caps value is: " + str(nox_caps))
-                new_time = area_time(area_caps,time_now)
+                new_time = area_time(area_caps,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
                 print(test_client.write_json(json,'truck_test_2'))
 
@@ -1611,7 +1612,7 @@ class myThread9(threading.Thread):
             with open(self.logfile9, "a") as fp:
                 fp.write("%s,%s\n"%(time_str9,nox_caps))
 
-class myThread10(threading.Thread):
+class ucb_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
@@ -1746,7 +1747,7 @@ class myThread10(threading.Thread):
                     }
                 #print("The nox_ucb value is: " + str(nox_ucb))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_ucb,time_now)
+                new_time = area_time(area_ucb,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
 
@@ -1779,16 +1780,16 @@ signal.signal(signal.SIGINT, sig_handler)
 all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-thread1=myThread1(serial1,all_area)
-thread2=myThread2(serial2,all_area)
-thread3=myThread3(serial3,all_area)
-thread4=myThread4(serial4,all_area)
-thread5=myThread5(serial5,all_area)
-thread6=myThread6(serial6,all_area)
-thread7=myThread7(serial7,all_area)
-thread8=myThread8(serial8,all_area)
-thread9=myThread9(serial9,all_area)
-thread10=myThread10(serial10,all_area)
+thread1=abcd_thread(serial1,all_area)
+thread2=ae16_thread(serial2,all_area)
+thread3=ae33_thread(serial3,all_area)
+thread4=li820_thread(serial4,all_area)
+thread5=li7000(serial5,all_area)
+thread6=sba5_thread(serial6,all_area)
+thread7=ma300_thread(serial7,all_area)
+thread8=vco2_thread(serial8,all_area)
+thread9=caps_thread(serial9,all_area)
+thread10=ucb_thread(serial10,all_area)
 #thread11=myThread11(serial11,all_area)
 area_thread=areaThread(all_area)
 thread1.start()
