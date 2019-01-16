@@ -389,7 +389,8 @@ class myThread1(threading.Thread):
                 print(bc_abcd1)
 
             except (ValueError,IndexError) as e:
-               continue
+                print("abcd index failure")
+                continue
 
             self.peak_abcd(time_str1,bc_abcd1)
 
@@ -412,7 +413,7 @@ class myThread1(threading.Thread):
                 print(test_client.write_json(json,'truck_test_2'))
 
             except (ValueError,IndexError) as e:
-                print("issue in push?")
+                print("abcd index failure")
                 continue
             i += 1
 
@@ -535,9 +536,12 @@ class myThread2(threading.Thread):
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
                 atn_ae16 = float(values_ae16[9])
+                print("values for ae16 are:")
+                print(values_ae16)
                 print(bc_ae16)
 
             except(ValueError,IndexError) as e:
+                print("ae16 index error")
                 continue
 
             run_avg2 = sum(self.ynp_ae16[-self.N2:])/float(self.N2)
@@ -620,6 +624,7 @@ class myThread2(threading.Thread):
                 all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("ae16 index failure")
                 continue
 
             j+= 1
@@ -672,6 +677,7 @@ class myThread3(threading.Thread):
                 print(bc_ae33)
 
             except(ValueError,IndexError) as e:
+                print("ae33 index failure")
                 continue
 
 
@@ -751,6 +757,7 @@ class myThread3(threading.Thread):
                 new_time = area_time(area_ae33,time_now)
                 all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
+                print("ae33 index failure")
                 continue
 
             l+= 1
@@ -800,10 +807,12 @@ class myThread4(threading.Thread):
             time_now=int(time.time()*1000000000)
             try:
                 values_li820 = re.split(r'[<>]', ser4)
-
+                print("The values for li820:")
+                print(values_li820)
                 co2_li820 = float(values_li820[14])
 
             except(ValueError,IndexError) as e:
+                print("li820 index failure")
                 continue
 
             self.ys_li820.append(co2_li820)
@@ -892,6 +901,7 @@ class myThread4(threading.Thread):
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("li820 index failure")
                 continue
 
             with open(self.logfile4, "a") as fp:
@@ -938,10 +948,13 @@ class myThread5(threading.Thread):
             time_now=int(time.time()*1000000000)
             try:
                 values_li7000 = ser5.split('\n')[0].split('\t')
+                print("The values for li700 are:")
+                print(values_li7000)
                 co2_li7000 = float(values_li7000[2])
 
 
             except (ValueError,IndexError) as e:
+                print("li7000 index failure")
                continue
 
 
@@ -1026,6 +1039,7 @@ class myThread5(threading.Thread):
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("li7000 index failure")
                 continue
 
             n+= 1
@@ -1078,7 +1092,8 @@ class myThread6(threading.Thread):
                 co2_sba5 = float(values_sba5[3])
 
             except (ValueError, IndexError) as e:
-               continue
+                print("sba5 index failure")
+                continue
 
 
             self.ys_sba5.append(co2_sba5)
@@ -1163,6 +1178,7 @@ class myThread6(threading.Thread):
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("sba5 index failure")
                 continue
 
             o+= 1
@@ -1215,7 +1231,8 @@ class myThread7(threading.Thread):
                 bc_ma300 = bc3/1000
 
             except (ValueError, IndexError) as e:
-               continue
+                print("ma300 index failure")
+                continue
 
 
             self.ys_ma300.append(bc_ma300)
@@ -1299,6 +1316,7 @@ class myThread7(threading.Thread):
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("ma300 index failure")
                 continue
 
             p+= 1
@@ -1354,7 +1372,8 @@ class myThread8(threading.Thread):
                 vco2 = float(values_vco2[0])
 
             except (ValueError, IndexError) as e:
-               continue
+                print("vco2 index failure")
+                continue
 
 
             self.ys_vco2.append(vco2)
@@ -1440,6 +1459,7 @@ class myThread8(threading.Thread):
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
+                print("vco2 index failure")
                 continue
 
             q+= 1
@@ -1493,7 +1513,8 @@ class myThread9(threading.Thread):
                 nox_caps = nox1/1000
 
             except (ValueError, IndexError) as e:
-               continue
+                print("caps index failure")
+                continue
 
 
             self.ys_caps.append(nox_caps)
@@ -1574,6 +1595,7 @@ class myThread9(threading.Thread):
                 print(test_client.write_json(json,'truck_test_2'))
 
             except(ValueError,IndexError) as e:
+                print("caps index failure")
                 continue
 
             r+= 1
@@ -1632,6 +1654,7 @@ class myThread10(threading.Thread):
 
 
             except Exception as e:
+                print("ucb index failure")
                 print (e)
                 continue
 
@@ -1718,6 +1741,7 @@ class myThread10(threading.Thread):
 
 
             except(ValueError,IndexError) as e:
+                print("ucb index failure")
                 continue
 
             s+= 1
