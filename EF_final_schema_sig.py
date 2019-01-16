@@ -1749,7 +1749,7 @@ class myThread10(threading.Thread):
 
 
             except(ValueError,IndexError) as e:
-                print("ucb index failure")
+                print("ucb index failure push")
                 continue
 
             s+= 1
