@@ -536,8 +536,8 @@ class myThread2(threading.Thread):
                 bc1 = float(values_ae16[2])
                 bc_ae16 = bc1/1000
                 atn_ae16 = float(values_ae16[9])
-                print("values for ae16 are:")
-                print(values_ae16)
+                #print("values for ae16 are:")
+                #print(values_ae16)
                 print(bc_ae16)
 
             except(ValueError,IndexError) as e:
@@ -807,9 +807,11 @@ class myThread4(threading.Thread):
             time_now=int(time.time()*1000000000)
             try:
                 values_li820 = re.split(r'[<>]', ser4)
-                print("The values for li820:")
-                print(values_li820)
+                #print("The values for li820:")
+                #print(values_li820)
                 co2_li820 = float(values_li820[14])
+                temp_li820 = float(values_li820[6])
+                press_li820 = float(values_li820[10])
 
             except(ValueError,IndexError) as e:
                 print("li820 index failure")
@@ -887,7 +889,9 @@ class myThread4(threading.Thread):
                 json =   {
                     'fields': {
                         'co2': co2_li820,
-                        'area': area_li820
+                        'area': area_li820,
+                        'temp': temp_li820,
+                        'pressure': press_li820
                         },
                     'time': time_now,
                     'tags': {
@@ -948,9 +952,11 @@ class myThread5(threading.Thread):
             time_now=int(time.time()*1000000000)
             try:
                 values_li7000 = ser5.split('\n')[0].split('\t')
-                print("The values for li700 are:")
-                print(values_li7000)
+                #print("The values for li700 are:")
+                #print(values_li7000)
                 co2_li7000 = float(values_li7000[2])
+                press_li7000 = float(values_li7000[4])
+                temp_li7000 = float(values_li7000[5])
 
 
             except (ValueError,IndexError) as e:
@@ -1025,7 +1031,9 @@ class myThread5(threading.Thread):
                 json =   {
                     'fields': {
                         'co2': co2_li7000,
-                        'area': area_li7000
+                        'area': area_li7000,
+                        'temp': temp_li7000,
+                        'pressure': press_li7000
                         },
                     'time': time_now,
                     'tags': {
