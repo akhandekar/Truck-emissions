@@ -955,7 +955,7 @@ class myThread5(threading.Thread):
 
             except (ValueError,IndexError) as e:
                 print("li7000 index failure")
-               continue
+                continue
 
 
             self.ys_li7000.append(co2_li7000)
