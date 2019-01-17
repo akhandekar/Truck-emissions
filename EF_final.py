@@ -510,8 +510,6 @@ class abcd_thread(threading.Thread):
                         },
                     'measurement': 'bc'
                     }
-                new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
-                all_area.area_time_abcd1.append(new_time)
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 test_client.write_json(json,'truck_test_2')
 
@@ -572,6 +570,8 @@ class abcd_thread(threading.Thread):
                         },
                     'measurement': 'peak'
                     }
+                new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
+                all_area.area_time_abcd1.append(new_time)
                 print(test_client.write_json(json_start,'truck_test_2'))
                 print(test_client.write_json(json_end,'truck_test_2'))
 
@@ -693,6 +693,8 @@ class ae16_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_ae16,self.peak_start,self.peak_end)
+                    all_area.area_time_ae16.append(new_time)
 
                 self.polluting_ae16.append(False)
                 self.ynp_ae16.append(bc_ae16)
@@ -723,8 +725,6 @@ class ae16_thread(threading.Thread):
                     }
                 #print("bc_ae16 value is: " +str(bc_ae16))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_ae16,self.peak_start,self.peak_end)
-                all_area.area_time_ae16.append(new_time)
 
             except(ValueError,IndexError) as e:
                 print("ae16 index failure")
@@ -829,6 +829,8 @@ class ae33_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_ae33,self.peak_start,self.peak_end)
+                    all_area.area_time_ae33.append(new_time)
 
                 self.polluting_ae33.append(False)
                 self.ynp_ae33.append(bc_ae33)
@@ -857,8 +859,7 @@ class ae33_thread(threading.Thread):
                     }
                 #print("The value for bc_ae33 is: " + str(bc_ae33))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_ae33,self.peak_start,self.peak_end)
-                all_area.area_time_ae33.append(new_time)
+
             except(ValueError,IndexError) as e:
                 print("ae33 index failure")
                 continue
@@ -969,6 +970,8 @@ class li820_thread(threading.Thread):
                             },
                         'measurement': 'peak'
                         }
+                    new_time = area_time(area_li820,self.peak_start,self.peak_end)
+                    all_area.area_time_li820.append(new_time)
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
 
@@ -1004,8 +1007,6 @@ class li820_thread(threading.Thread):
                     }
                 #print("The co2_li820 value is: " + str(co2_li820))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_li820,self.peak_start,self.peak_end)
-                all_area.area_time_li820.append(new_time)
 
             except(ValueError,IndexError) as e:
                 print("li820 index failure")
@@ -1115,6 +1116,8 @@ class li7000_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_li7000,self.peak_start,self.peak_end)
+                    all_area.area_time_li7000.append(new_time)
 
                 self.polluting_li7000.append(False)
                 self.ynp_li7000.append(co2_li7000)
@@ -1146,8 +1149,7 @@ class li7000_thread(threading.Thread):
                     }
                 #print("The co2_li7000 value is: "+ str(co2_li7000))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_li7000,self.peak_start,self.peak_end)
-                all_area.area_time_li7000.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 print("li7000 index failure")
@@ -1257,6 +1259,8 @@ class sba5_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_sba5,self.peak_start,self.peak_end)
+                    all_area.area_time_sba5.append(new_time)
 
                 self.polluting_sba5.append(False)
                 self.ynp_sba5.append(co2_sba5)
@@ -1285,8 +1289,7 @@ class sba5_thread(threading.Thread):
                     }
                 #print("The co2_sba2 value is: " +str(co2_sba5))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_sba5,self.peak_start,self.peak_end)
-                all_area.area_time_sba5.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 print("sba5 index failure")
@@ -1394,6 +1397,8 @@ class ma300_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_ma300,self.peak_start,self.peak_end)
+                    all_area.area_time_ma300.append(new_time)
 
                 self.polluting_ma300.append(False)
                 self.ynp_ma300.append(bc_ma300)
@@ -1423,8 +1428,7 @@ class ma300_thread(threading.Thread):
                     }
                 #print("The bc_ma300 value is: " + str(bc_ma300))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_ma300,self.peak_start,self.peak_end)
-                all_area.area_time_ma300.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 print("ma300 index failure")
@@ -1536,6 +1540,8 @@ class vco2_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_vco2,self.peak_start,self.peak_end)
+                    all_area.area_time_vco2.append(new_time)
 
                 self.polluting_vco2.append(False)
                 self.ynp_vco2.append(vco2)
@@ -1566,8 +1572,7 @@ class vco2_thread(threading.Thread):
                     }
                 #print("The vco2 value is: " + str(vco2))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_vco2,self.peak_start,self.peak_end)
-                all_area.area_time_vco2.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 print("vco2 index failure")
@@ -1674,6 +1679,8 @@ class caps_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_caps,self.peak_start,self.peak_end)
+                    all_area.area_time_caps.append(new_time)
                 self.polluting_caps.append(False)
                 self.ynp_caps.append(nox_caps)
             else:
@@ -1701,8 +1708,7 @@ class caps_thread(threading.Thread):
                     'measurement': 'nox'
                     }
                 #print("The nox_caps value is: " + str(nox_caps))
-                new_time = area_time(area_caps,self.peak_start,self.peak_end)
-                all_area.area_time_caps.append(new_time)
+
                 test_client.write_json(json,'truck_test_2')
 
             except(ValueError,IndexError) as e:
@@ -1819,6 +1825,8 @@ class ucb_thread(threading.Thread):
                         }
                     print(test_client.write_json(json_start,'truck_test_2'))
                     print(test_client.write_json(json_end,'truck_test_2'))
+                    new_time = area_time(area_ucb,self.peak_start,self.peak_end)
+                    all_area.area_time_ucb.append(new_time)
 
                 self.polluting_ucb.append(False)
                 self.ynp_ucb.append(nox_ucb)
@@ -1849,8 +1857,7 @@ class ucb_thread(threading.Thread):
                     }
                 #print("The nox_ucb value is: " + str(nox_ucb))
                 test_client.write_json(json,'truck_test_2')
-                new_time = area_time(area_ucb,self.peak_start,self.peak_end)
-                all_area.area_time_ucb.append(new_time)
+
 
             except(ValueError,IndexError) as e:
                 print("ucb index failure push")
