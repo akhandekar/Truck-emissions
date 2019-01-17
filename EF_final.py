@@ -1050,7 +1050,7 @@ class li7000_thread(threading.Thread):
                     }
                 #print("The co2_li7000 value is: "+ str(co2_li7000))
                 print(test_client.write_json(json,'truck_test_2'))
-                new_time = area_time(area_li7000,time_str5)
+                new_time = area_time(area_li7000,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
 
             except(ValueError,IndexError) as e:
