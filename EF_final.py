@@ -116,7 +116,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
                 """
                 if (abs(difference) >= start_window[0]):
                     if (abs(end_difference) >= end_window[0]):
@@ -133,7 +133,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
             for y in range(self.ae16_len):
                 difference = area_time_quot[x].start_time - self.area_time_ae16[y].start_time
@@ -150,7 +150,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
                 """
                 if (abs(difference) >= start_window[1]):
                     if (abs(end_difference) >= end_window[1]):
@@ -167,7 +167,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
             print("The amount of bc peaks for " + divisor + "is" + str(self.ae33_len))
             for y in range(self.ae33_len):
@@ -185,7 +185,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
                 """
                 if (abs(difference) >= start_window[2]):
                     if (abs(end_difference) >= end_window[2]):
@@ -202,7 +202,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
             for y in range(self.ma300_len):
                 difference = area_time_quot[x].start_time - self.area_time_ma300[y].start_time
@@ -219,7 +219,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
                 """
                 if (abs(difference) >= start_window[3]):
                     if (abs(end_difference) >= end_window[3]):
@@ -236,7 +236,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
 
     def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
@@ -259,7 +259,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
 
                 """
                 if (abs(difference) >= start_window[0]):
@@ -277,7 +277,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
             print("The amount of nox peaks for " + divisor + "is" + str(self.ucb_len))
             for y in range(self.ucb_len):
@@ -295,7 +295,7 @@ class area_container:
                         },
                     'measurement': 'emission_factor'
                     }
-                print(self.influx_client.write_json(json,'truck_test_2'))
+                self.influx_client.write_json(json,'truck_test_2')
                 """
                 if (abs(difference) >= start_window[1]):
                     if (abs(end_difference) >= end_window[1]):
@@ -312,7 +312,7 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(self.influx_client.write_json(json,'truck_test_2'))
+                        self.influx_client.write_json(json,'truck_test_2')
                 """
 
 
