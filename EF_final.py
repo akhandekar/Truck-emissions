@@ -35,6 +35,7 @@ class area_time:
         #self.time = time
         self.start_time = start_time
         self.end_time = end_time
+        # Potentially may want to add in baseline for subtracting base rectangle
 
 class area_container:
     #switch to lists so we don't have to save elements
@@ -494,7 +495,7 @@ class ae16_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N2 = 20
+        self.N2 = 10
 
         #Could pass in an object here for all variables
         # Timestamps for all data
@@ -637,7 +638,7 @@ class ae33_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N3 = 20
+        self.N3 = 10
 
         # Timestamps for all data
         self.xs_ae33 = []
@@ -770,7 +771,7 @@ class li820_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N4 = 20
+        self.N4 = 10
 
         # Timestamps for all data
         self.xs_li820 = []
@@ -916,7 +917,7 @@ class li7000_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N5 = 20
+        self.N5 = 10
 
         # Timestamps for all data
         self.xs_li7000 = []
@@ -1060,7 +1061,7 @@ class sba5_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N6 = 20
+        self.N6 = 10
 
         # Timestamps for all data
         self.xs_sba5 = []
@@ -1199,7 +1200,7 @@ class ma300_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N7 = 20
+        self.N7 = 10
 
         # Timestamps for all data
         self.xs_ma300 = []
@@ -1337,7 +1338,7 @@ class vco2_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N8 = 20
+        self.N8 = 10
 
         # Timestamps for all data
         self.xs_vco2 = []
@@ -1389,7 +1390,7 @@ class vco2_thread(threading.Thread):
 
             run_avg8 = sum(self.ynp_vco2[-self.N8:])/float(self.N8)
             dif8 = abs(run_avg8 - vco2)
-
+            self.thresh_vco2 = 1.07* run_avg8
             self.ym_vco2.append(run_avg8)
 
             self.xs_vco2.append(time_str8)
@@ -1480,7 +1481,7 @@ class caps_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N9 = 20
+        self.N9 = 10
 
         # Timestamps for all data
         self.xs_caps = []
@@ -1616,7 +1617,7 @@ class ucb_thread(threading.Thread):
     def __init__(self, ser,all_area):
         threading.Thread.__init__(self)
         self.ser = ser
-        self.N10 = 20
+        self.N10 = 10
 
         # Timestamps for all data
         self.xs_ucb = []
@@ -1749,7 +1750,6 @@ class ucb_thread(threading.Thread):
                 print(test_client.write_json(json,'truck_test_2'))
                 new_time = area_time(area_ucb,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
-
 
             except(ValueError,IndexError) as e:
                 print("ucb index failure push")
