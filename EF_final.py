@@ -487,7 +487,7 @@ class abcd_thread(threading.Thread):
                 atn_abcd1 = float(values_abcd1[3])
                 bc_abcd1 = float(values_abcd1[4])
                 flow_abcd1 = float(values_abcd1[7])
-                print(bc_abcd1)
+                #print(bc_abcd1)
 
             except (ValueError,IndexError) as e:
                 print("abcd index failure")
@@ -510,7 +510,7 @@ class abcd_thread(threading.Thread):
                     }
                 new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
                 all_area.area_time_abcd1.append(new_time)
-                print("The bc_abcd1 is: "+ str(bc_abcd1))
+                #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(test_client.write_json(json,'truck_test_2'))
 
             except (ValueError,IndexError) as e:
@@ -639,7 +639,7 @@ class ae16_thread(threading.Thread):
                 atn_ae16 = float(values_ae16[9])
                 #print("values for ae16 are:")
                 #print(values_ae16)
-                print(bc_ae16)
+                #print(bc_ae16)
 
             except(ValueError,IndexError) as e:
                 print("ae16 index error")
@@ -775,7 +775,7 @@ class ae33_thread(threading.Thread):
             try:
                 bc2 = float(values_ae33[9])
                 bc_ae33 = bc2/1000
-                print(bc_ae33)
+                #print(bc_ae33)
 
             except(ValueError,IndexError) as e:
                 print("ae33 index failure")
