@@ -99,8 +99,8 @@ class area_container:
     #
     def EF_calc_bc(self,area_time_quot,quot_len,divisor,start_window,end_window):
         print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
-        print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
         for x in range(quot_len):
+            print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
             for y in range(self.abcd1_len):
                 difference = area_time_quot[x].start_time - self.area_time_abcd1[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_abcd1[y].end_time
@@ -241,8 +241,8 @@ class area_container:
 
     def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
         print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
-        print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
         for x in range(quot_len):
+            print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
             print("The amount of nox peaks for " + divisor + "is" + str(self.caps_len))
             for y in range(self.caps_len):
                 difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
