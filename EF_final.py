@@ -56,6 +56,27 @@ class area_container:
         self.area_time_caps  = []
         self.area_time_ucb = []
 
+        self.li820_bc_start = [4,1,5,5]
+        self.li7000_bc_start = [5,1.5,6,6]
+        self.sba5_bc_start = [1.5,3,3,3]
+        self.vco2_bc_start = [3,6,3,3]
+
+        self.li820_bc_end = [5,5,9.5,9.5]
+        self.li7000_bc_end = [6,6,10,10]
+        self.sba5_bc_end = [2,1.5,4.5,4.5]
+        self.vco2_bc_end = [2,2,4,4]
+
+        self.li820_nox_start = [2.5,1]
+        self.li7000_nox_start = [3,1.5]
+        self.sba5_nox_start = [1,3]
+        self.vco2_nox_start = [4.5,6]
+
+        self.li820_nox_end = [2.5,1]
+        self.li7000_nox_end = [3,2]
+        self.sba5_nox_end = [2.5,4]
+        self.vco2_nox_end = [3,5]
+
+
         # CO2 Area_Time lengths
         self.li820_len = 0
         self.li7000_len = 0
@@ -76,149 +97,130 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def EF_calc_bc(self,area_time_quot,quot_len,numerator):
+    def EF_calc_bc(self,area_time_quot,quot_len,divisor,start_window,end_window):
         print(quot_len)
         for x in range(quot_len):
-            for y in range(self.li820_len):
-                difference = area_time_quot[x].time - self.area_time_li820[y].time
-                print(difference.total_seconds())
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF1")
-                    EF1 = area_time_quot[x].area / self.area_time_li820[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF1
-                            },
-                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF1'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.li7000_len):
-                difference = area_time_quot[x].time - self.area_time_li7000[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF2")
-                    EF2 = area_time_quot[x].area / self.area_time_li7000[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF2
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF2'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.sba5_len):
-                difference = area_time_quot[x].time - area_time_sba5[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF3")
-                    EF3 = area_time_quot[x].area / self.area_time_sba5[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF3
-                            },
-                        'time': area_time_abcd1.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF3'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.vco2_len):
-                difference = area_time_quot[x].time - area_time_vco2[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF4")
-                    EF4 = area_time_quot[x].area / self.area_time_vco2[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF4
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF4'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
+            for y in range(self.abcd1_len):
+                difference = area_time_quot[x].start_time - self.area_time_abc1[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_abcd1[y].end_time
+                if (abs(difference) >= start_window[0]):
+                    if (abs(end_difference) >= end_window[0])
+                        print("We have a match at EF with caps and" + divisor)
+                            EF = self.area_time_abcd1[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'bc_device': 'abcd1'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
+            for y in range(self.ae16_len):
+                difference = area_time_quot[x].start_time - self.area_time_ae16[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_ae16[y].end_time
+                if (abs(difference) >= start_window[1]):
+                    if (abs(end_difference) >= end_window[1])
+                        print("We have a match at EF with caps and" + divisor)
+                            EF = self.area_time_ae16[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'bc_device': 'ae16'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
+            for y in range(self.ae33_len):
+                difference = area_time_quot[x].start_time - self.area_time_ae33[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_ae33[y].end_time
+                if (abs(difference) >= start_window[2]):
+                    if (abs(end_difference) >= end_window[2])
+                        print("We have a match at EF with caps and" + divisor)
+                            EF = self.area_time_abcd1[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'bc_device': 'ae33'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
+            for y in range(self.ma300_len):
+                difference = area_time_quot[x].start_time - self.area_time_ma300[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_ma300[y].end_time
+                if (abs(difference) >= start_window[3]):
+                    if (abs(end_difference) >= end_window[3])
+                        print("We have a match at EF with caps and" + divisor)
+                            EF = self.area_time_ma300[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'bc_device': 'ma300'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
 
-    def EF_calc_nox(self,area_time_quot,quot_len,numerator):
+
+    def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
         for x in range(quot_len):
-            for y in range(self.li820_len):
-                difference = area_time_quot[x].time - self.area_time_li820[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF5")
-                    EF5 = area_time_quot[x].area / self.area_time_li820[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF5
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF5'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.li7000_len):
-                difference = area_time_quot[x].time - self.area_time_li7000[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF6")
-                    EF6 = area_time_quot[x].area / self.area_time_li7000[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF6
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF6'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.sba5_len):
-                difference = area_time_quot[x].time - area_time_sba5[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF7")
-                    EF7 = area_time_quot[x].area / self.area_time_sba5[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF7
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF7'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
-            for y in range(self.vco2_len):
-                difference = area_time_quot[x].time - area_time_vco2[y].time
-                if timedelta(seconds=-self.delta_window) <= difference.total_seconds() <= timedelta(seconds=self.delta_window):
-                    print("We have a match at EF8")
-                    EF8 = area_time_quot[x].area / self.area_time_vco2[y].area
-                    json =   {
-                        'fields': {
-                            'EF': EF8
-                            },
-                        'time': area_time_quot.time.strftime('%H:%M:%S'),
-                        'tags': {
-                            'sensor_numerator': numerator,
-                            'EF_num': 'EF8'
-                            },
-                        'measurement': 'emission_factor'
-                        }
-                    print(test_client.write_json(json,'truck_test_2'))
+            for y in range(self.caps_len):
+                difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_caps[y].end_time
+                if (abs(difference) >= start_window[0]):
+                    if (abs(difference) >= end_window[0])
+                        print("We have a match at EF with caps and" + divisor)
+                            EF = self.area_time_caps[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'nox_device': 'caps'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
+
+
+            for y in range(self.ucb_len):
+                difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
+                end_difference = area_time_quot[x].end_time - self.area_time_ucb[y].end_time
+                if (abs(difference) >= start_window[1]):
+                    if (abs(difference) >= end_window[1])
+                        print("We have a match at EF with ucb and" + divisor)
+                            EF = self.area_time_ucb[y].area / area_time_quot[x].area
+                            json =   {
+                                'fields': {
+                                    'EF': EF
+                                    },
+                                'time': area_time_quot[x].start_time,
+                                'tags': {
+                                    'co2_device': divisor,
+                                    'nox_device': 'ucb'
+                                    },
+                                'measurement': 'emission_factor'
+                                }
+                            print(test_client.write_json(json,'truck_test_2'))
+
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
@@ -238,13 +240,16 @@ class area_container:
         self.caps_len = len(self.area_time_caps)
         self.ucb_len = len(self.area_time_ucb)
 
-        self.EF_calc_bc(self.area_time_abcd1,self.abcd1_len,'bc_abcd1')
-        self.EF_calc_bc(self.area_time_ae16,self.ae16_len,'bc_ae16')
-        self.EF_calc_bc(self.area_time_ae33,self.ae33_len,'bc_ae33')
-        self.EF_calc_bc(self.area_time_ma300,self.ma300_len,'bc_ma300')
 
-        self.EF_calc_nox(self.area_time_caps,self.caps_len,'nox_caps')
-        self.EF_calc_nox(self.area_time_ucb,self.ucb_len,'nox_ucb')
+        self.EF_calc_bc(self.area_time_li820,self.li820_len,'li820',self.li820_bc_start,self.li820_bc_end)
+        self.EF_calc_bc(self.area_time_li7000,self.li7000_len,'li7000',self.li7000_bc_start,self.li7000_bc_end)
+        self.EF_calc_bc(self.area_time_sba5,self.sba5_len,'sba5',self.sba5_bc_start,self.sba5_bc_end)
+        self.EF_calc_bc(self.area_time_vco2,self.vco2_len,'vco2',self.vco2_bc_start,self.vco2_bc_end)
+
+        self.EF_calc_nox(self.area_time_li820,self.li820_len,'li820',self.li820_nox_start,self.li820_nox_end)
+        self.EF_calc_nox(self.area_time_li7000,self.li7000_len,'li7000',self.li7000_nox_start,self.li7000_nox_end)
+        self.EF_calc_nox(self.area_time_sba5,self.sba5_len,'sba5',self.sba5_nox_start,self.sba5_nox_end)
+        self.EF_calc_nox(self.area_time_vco2,self.vco2_len,'vco2',self.vco2_nox_start,self.vco2_nox_end)
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
