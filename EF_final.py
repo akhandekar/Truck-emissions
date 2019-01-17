@@ -1855,7 +1855,7 @@ class ucb_thread(threading.Thread):
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
 
 class areaThread(threading.Thread):
-    def __init__(self,all_area,influx_client):
+    def __init__(self,all_area):
         threading.Thread.__init__(self)
         print("Started influx thread")
 
@@ -1870,10 +1870,10 @@ signal.signal(signal.SIGTERM, sig_handler)
 signal.signal(signal.SIGINT, sig_handler)
 
 
-
-all_area=area_container()
 conf_file = "local_server.yaml"
 test_client = Influx_Dataframe_Client(conf_file,'DB_config')
+
+all_area=area_container(test_client)
 thread1=abcd_thread(serial1,all_area)
 thread2=ae16_thread(serial2,all_area)
 thread3=ae33_thread(serial3,all_area)
