@@ -99,6 +99,7 @@ class area_container:
     #
     def EF_calc_bc(self,area_time_quot,quot_len,divisor,start_window,end_window):
         print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
+        print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
         for x in range(quot_len):
             for y in range(self.abcd1_len):
                 difference = area_time_quot[x].start_time - self.area_time_abcd1[y].start_time
@@ -240,6 +241,7 @@ class area_container:
 
     def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
         print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
+        print("The co2 timestamp start is " + divisor + "is" + area_time_quot[x].start_time)
         for x in range(quot_len):
             print("The amount of nox peaks for " + divisor + "is" + str(self.caps_len))
             for y in range(self.caps_len):
@@ -511,7 +513,7 @@ class abcd_thread(threading.Thread):
                 new_time = area_time(self.area_temp,self.peak_start,self.peak_start)
                 all_area.area_time_abcd1.append(new_time)
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
 
             except (ValueError,IndexError) as e:
                 print("abcd index failure")
@@ -720,7 +722,7 @@ class ae16_thread(threading.Thread):
                     'measurement': 'bc'
                     }
                 #print("bc_ae16 value is: " +str(bc_ae16))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ae16,self.peak_start,self.peak_end)
                 all_area.area_time_ae16.append(new_time)
 
@@ -854,7 +856,7 @@ class ae33_thread(threading.Thread):
                     'measurement': 'bc'
                     }
                 #print("The value for bc_ae33 is: " + str(bc_ae33))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ae33,self.peak_start,self.peak_end)
                 all_area.area_time_ae33.append(new_time)
             except(ValueError,IndexError) as e:
@@ -1001,7 +1003,7 @@ class li820_thread(threading.Thread):
                     'measurement': 'co2'
                     }
                 #print("The co2_li820 value is: " + str(co2_li820))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_li820,self.peak_start,self.peak_end)
                 all_area.area_time_li820.append(new_time)
 
@@ -1143,7 +1145,7 @@ class li7000_thread(threading.Thread):
                     'measurement': 'co2'
                     }
                 #print("The co2_li7000 value is: "+ str(co2_li7000))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_li7000,self.peak_start,self.peak_end)
                 all_area.area_time_li7000.append(new_time)
 
@@ -1282,7 +1284,7 @@ class sba5_thread(threading.Thread):
                     'measurement': 'co2'
                     }
                 #print("The co2_sba2 value is: " +str(co2_sba5))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_sba5,self.peak_start,self.peak_end)
                 all_area.area_time_sba5.append(new_time)
 
@@ -1420,7 +1422,7 @@ class ma300_thread(threading.Thread):
                     'measurement': 'bc'
                     }
                 #print("The bc_ma300 value is: " + str(bc_ma300))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ma300,self.peak_start,self.peak_end)
                 all_area.area_time_ma300.append(new_time)
 
@@ -1563,7 +1565,7 @@ class vco2_thread(threading.Thread):
                     'measurement': 'co2'
                     }
                 #print("The vco2 value is: " + str(vco2))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_vco2,self.peak_start,self.peak_end)
                 all_area.area_time_vco2.append(new_time)
 
@@ -1701,7 +1703,7 @@ class caps_thread(threading.Thread):
                 #print("The nox_caps value is: " + str(nox_caps))
                 new_time = area_time(area_caps,self.peak_start,self.peak_end)
                 all_area.area_time_caps.append(new_time)
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
 
             except(ValueError,IndexError) as e:
                 print("caps index failure")
@@ -1758,8 +1760,8 @@ class ucb_thread(threading.Thread):
             try:
                 output_ucb = ser10.decode('ascii')
                 values_ucb = output_ucb.split('\n')[0].split(',')
-                print("values_ucb:")
-                print(values_ucb)
+                #print("values_ucb:")
+                #print(values_ucb)
                 if float(values_ucb[1])!=0:
                     nox_ucb = float(values_ucb[1])
 
@@ -1846,7 +1848,7 @@ class ucb_thread(threading.Thread):
                     'measurement': 'nox'
                     }
                 #print("The nox_ucb value is: " + str(nox_ucb))
-                print(test_client.write_json(json,'truck_test_2'))
+                test_client.write_json(json,'truck_test_2')
                 new_time = area_time(area_ucb,self.peak_start,self.peak_end)
                 all_area.area_time_ucb.append(new_time)
 
