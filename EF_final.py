@@ -39,9 +39,9 @@ class area_time:
 
 class area_container:
     #switch to lists so we don't have to save elements
-    def __init__(self):
+    def __init__(self,influx_client):
         # create all area lists
-
+        self.influx_client = influx_client
         # CO2 Area Values
         self.area_time_li820  = []
         self.area_time_li7000  = []
@@ -103,6 +103,20 @@ class area_container:
             for y in range(self.abcd1_len):
                 difference = area_time_quot[x].start_time - self.area_time_abcd1[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_abcd1[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'bc_device': 'abcd1'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+                """
                 if (abs(difference) >= start_window[0]):
                     if (abs(end_difference) >= end_window[0]):
                         print("We have a match at EF with abcd and" + divisor)
@@ -118,10 +132,25 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
             for y in range(self.ae16_len):
                 difference = area_time_quot[x].start_time - self.area_time_ae16[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ae16[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'bc_device': 'ae16'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+                """
                 if (abs(difference) >= start_window[1]):
                     if (abs(end_difference) >= end_window[1]):
                         print("We have a match at EF with ae16 and" + divisor)
@@ -137,10 +166,25 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
             for y in range(self.ae33_len):
                 difference = area_time_quot[x].start_time - self.area_time_ae33[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ae33[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'bc_device': 'ae33'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+                """
                 if (abs(difference) >= start_window[2]):
                     if (abs(end_difference) >= end_window[2]):
                         print("We have a match at EF with ae33 and" + divisor)
@@ -156,10 +200,25 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
             for y in range(self.ma300_len):
                 difference = area_time_quot[x].start_time - self.area_time_ma300[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ma300[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'bc_device': 'ma300'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+                """
                 if (abs(difference) >= start_window[3]):
                     if (abs(end_difference) >= end_window[3]):
                         print("We have a match at EF with ma300 and" + divisor)
@@ -175,14 +234,29 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
-
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
 
     def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
         for x in range(quot_len):
             for y in range(self.caps_len):
                 difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_caps[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'nox_device': 'caps'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+
+                """
                 if (abs(difference) >= start_window[0]):
                     if (abs(end_difference) >= end_window[0]):
                         print("We have a match at EF with caps and" + divisor)
@@ -198,12 +272,26 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
-
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
 
             for y in range(self.ucb_len):
                 difference = area_time_quot[x].start_time - self.area_time_ucb[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ucb[y].end_time
+                json =   {
+                    'fields': {
+                        'start_difference': difference,
+                        'end_difference': end_difference
+                        },
+                    'time': area_time_quot[x].start_time,
+                    'tags': {
+                        'co2_device': divisor,
+                        'nox_device': 'ucb'
+                        },
+                    'measurement': 'emission_factor'
+                    }
+                print(self.influx_client.write_json(json,'truck_test_2'))
+                """
                 if (abs(difference) >= start_window[1]):
                     if (abs(end_difference) >= end_window[1]):
                         print("We have a match at EF with ucb and" + divisor)
@@ -219,7 +307,8 @@ class area_container:
                                 },
                             'measurement': 'emission_factor'
                             }
-                        print(test_client.write_json(json,'truck_test_2'))
+                        print(self.influx_client.write_json(json,'truck_test_2'))
+                """
 
 
     def EF_calc_all(self):
@@ -1766,7 +1855,7 @@ class ucb_thread(threading.Thread):
                 fp.write("%s,%s\n"%(time_str10,nox_ucb))
 
 class areaThread(threading.Thread):
-    def __init__(self,all_area):
+    def __init__(self,all_area,influx_client):
         threading.Thread.__init__(self)
         print("Started influx thread")
 
@@ -1796,7 +1885,7 @@ thread8=vco2_thread(serial8,all_area)
 thread9=caps_thread(serial9,all_area)
 thread10=ucb_thread(serial10,all_area)
 #thread11=myThread11(serial11,all_area)
-area_thread=areaThread(all_area)
+area_thread=areaThread(all_area,test_client)
 thread1.start()
 thread2.start()
 thread3.start()
