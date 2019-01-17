@@ -106,8 +106,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_abcd1[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
@@ -138,8 +138,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_ae16[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
@@ -171,8 +171,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_ae33[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
@@ -203,8 +203,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_ma300[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
@@ -241,8 +241,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_caps[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
@@ -275,8 +275,8 @@ class area_container:
                 end_difference = area_time_quot[x].end_time - self.area_time_ucb[y].end_time
                 json =   {
                     'fields': {
-                        'start_difference': difference,
-                        'end_difference': end_difference
+                        'start_difference': difference/1000000000,
+                        'end_difference': end_difference/1000000000
                         },
                     'time': area_time_quot[x].start_time,
                     'tags': {
