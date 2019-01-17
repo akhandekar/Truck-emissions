@@ -98,7 +98,7 @@ class area_container:
     # else...then remove it make sure to only check through the current members of the list
     #
     def EF_calc_bc(self,area_time_quot,quot_len,divisor,start_window,end_window):
-        print("The amount of co2 peaks for " + divisor + "is" str(quot_len))
+        print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
         for x in range(quot_len):
             for y in range(self.abcd1_len):
                 difference = area_time_quot[x].start_time - self.area_time_abcd1[y].start_time
@@ -168,7 +168,7 @@ class area_container:
                             }
                         print(self.influx_client.write_json(json,'truck_test_2'))
                 """
-            print("The amount of bc peaks for " + divisor + "is" str(self.ae33_len))
+            print("The amount of bc peaks for " + divisor + "is" + str(self.ae33_len))
             for y in range(self.ae33_len):
                 difference = area_time_quot[x].start_time - self.area_time_ae33[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ae33[y].end_time
@@ -239,9 +239,9 @@ class area_container:
                 """
 
     def EF_calc_nox(self,area_time_quot,quot_len,divisor,start_window,end_window):
-        print("The amount of co2 peaks for " + divisor + "is" str(quot_len))
+        print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
         for x in range(quot_len):
-            print("The amount of nox peaks for " + divisor + "is" str(self.caps_len))
+            print("The amount of nox peaks for " + divisor + "is" + str(self.caps_len))
             for y in range(self.caps_len):
                 difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_caps[y].end_time
@@ -277,7 +277,7 @@ class area_container:
                             }
                         print(self.influx_client.write_json(json,'truck_test_2'))
                 """
-            print("The amount of nox peaks for " + divisor + "is" str(self.ucb_len))
+            print("The amount of nox peaks for " + divisor + "is" + str(self.ucb_len))
             for y in range(self.ucb_len):
                 difference = area_time_quot[x].start_time - self.area_time_ucb[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ucb[y].end_time
