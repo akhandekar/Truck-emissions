@@ -104,7 +104,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_abcd1[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_abcd1[y].end_time
                 if (abs(difference) >= start_window[0]):
-                    if (abs(end_difference) >= end_window[0])
+                    if (abs(end_difference) >= end_window[0]):
                         print("We have a match at EF with abcd and" + divisor)
                             EF = self.area_time_abcd1[y].area / area_time_quot[x].area
                             json =   {
@@ -123,7 +123,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_ae16[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ae16[y].end_time
                 if (abs(difference) >= start_window[1]):
-                    if (abs(end_difference) >= end_window[1])
+                    if (abs(end_difference) >= end_window[1]):
                         print("We have a match at EF with ae16 and" + divisor)
                             EF = self.area_time_ae16[y].area / area_time_quot[x].area
                             json =   {
@@ -142,7 +142,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_ae33[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ae33[y].end_time
                 if (abs(difference) >= start_window[2]):
-                    if (abs(end_difference) >= end_window[2])
+                    if (abs(end_difference) >= end_window[2]):
                         print("We have a match at EF with ae33 and" + divisor)
                             EF = self.area_time_ae33[y].area / area_time_quot[x].area
                             json =   {
@@ -161,7 +161,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_ma300[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ma300[y].end_time
                 if (abs(difference) >= start_window[3]):
-                    if (abs(end_difference) >= end_window[3])
+                    if (abs(end_difference) >= end_window[3]):
                         print("We have a match at EF with ma300 and" + divisor)
                             EF = self.area_time_ma300[y].area / area_time_quot[x].area
                             json =   {
@@ -184,7 +184,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_caps[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_caps[y].end_time
                 if (abs(difference) >= start_window[0]):
-                    if (abs(end_difference) >= end_window[0])
+                    if (abs(end_difference) >= end_window[0]):
                         print("We have a match at EF with caps and" + divisor)
                             EF = self.area_time_caps[y].area / area_time_quot[x].area
                             json =   {
@@ -205,7 +205,7 @@ class area_container:
                 difference = area_time_quot[x].start_time - self.area_time_ucb[y].start_time
                 end_difference = area_time_quot[x].end_time - self.area_time_ucb[y].end_time
                 if (abs(difference) >= start_window[1]):
-                    if (abs(end_difference) >= end_window[1])
+                    if (abs(end_difference) >= end_window[1]):
                         print("We have a match at EF with ucb and" + divisor)
                             EF = self.area_time_ucb[y].area / area_time_quot[x].area
                             json =   {
