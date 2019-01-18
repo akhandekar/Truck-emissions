@@ -323,7 +323,7 @@ class bc_sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
-                    self.bc_areas.append(bc_area)
+                    #self.bc_areas.append(bc_area)
                     #self.xp.append(time_str3)
                     del self.yp[:]
                     self.peak_end = int(time.time()*1000000000)
@@ -423,7 +423,7 @@ class co2_sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area_co2 = np.trapz(self.yp, dx=1)
-                    self.areas.append(area_co2)
+                    #self.areas.append(area_co2)
                     #self.xp_vco2.append(time_str8)
 
                     del self.yp[:]
@@ -482,7 +482,7 @@ class nox_sensor:
 
     def push_values(self,nox_measurement):
             try:
-                print("nox measurement push attempt")
+                #print("nox measurement push attempt")
                 json =   {
                     'fields': {
                         'nox': nox_measurement[0]
@@ -514,7 +514,7 @@ class nox_sensor:
                 base_line_y = [self.thresh_nox for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, dx=1)
                 peak_area = area - base_area
-                self.areas.append(peak_area)
+                #self.areas.append(peak_area)
                 self.xp.append(time_str10)
                 del self.yp[:]
                 self.peak_end = int(time.time()*1000000000)
