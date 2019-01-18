@@ -539,7 +539,7 @@ class abcd_instrument(bc_sensor):
         values_abcd1 = ser.split('\n')[0].split(',')
         #print(values_abcd1)
         time_now=int(time.time()*1000000000)
-        time_str1 = dt_object.strftime('%H:%M:%S')
+        #time_str1 = dt_object.strftime('%H:%M:%S')
         try:
             #print(values_abcd1)
             atn_abcd1 = float(values_abcd1[3])
