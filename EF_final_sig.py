@@ -561,7 +561,7 @@ class ae16_instrument(bc_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
         self.bc_peaks = self.all_area.bc_peaks[1]
 
-    def get_values():
+    def get_values(self):
         bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -589,7 +589,7 @@ class ae33_instrument(bc_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
         self.bc_peaks = self.all_area.bc_peaks[2]
 
-    def get_values():
+    def get_values(self):
         bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -613,7 +613,7 @@ class ma300_instrument(bc_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
         self.bc_peaks = self.all_area.bc_peaks[3]
 
-    def get_values():
+    def get_values(self):
         bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -639,7 +639,7 @@ class li820_instrument(co2_sensor):
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
         self.co2_peaks = self.all_area.co2_peaks[2]
-    def get_values():
+    def get_values(self):
         co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -663,7 +663,7 @@ class li7000_instrument(co2_sensor):
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
         self.co2_peaks = self.all_area.co2_peaks[1]
-    def get_values():
+    def get_values(self):
         co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -688,7 +688,7 @@ class sba5_instrument(co2_sensor):
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
         self.co2_peaks = self.all_area.co2_peaks[2]
-    def get_values():
+    def get_values(self):
         co2_values = []
         ser = serial.readline()
         dt_object = datetime.now()
@@ -713,7 +713,7 @@ class vco2_instrument(co2_sensor):
         self.serial.write("R\r\n")
         response=self.serial.readline()
         self.co2_peaks = self.all_area.co2_peaks[3]
-    def get_values():
+    def get_values(self):
         co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -739,7 +739,7 @@ class caps_instrument(nox_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
         self.nox_peaks = self.all_area.nox_peaks[0]
 
-    def get_values():
+    def get_values(self):
         nox_values = []
         ser =  self.serial.readline()
         dt_object = datetime.now()
@@ -766,7 +766,7 @@ class ucb_instrument(nox_sensor):
                 timeout = 1,
                 bytesize=serial.SEVENBITS)
         self.nox_peaks = self.all_area.nox_peaks[1]
-    def get_values():
+    def get_values(self):
         nox_values = []
         serial.write(b'\x0201RD0\x03\x26')
         ser = serial.readline()
@@ -791,13 +791,14 @@ class ucb_instrument(nox_sensor):
 class areaThread(threading.Thread):
     def __init__(self,all_area):
         threading.Thread.__init__(self)
+        self.all_area = all_area
         print("Started influx thread")
 
     def run(self):
         i = 0
         while not stop_requested:
             time.sleep(5)
-            all_area.EF_calc_all()
+            self.all_area.EF_calc_all()
             i+=1
 
 class sensor_thread(threading.Thread):
