@@ -605,8 +605,7 @@ class ae33_instrument(bc_sensor):
 
 class ma300_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'ma300'
-        bc_sensor.__init__(self,all_area,influx_client)
+        bc_sensor.__init__(self,'ma300',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
 
     def get_values(self):
