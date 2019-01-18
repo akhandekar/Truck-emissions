@@ -557,7 +557,7 @@ class abcd_instrument(bc_sensor):
 
 class ae16_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
-        bc_sensor.__init__(self,'ae16',influx_client)
+        bc_sensor.__init__(self,'ae16',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
