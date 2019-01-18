@@ -282,7 +282,7 @@ class bc_sensor:
 
     def push_values(self,bc_measurement):
             try:
-                print("bc measurement push attempt")
+                #print("bc measurement push attempt")
                 json =   {
                     'fields': {
                         'bc': bc_measurement[0]
@@ -304,7 +304,7 @@ class bc_sensor:
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(self.influx_client.write_json(json))
-                print(json)
+                #print(json)
             except:
                 print("Influx push failure")
 
@@ -380,8 +380,8 @@ class co2_sensor:
 
     def push_values(self,co2_measurement):
             try:
-                print("co2 measurement push attempt")
-                print(co2_measurement)
+                #print("co2 measurement push attempt")
+                #print(co2_measurement)
                 json =   {
                     'fields': {
                         'co2': co2_measurement[0]
@@ -391,22 +391,15 @@ class co2_sensor:
                         },
                     'measurement': 'co2'
                     }
-                #print(json)
                 if (len(co2_measurement)>2):
                     json['fields']['press'] = co2_measurement[1]
-                    print("error 1?")
                     if(len(co2_measurement)==4):
                         json['fields']['temp'] = co2_measurement[2]
-                        print("error 2?")
                         json['time'] = co2_measurement[3]
-                        print("error 3?")
                     else:
                         json['time'] = co2_measurement[2]
-                        print("error 4?")
                 else:
                     json['time'] = co2_measurement[1]
-                    print("error 5?")
-                print(json)
                 print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
