@@ -634,7 +634,7 @@ class li820_instrument(co2_sensor):
         time_str4 = dt_object.strftime('%H:%M:%S')
         time_now=int(time.time()*1000000000)
         try:
-            values_li820 = re.split(r'[<>]', ser
+            values_li820 = re.split(r'[<>]', ser)
             co2_values[0] = float(values_li820[14]) # CO2 value
             co2_values[1] = float(values_li820[6]) # Temperature
             co2_values[2] = float(values_li820[10]) # Pressue
