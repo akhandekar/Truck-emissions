@@ -382,13 +382,13 @@ class co2_sensor:
                     'measurement': 'co2'
                     }
                 if (len(co2_values)>2):
-                    json['fields']['press']: co2_measurement[1]
+                    json['fields']['press'] = co2_measurement[1]
                     json['time']: co2_measurement[2]
                     if(len(co2_values==3)):
-                        json['fields']['temp']: co2_measurement[2]
-                        json['time']: co2_measurement[3]
+                        json['fields']['temp'] = co2_measurement[2]
+                        json['time'] = co2_measurement[3]
                 else:
-                    json['time']: co2_measurement[1]
+                    json['time'] = co2_measurement[1]
                 self.influx_client.write_json(json)
             except:
                 print("Influx push failure")
