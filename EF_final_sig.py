@@ -182,7 +182,7 @@ class area_container:
     def EF_calc_bc(self,co2_device,start_window,end_window):
         #peak_amt = len()
         co2_peak_amt = self.co2_peaks_amt[co2_device]
-        print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
+        #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
             self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device,0,start_window,end_window)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device,1,start_window,end_window)
@@ -192,7 +192,7 @@ class area_container:
     def EF_calc_nox(self,co2_device,start_window,end_window):
         #peak_amt = len(co2_peaks)
         co2_peak_amt = self.co2_peaks_amt[co2_device]
-        print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
+        #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
             self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device,0,start_window,end_window)
             self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device,1,start_window,end_window)
@@ -303,7 +303,7 @@ class bc_sensor:
                     json['time'] = bc_measurement[1]
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
-                print(self.influx_client.write_json(json))
+                self.influx_client.write_json(json)
                 #print(json)
             except:
                 print("Influx push failure")
@@ -400,7 +400,7 @@ class co2_sensor:
                         json['time'] = co2_measurement[2]
                 else:
                     json['time'] = co2_measurement[1]
-                print(self.influx_client.write_json(json))
+                self.influx_client.write_json(json)
             except:
                 print("Influx push failure")
 
@@ -493,7 +493,7 @@ class nox_sensor:
                         },
                     'measurement': 'nox'
                     }
-                print(self.influx_client.write_json(json))
+                self.influx_client.write_json(json)
             except:
                 print("Influx push failure")
 
@@ -812,7 +812,7 @@ class sensor_thread(threading.Thread):
             values = self.sensor.get_values()
             if(len(values) == 0):
                 continue
-            print("The measurement value for "+self.sensor.sensor_name + "is " + str(values[0]))
+            #print("The measurement value for "+self.sensor.sensor_name + "is " + str(values[0]))
             self.readings.append(values[0])
             self.sensor.push_values(values)
             self.sensor.peak_area(values[0])
