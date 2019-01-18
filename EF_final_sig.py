@@ -306,7 +306,7 @@ class bc_sensor:
             except:
                 print("Influx push failure")
 
-    def peak_area(self,bc_value,bc_peaks):
+    def peak_area(self,bc_value):
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
             dif = abs(run_avg - bc_value)
             self.ym.append(run_avg)
