@@ -296,11 +296,11 @@ class bc_sensor:
                     json['fields']['atn'] = bc_measurement[1]
                     if (len(bc_measurement) > 3):
                         json['fields']['flow'] = bc_measurement[2]
-                        json['time'] = bc_values[3]
+                        json['time'] = bc_measurement[3]
                     else:
-                        json['time'] = bc_values[2]
+                        json['time'] = bc_measurement[2]
                 else:
-                    json['time'] = bc_values[1]
+                    json['time'] = bc_measurement[1]
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(self.influx_client.write_json(json))
@@ -392,7 +392,7 @@ class co2_sensor:
                     }
                 if (len(co2_measurement)>2):
                     json['fields']['press'] = co2_measurement[1]
-                    if(len(co2bc_measurement>3)):
+                    if(len(co2_measurement>3)):
                         json['fields']['temp'] = co2_measurement[2]
                         json['time'] = co2_measurement[3]
                     else:
