@@ -106,7 +106,7 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def bc_peak_match(self,single_co2_peak,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
+    def bc_peak_match(self,single_co2_peak_list,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
             print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
             for y in range(len(bc_peaks[dev_id])):
                 difference = single_co2_peak.start_time - bc_peaks[dev_id][y].start_time
@@ -179,18 +179,18 @@ class area_container:
         peak_amt = len(self.co2_peaks)
         print("The amount of co2 peaks for " + co2_device + "is" + str(peak_amt))
         for x in range(peak_amt):
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[0],'abcd',co2_device,0,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[1],'ae16',co2_device,1,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[2],'ae33',co2_device,2,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[3],'ma300',co2_device,3,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[dev_id][x],self.bc_peaks[0],'abcd',co2_device,0,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[dev_id][x],self.bc_peaks[1],'ae16',co2_device,1,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[dev_id][x],self.bc_peaks[2],'ae33',co2_device,2,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[dev_id][x],self.bc_peaks[3],'ma300',co2_device,3,start_window,end_window)
 
 
     def EF_calc_nox(self,co2_peaks,divisor,start_window,end_window):
         peak_amt = len(co2_peaks)
         print("The amount of co2 peaks for " + co2_device + "is" + str(peak_amt))
         for x in range(peak_amt):
-            self.nox_peak_match(self.co2_peaks[x],self.nox_peaks[0],'caps',co2_device,0,start_window,end_window)
-            self.nox_peak_match(self.co2_peaks[x],self.nox_peaks[1],'ucb',co2_device,1,start_window,end_window)
+            self.nox_peak_match(self.co2_peaks[dev_id][x],self.nox_peaks[0],'caps',co2_device,0,start_window,end_window)
+            self.nox_peak_match(self.co2_peaks[dev_id][x],self.nox_peaks[1],'ucb',co2_device,1,start_window,end_window)
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
