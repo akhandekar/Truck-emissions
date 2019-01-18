@@ -47,22 +47,22 @@ class area_container:
         # create all area lists
         self.influx_client = influx_client
         # Probably will switch this to a dictionary
-        # CO2 Area Values
-        self.co2_peaks = []
-        self.co2_peaks.append([]) #li820 sensor
-        self.co2_peaks.append([]) #li7000 sensor
-        self.co2_peaks.append([]) #sba5 sensor
-        self.co2_peaks.append([]) #vco2 sensor
+        # CO2 peak information lists
+        self.co2_peaks = {}
+        self.co2_peaks['li820'] = []
+        self.co2_peaks['li7000'] = [] #li7000 sensor
+        self.co2_peaks['sba5'] = [] #sba5 sensor
+        self.co2_peaks['vco2'] = [] #vco2 sensor
         # BC Area Values
-        self.bc_peaks = []
-        self.bc_peaks.append([]) #abcd sensor
-        self.bc_peaks.append([]) #ae16 sensor
-        self.bc_peaks.append([]) #ae33 sensor
-        self.bc_peaks.append([]) #ma300 sensor
+        self.bc_peaks = {}
+        self.bc_peaks['abcd']#abcd sensor
+        self.bc_peaks['ae16'] #ae16 sensor
+        self.bc_peaks['ae33'] #ae33 sensor
+        self.bc_peaks['ma300'] #ma300 sensor
         # Nox areav values
-        self.nox_peaks = []
-        self.nox_peaks.append([]) # caps sensor
-        self.nox_peaks.append([]) # ucb sensor
+        self.nox_peaks = {}
+        self.nox_peaks['caps'] # caps sensor
+        self.nox_peaks['ucb'] # ucb sensor
 
         # Windows for matching peaks between instruments
         self.li820_bc_start = [4,1,5,5]
@@ -106,11 +106,11 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def bc_peak_match(self,single_co2_peak,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
+    def bc_peak_match(self,single_co2_peak,bc_device,co2_device,dev_id,start_window,end_window):
             print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
-            for y in range(len(bc_peaks[dev_id])):
-                difference = single_co2_peak.start_time - bc_peaks[dev_id][y].start_time
-                end_difference = single_co2_peak.end_time - bc_peaks[dev_id][y].end_time
+            for y in range(len(self.bc_peaks[bc_device])):
+                difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
+                end_difference = single_co2_peak.end_time - bc_peaks[bc_device][y].end_time
                 json =   {
                     'fields': {
                         'start_difference': float(difference/1000000000),
@@ -127,12 +127,12 @@ class area_container:
                 if (abs(difference) >= start_window[dev_id]*1000000000):
                     if (abs(end_difference) >= end_window[dev_id]*1000000000):
                         print("We have a match at EF with abcd and" + divisor)
-                        EF = bc_peaks[dev_id][y].area / single_co2_peak.area
+                        EF = bc_peaks[bc_device][y].area / single_co2_peak.area
                         json =   {
                             'fields': {
                                 'EF': EF
                                 },
-                            'time': single_co2_peak[x].start_time,
+                            'time': single_co2_peak.start_time,
                             'tags': {
                                 'co2_device': co2_device,
                                 'bc_device': bc_device
@@ -141,10 +141,10 @@ class area_container:
                             }
                         self.influx_client.write_json(json)
 
-    def nox_peak_match(self,single_co2_peak,nox_peaks,nox_device,co2_device,dev_id,start_window,end_window):
-        for y in range(len(nox_peaks[dev_id])):
-            difference = single_co2_peak.start_time - nox_peaks[dev_id][y].start_time
-            end_difference = single_co2_peak.end_time - nox_peaks[dev_id].end_time
+    def nox_peak_match(self,single_co2_peak,nox_device,co2_device,dev_id,start_window,end_window):
+        for y in range(len(self.nox_peaks[nox_device])):
+            difference = single_co2_peak.start_time - self.nox_peaks[nox_device][y].start_time
+            end_difference = single_co2_peak.end_time - self.nox_peaks[nox_device][y].end_time
             json =   {
                 'fields': {
                     'start_difference': float(difference/1000000000),
@@ -175,22 +175,22 @@ class area_container:
                         }
                     self.influx_client.write_json(json)
 
-    def EF_calc_bc(self,co2_peaks,dev_id,co2_device,start_window,end_window):
-        peak_amt = len(self.co2_peaks)
-        print("The amount of co2 peaks for " + co2_device + "is" + str(peak_amt))
-        for x in range(peak_amt):
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[0],'abcd',co2_device,0,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[1],'ae16',co2_device,1,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[2],'ae33',co2_device,2,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[x],self.bc_peaks[3],'ma300',co2_device,3,start_window,end_window)
+    def EF_calc_bc(self,co2_device,co2_peak_amt,start_window,end_window):
+        #peak_amt = len()
+        print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
+        for x in range(co2_peak_amt):
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device,0,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device,1,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device,2,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device,3,start_window,end_window)
 
 
-    def EF_calc_nox(self,co2_peaks,divisor,start_window,end_window):
-        peak_amt = len(co2_peaks)
-        print("The amount of co2 peaks for " + co2_device + "is" + str(peak_amt))
+    def EF_calc_nox(self,co2_device,co2_peak_amt,divisor,start_window,end_window):
+        #peak_amt = len(co2_peaks)
+        print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(peak_amt):
-            self.nox_peak_match(self.co2_peaks[x],self.nox_peaks[0],'caps',co2_device,0,start_window,end_window)
-            self.nox_peak_match(self.co2_peaks[x],self.nox_peaks[1],'ucb',co2_device,1,start_window,end_window)
+            self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device,0,start_window,end_window)
+            self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device,1,start_window,end_window)
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
@@ -211,15 +211,15 @@ class area_container:
         self.ucb_len = len(self.nox_peaks[1])
 
 
-        self.EF_calc_bc(self.co2_peaks[0],self.li820_len,'li820',self.li820_bc_start,self.li820_bc_end)
-        self.EF_calc_bc(self.co2_peaks[1],self.li7000_len,'li7000',self.li7000_bc_start,self.li7000_bc_end)
-        self.EF_calc_bc(self.co2_peaks[2],self.sba5_len,'sba5',self.sba5_bc_start,self.sba5_bc_end)
-        self.EF_calc_bc(self.co2_peaks[3],self.vco2_len,'vco2',self.vco2_bc_start,self.vco2_bc_end)
+        self.EF_calc_bc('li820',self.li820_len,self.li820_bc_start,self.li820_bc_end)
+        self.EF_calc_bc('li7000',self.li7000_len,self.li7000_bc_start,self.li7000_bc_end)
+        self.EF_calc_bc('sba5',self.sba5_len,self.sba5_bc_start,self.sba5_bc_end)
+        self.EF_calc_bc('vco2',self.vco2_len,self.vco2_bc_start,self.vco2_bc_end)
 
-        self.EF_calc_nox(self.co2_peaks[0],self.li820_len,'li820',self.li820_nox_start,self.li820_nox_end)
-        self.EF_calc_nox(self.co2_peaks[1],self.li7000_len,'li7000',self.li7000_nox_start,self.li7000_nox_end)
-        self.EF_calc_nox(self.co2_peaks[2],self.sba5_len,'sba5',self.sba5_nox_start,self.sba5_nox_end)
-        self.EF_calc_nox(self.co2_peaks[3],self.vco2_len,'vco2',self.vco2_nox_start,self.vco2_nox_end)
+        self.EF_calc_nox('li820',self.li820_len,self.li820_nox_start,self.li820_nox_end)
+        self.EF_calc_nox('li7000',self.li7000_len,self.li7000_nox_start,self.li7000_nox_end)
+        self.EF_calc_nox('sba5',self.sba5_len,self.sba5_nox_start,self.sba5_nox_end)
+        self.EF_calc_nox('vco2',self.vco2_len,self.vco2_nox_start,self.vco2_nox_end)
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
@@ -240,9 +240,9 @@ class area_container:
 
 # Measurement classes
 class bc_sensor:
-    def __init__(self,all_area,influx_client):
+    def __init__(self,sensor_name,all_area,influx_client):
         # probably will put this back in
-        #self.sensor_name = sensor_name
+        self.sensor_name = sensor_name
         self.time_values = []
         self.bc_values = []
         self.avg_window = 20
@@ -278,6 +278,7 @@ class bc_sensor:
 
         self.influx_client = influx_client
         self.all_area = all_area
+        self.bc_peaks = self.all_area.bc_peaks[self.sensor_name]
 
 
     def push_values(bc_measurement):
@@ -341,8 +342,8 @@ class bc_sensor:
                 self.yp.append(bc_value)
 
 class co2_sensor:
-    def __init__(self,all_area,influx_client):
-        #self.sensor_name = sensor_name
+    def __init__(self,sensor_name,all_area,influx_client):
+        self.sensor_name = sensor_name
         self.time_values = []
         self.co2_values = []
         self.avg_window = 10
@@ -374,6 +375,7 @@ class co2_sensor:
         self.peak_end = 0
 
         self.all_area = all_area
+        self.co2_peaks = self.all_area.co2_peaks[self.sensor_name]
 
     def push_values(co2_measurement):
             try:
@@ -440,7 +442,7 @@ class co2_sensor:
                 self.yp.append(co2_value)
 
 class nox_sensor:
-    def __init__(self,all_area,influx_client):
+    def __init__(self,sensor_name,all_area,influx_client):
         #self.sensor_name = sensor_name
         self.time_values = []
         self.nox_values = []
@@ -472,6 +474,7 @@ class nox_sensor:
         self.peak_end = 0
 
         self.all_area = all_area
+        self.nox_peaks = self.all_area.nox_peaks[self.sensor_name]
 
     def push_values(nox_measurement):
             try:
@@ -527,8 +530,7 @@ class nox_sensor:
 # BC instruments
 class abcd_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'abcd'
-        bc_sensor.__init__(self,all_area,influx_client)
+        bc_sensor.__init__(self,'abcd',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
         self.bc_peaks = self.all_area.bc_peaks[0]
 
@@ -556,8 +558,7 @@ class abcd_instrument(bc_sensor):
 
 class ae16_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'ae16'
-        bc_sensor.__init__(self,all_area,influx_client)
+        bc_sensor.__init__(self,'ae16',influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
         self.bc_peaks = self.all_area.bc_peaks[1]
 
