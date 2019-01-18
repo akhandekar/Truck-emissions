@@ -197,7 +197,6 @@ class area_container:
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
         # Retrieve lengths for all lists
-
         # Get all CO2 Area_Time lengths
         for key in self.co2_peaks_amt:
             self.co2_peaks_amt[key] = len(self.co2_peaks[key])
