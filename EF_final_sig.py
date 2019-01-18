@@ -574,7 +574,7 @@ class ae16_instrument(bc_sensor):
             bc1 = float(values_ae16[2])
             bc_ae16 = bc1/1000
             atn_ae16 = float(values_ae16[9])
-            bc_values.insert(0,ae16)
+            bc_values.insert(0,bc_ae16)
             bc_values.insert(1,atn_ae16)
             bc_values.insert(time_now)
 
