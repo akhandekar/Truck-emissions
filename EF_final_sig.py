@@ -114,7 +114,7 @@ class area_container:
             print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
             for y in range(len(self.bc_peaks[bc_device])):
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
-                end_difference = single_co2_peak.end_time - bc_peaks[bc_device][y].end_time
+                end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
                 json =   {
                     'fields': {
                         'start_difference': float(difference/1000000000),
@@ -515,7 +515,7 @@ class nox_sensor:
                 base_area = np.trapz(base_line_y, dx=1)
                 peak_area = area - base_area
                 #self.areas.append(peak_area)
-                self.xp.append(time_str10)
+                #self.xp.append(time_str10)
                 del self.yp[:]
                 self.peak_end = int(time.time()*1000000000)
                 new_time = area_time(peak_area,self.peak_start,self.peak_end)
