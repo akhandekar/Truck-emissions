@@ -545,7 +545,7 @@ class abcd_instrument(bc_sensor):
 
         except (ValueError,IndexError) as e:
             print("abcd index failure")
-            continue
+            return bc_values
         return bc_values
 
 class ae16_instrument(bc_sensor):
@@ -572,7 +572,7 @@ class ae16_instrument(bc_sensor):
 
         except(ValueError,IndexError) as e:
             print("ae16 index error")
-            continue
+            return bc_values
         return bc_values
 
 class ae33_instrument(bc_sensor):
@@ -595,7 +595,8 @@ class ae33_instrument(bc_sensor):
             bc_values[1] = time_now
         except(ValueError,IndexError) as e:
             print("ae33 index failure")
-            continue
+            return bc_values
+        return bc_values
 
 class ma300_instrument(bc_sensor):
     def __init__(self):
@@ -618,7 +619,8 @@ class ma300_instrument(bc_sensor):
 
         except (ValueError, IndexError) as e:
             print("ma300 index failure")
-            continue
+            return bc_values
+        return bc_values
 
 # CO2 instruments
 
@@ -642,7 +644,7 @@ class li820_instrument(co2_sensor):
 
         except(ValueError,IndexError) as e:
             print("li820 index failure")
-            continue
+            return co2_values
         return co2_values
 
 class li7000_instrument(co2_sensor):
@@ -666,7 +668,7 @@ class li7000_instrument(co2_sensor):
             co2_values[3] = time_now # time
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
-            continue
+            return co2_values
         return co2_values
 
 class sba5_instrument(co2_sensor):
@@ -688,7 +690,7 @@ class sba5_instrument(co2_sensor):
 
         except (ValueError, IndexError) as e:
             print("sba5 index failure")
-            continue
+            return co2_values
         return co2_values
 
 class vco2_instrument(co2_sensor):
@@ -712,7 +714,8 @@ class vco2_instrument(co2_sensor):
 
         except (ValueError, IndexError) as e:
             print("vco2 index failure")
-            continue
+            return co2_values
+        return co2_values
 
 # NOX instruments
 
@@ -737,7 +740,7 @@ class caps_instrument(nox_sensor):
 
         except (ValueError, IndexError) as e:
             print("caps index failure")
-            continue
+            return nox_values
         return nox_values
 
 class ucb_instrument(nox_sensor):
@@ -767,7 +770,8 @@ class ucb_instrument(nox_sensor):
         except Exception as e:
             print("ucb index failure")
             print (e)
-            continue
+            return nox_values
+        return nox_values
 
 class areaThread(threading.Thread):
     def __init__(self,all_area):
@@ -796,6 +800,8 @@ class sensor_thread(threading.Thread):
             values = self.sensor.get_values()
             self.readings.append(values[0])
             self.sensor.push_values(values)
+            if(values == 0):
+                continue
             self.sensor.peak_area(values[0])
             count+=1
 
