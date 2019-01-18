@@ -303,6 +303,7 @@ class bc_sensor:
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(self.influx_client.write_json(json))
+                print("bc measurement push attempt")
             except:
                 print("Influx push failure")
 
@@ -396,6 +397,7 @@ class co2_sensor:
                 else:
                     json['time'] = co2_measurement[1]
 
+                print("co2 measurement push attempt")
                 push(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
@@ -489,6 +491,7 @@ class nox_sensor:
                         },
                     'measurement': 'nox'
                     }
+                print("Nox measurement push attempt")
                 print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
@@ -673,7 +676,7 @@ class li7000_instrument(co2_sensor):
             co2_values.insert(1,float(values_li7000[5])) # Temperature
             co2_values.insert(2,float(values_li7000[4])) # Pressue
             co2_values.insert(3,time_now)
-            print(co2_values)
+            #print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
             return co2_values
