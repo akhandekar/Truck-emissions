@@ -106,7 +106,7 @@ class area_container:
     # if they do push to influx, if the member of the list doesn't match with anything
     # else...then remove it make sure to only check through the current members of the list
     #
-    def bc_peak_match(self,single_co2_peak_list,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
+    def bc_peak_match(self,single_co2_peak,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
             print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
             for y in range(len(bc_peaks[dev_id])):
                 difference = single_co2_peak.start_time - bc_peaks[dev_id][y].start_time
