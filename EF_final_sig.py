@@ -87,18 +87,19 @@ class area_container:
 
 
         # CO2 Area_Time lengths
-        self.li820_len = 0
-        self.li7000_len = 0
-        self.sba5_len = 0
-        self.vco2_len = 0
+        self.co2_peaks_amt['li720'] = 0
+        self.co2_peaks_amt['li7000'] = 0
+        self.co2_peaks_amt['sba5'] = 0
+        self.co2_peaks_amt['vco2'] = 0
         # BC Area_Time lengths
-        self.abcd1_len = 0
-        self.ae16_len = 0
-        self.ae33_len = 0
-        self.ma300_len = 0
+        self.nox_peaks_amt['abcd'] = 0
+        self.nox_peaks_amt['ae16'] = 0
+        self.nox_peaks_amt['ae33'] = 0
+        self.nox_peaks_amt['ma300'] = 0
         # NOx Area_Time length
-        self.caps_len = 0
-        self.ucb_len = 0
+        self.nox_peaks_amt['caps'] = 0
+        self.nox_peaks_amt['ucb'] = 0
+
         self.delta_window = 10
 
 
@@ -175,8 +176,9 @@ class area_container:
                         }
                     self.influx_client.write_json(json)
 
-    def EF_calc_bc(self,co2_device,co2_peak_amt,start_window,end_window):
+    def EF_calc_bc(self,co2_device,start_window,end_window):
         #peak_amt = len()
+        co2_peak_amt = self.co2_peak_amt[co2_device]
         print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
             self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device,0,start_window,end_window)
@@ -184,11 +186,11 @@ class area_container:
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device,2,start_window,end_window)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device,3,start_window,end_window)
 
-
-    def EF_calc_nox(self,co2_device,co2_peak_amt,divisor,start_window,end_window):
+    def EF_calc_nox(self,co2_device,divisor,start_window,end_window):
         #peak_amt = len(co2_peaks)
+        co2_peak_amt = self.co2_peak_amt[co2_device]
         print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
-        for x in range(peak_amt):
+        for x in range(co2_peak_amt):
             self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device,0,start_window,end_window)
             self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device,1,start_window,end_window)
 
@@ -196,30 +198,25 @@ class area_container:
         print("Entered into EF_calc_all")
         # Retrieve lengths for all lists
 
-        # CO2 Area_Time lengths
-        self.li820_len = len(self.co2_peaks[0])
-        self.li7000_len = len(self.co2_peaks[0])
-        self.sba5_len = len(self.co2_peaks[0])
-        self.vco2_len = len(self.co2_peaks[0])
-        # BC Area_Time lengths
-        self.abcd1_len = len(self.bc_peaks[0])
-        self.ae16_len = len(self.bc_peaks[1])
-        self.ae33_len = len(self.bc_peaks[2])
-        self.ma300_len = len(self.bc_peaks[3])
-        # NOx Area_Time length
-        self.caps_len = len(self.nox_peaks[0])
-        self.ucb_len = len(self.nox_peaks[1])
+        # Get all CO2 Area_Time lengths
+        for key in self.co2_peaks_amt:
+            self.co2_peaks_amt[key] = len(self.co2_peaks[key])
+        # Get all BC Area_Time lengths
+        for key in self.bc_peaks_amt:
+            self.bc_peaks_amt[key] = len(self.bc_peaks[key])
+        # Get all NOx Area_Time length
+        for key in self.nox_peaks_amt:
+            self.nox_peaks_amt[key] = len(self.nox_peaks[key])
 
+        self.EF_calc_bc('li820',self.li820_bc_start,self.li820_bc_end)
+        self.EF_calc_bc('li7000',self.li7000_bc_start,self.li7000_bc_end)
+        self.EF_calc_bc('sba5',self.sba5_bc_start,self.sba5_bc_end)
+        self.EF_calc_bc('vco2',self.vco2_bc_start,self.vco2_bc_end)
 
-        self.EF_calc_bc('li820',self.li820_len,self.li820_bc_start,self.li820_bc_end)
-        self.EF_calc_bc('li7000',self.li7000_len,self.li7000_bc_start,self.li7000_bc_end)
-        self.EF_calc_bc('sba5',self.sba5_len,self.sba5_bc_start,self.sba5_bc_end)
-        self.EF_calc_bc('vco2',self.vco2_len,self.vco2_bc_start,self.vco2_bc_end)
-
-        self.EF_calc_nox('li820',self.li820_len,self.li820_nox_start,self.li820_nox_end)
-        self.EF_calc_nox('li7000',self.li7000_len,self.li7000_nox_start,self.li7000_nox_end)
-        self.EF_calc_nox('sba5',self.sba5_len,self.sba5_nox_start,self.sba5_nox_end)
-        self.EF_calc_nox('vco2',self.vco2_len,self.vco2_nox_start,self.vco2_nox_end)
+        self.EF_calc_nox('li820',self.li820_nox_start,self.li820_nox_end)
+        self.EF_calc_nox('li7000',self.li7000_nox_start,self.li7000_nox_end)
+        self.EF_calc_nox('sba5',self.sba5_nox_start,self.sba5_nox_end)
+        self.EF_calc_nox('vco2',self.vco2_nox_start,self.vco2_nox_end)
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
