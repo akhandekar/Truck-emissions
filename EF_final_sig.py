@@ -241,7 +241,8 @@ class area_container:
 # Measurement classes
 class bc_sensor:
     def __init__(self,all_area,influx_client):
-        self.sensor_name = sensor_name
+        # probably will put this back in
+        #self.sensor_name = sensor_name
         self.time_values = []
         self.bc_values = []
         self.avg_window = 20
@@ -341,7 +342,7 @@ class bc_sensor:
 
 class co2_sensor:
     def __init__(self,all_area,influx_client):
-        self.sensor_name = sensor_name
+        #self.sensor_name = sensor_name
         self.time_values = []
         self.co2_values = []
         self.avg_window = 10
@@ -440,7 +441,7 @@ class co2_sensor:
 
 class nox_sensor:
     def __init__(self,all_area,influx_client):
-        self.sensor_name = sensor_name
+        #self.sensor_name = sensor_name
         self.time_values = []
         self.nox_values = []
         self.nox_peaks = []
