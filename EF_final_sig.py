@@ -630,8 +630,7 @@ class ma300_instrument(bc_sensor):
 
 class li820_instrument(co2_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'li820'
-        co2_sensor.__init__(self,all_area,influx_client)
+        co2_sensor.__init__(self,'li820',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
     def get_values(self):
         co2_values = []
