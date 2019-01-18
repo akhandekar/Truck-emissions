@@ -527,6 +527,7 @@ class nox_sensor:
 class abcd_instrument(bc_sensor):
     def __init__(self):
         self.sensor_name = 'abcd'
+        bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
         self.bc_peaks = self.all_area.bc_peaks[0]
 
@@ -555,6 +556,7 @@ class abcd_instrument(bc_sensor):
 class ae16_instrument(bc_sensor):
     def __init__(self):
         self.sensor_name = 'ae16'
+        bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
         self.bc_peaks = self.all_area.bc_peaks[1]
 
@@ -582,6 +584,7 @@ class ae16_instrument(bc_sensor):
 class ae33_instrument(bc_sensor):
     def __init__(self):
         self.sensor_name = 'ae33'
+        bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
         self.bc_peaks = self.all_area.bc_peaks[2]
 
@@ -605,6 +608,7 @@ class ae33_instrument(bc_sensor):
 class ma300_instrument(bc_sensor):
     def __init__(self):
         self.sensor_name = 'ma300'
+        bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
         self.bc_peaks = self.all_area.bc_peaks[3]
 
@@ -631,6 +635,7 @@ class ma300_instrument(bc_sensor):
 class li820_instrument(co2_sensor):
     def __init__(self):
         self.sensor_name = 'li820'
+        co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
         self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values():
@@ -654,6 +659,7 @@ class li820_instrument(co2_sensor):
 class li7000_instrument(co2_sensor):
     def __init__(self):
         self.sensor_name = 'li7000'
+        co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
         self.co2_peaks = self.all_area.co2_peaks[1]
     def get_values():
@@ -678,6 +684,7 @@ class li7000_instrument(co2_sensor):
 class sba5_instrument(co2_sensor):
     def __init__(self):
         self.sensor_name = 'sba5'
+        co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
         self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values():
@@ -700,6 +707,7 @@ class sba5_instrument(co2_sensor):
 class vco2_instrument(co2_sensor):
     def __init__(self):
         self.sensor_name = 'vco2'
+        co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -726,6 +734,7 @@ class vco2_instrument(co2_sensor):
 class caps_instrument(nox_sensor):
     def __init__(self):
         self.sensor_name = 'caps'
+        nox_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
         self.nox_peaks = self.all_area.nox_peaks[0]
 
@@ -750,6 +759,7 @@ class caps_instrument(nox_sensor):
 class ucb_instrument(nox_sensor):
     def __init__(self):
         self.sensor_name = 'ucb'
+        nox_sensor.__init__(self,all_area,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,
@@ -823,18 +833,18 @@ def main():
     all_area=area_container(influx_client)
 
     # Create all bc sensor objects
-    abcd_sensor = abcd_instrument(influx_client)
-    ae16_sensor = ae16_instrument(influx_client)
-    ae33_sensor = ae33_instrument(influx_client)
-    ma300_sensor = ma300_instrument(influx_client)
+    abcd_sensor = abcd_instrument(all_area,influx_client)
+    ae16_sensor = ae16_instrument(all_area,influx_client)
+    ae33_sensor = ae33_instrument(all_area,influx_client)
+    ma300_sensor = ma300_instrument(all_area,influx_client)
     # Create all co2 sensor objects
-    li820_sensor = li820_instrument(influx_client)
-    li7000_sensor = li7000_instrument(influx_client)
-    sba5_sensor = sba5_instrument(influx_client)
-    vco2_sensor = vco2_instrument(influx_client)
+    li820_sensor = li820_instrument(all_area,influx_client)
+    li7000_sensor = li7000_instrument(all_area,influx_client)
+    sba5_sensor = sba5_instrument(all_area,influx_client)
+    vco2_sensor = vco2_instrument(all_area,influx_client)
     # Create all nox sensor objects
-    caps_sensor = caps_instrument(influx_client)
-    ucb_sensor = ucb_instrument(influx_client)
+    caps_sensor = caps_instrument(all_area,influx_client)
+    ucb_sensor = ucb_instrument(all_area,influx_client)
 
     # Create threads for each sensor
     bc_abcd_thread=sensor_thread(abcd_sensor)
