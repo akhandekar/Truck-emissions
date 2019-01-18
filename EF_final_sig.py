@@ -669,10 +669,10 @@ class li7000_instrument(co2_sensor):
             values_li7000 = ser.split('\n')[0].split('\t')
             print("The values for li700 are:")
             print(values_li7000)
-            co2_values.append(float(values_li7000[2]))  # CO2 value
-            co2_values.append(float(values_li7000[5]) # Temperature
-            co2_values.append(float(values_li7000[4])) # Pressue
-            co2_values.append(time_now)
+            co2_values.insert(0,float(values_li7000[2])) # CO2 value
+            co2_values.insert(1,float(values_li7000[5])) # Temperature
+            co2_values.insert(2,float(values_li7000[4])) # Pressue
+            co2_values.insert(3,time_now)
             print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
