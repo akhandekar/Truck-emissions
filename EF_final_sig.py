@@ -131,7 +131,7 @@ class area_container:
                 if (abs(difference) >= start_window[dev_id]*1000000000):
                     if (abs(end_difference) >= end_window[dev_id]*1000000000):
                         print("We have a match at EF with abcd and" + co2_device)
-                        EF = bc_peaks[bc_device][y].area / single_co2_peak.area
+                        EF = self.bc_peaks[bc_device][y].area / single_co2_peak.area
                         json =   {
                             'fields': {
                                 'EF': EF
