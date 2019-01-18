@@ -287,9 +287,9 @@ class bc_sensor:
                     'measurement': 'bc'
                     }
                 if (bc_values > 2):
-                    json['fields']['atn'] = 'atn': bc_measurement[1]
+                    json['fields']['atn'] = bc_measurement[1]
                     if (bc_values > 3):
-                        json['fields']['flow'] = 'atn': bc_measurement[2]
+                        json['fields']['flow'] = bc_measurement[2]
                         json['time'] = bc_values[3]
                     else:
                         json['time'] = bc_values[2]
