@@ -768,7 +768,7 @@ class ucb_instrument(nox_sensor):
         self.nox_peaks = self.all_area.nox_peaks[1]
     def get_values(self):
         nox_values = []
-        serial.write(b'\x0201RD0\x03\x26')
+        self.serial.write(b'\x0201RD0\x03\x26')
         ser = serial.readline()
         dt_object = datetime.now()
         time_str10 = dt_object.strftime('%H:%M:%S')
