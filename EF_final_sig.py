@@ -47,16 +47,19 @@ class area_container:
         # create all area lists
         self.influx_client = influx_client
         # CO2 Area Values
+        self.co2_peaks = []
         self.co2_peaks[0]  = [] #li820 sensor
         self.co2_peaks[1]  = [] #li7000 sensor
         self.co2_peaks[2]  = [] #sba5 sensor
         self.co2_peaks[3]  = [] #vco2 sensor
         # BC Area Values
+        self.bc_peaks = []
         self.bc_peaks[0]  = [] #abcd sensor
         self.bc_peaks[1]  = [] #ae16 sensor
         self.bc_peaks[2]  = [] #ae33 sensor
         self.bc_peaks[3]  = [] #ma300 sensor
         # Nox areav values
+        self.nox_peaks = []
         self.nox_peaks[0] = []
         self.nox_peaks[1] = []
 
