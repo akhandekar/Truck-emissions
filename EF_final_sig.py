@@ -381,6 +381,7 @@ class co2_sensor:
     def push_values(self,co2_measurement):
             try:
                 print("co2 measurement push attempt")
+                print(co2_measurement)
                 json =   {
                     'fields': {
                         'co2': co2_measurement[0]
@@ -390,7 +391,7 @@ class co2_sensor:
                         },
                     'measurement': 'co2'
                     }
-                print(json)
+                #print(json)
                 if (len(co2_measurement)>2):
                     json['fields']['press'] = co2_measurement[1]
                     print("error 1?")
@@ -405,6 +406,7 @@ class co2_sensor:
                 else:
                     json['time'] = co2_measurement[1]
                     print("error 5?")
+                print(json)
                 push(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
