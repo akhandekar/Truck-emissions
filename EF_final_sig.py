@@ -807,11 +807,11 @@ class sensor_thread(threading.Thread):
 
         while not stop_requested:
             values = self.sensor.get_values()
-            self.readings.append(values[0])
-            self.sensor.push_values(values)
-            if(values == 0):
+            if(len(values) == 0):
                 continue
             print(values)
+            self.readings.append(values[0])
+            self.sensor.push_values(values)
             self.sensor.peak_area(values[0])
             count+=1
 
