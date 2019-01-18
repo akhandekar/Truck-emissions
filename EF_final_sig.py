@@ -48,7 +48,7 @@ class area_container:
         self.influx_client = influx_client
         # CO2 Area Values
         self.co2_peaks = []
-        self.co2_peaks[0]  = [] #li820 sensor
+        self.co2_peaks.append([]) #li820 sensor
         self.co2_peaks[1]  = [] #li7000 sensor
         self.co2_peaks[2]  = [] #sba5 sensor
         self.co2_peaks[3]  = [] #vco2 sensor
