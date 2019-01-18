@@ -533,7 +533,7 @@ class abcd_instrument(bc_sensor):
         bc_sensor.__init__(self,'abcd',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 
-    def get_values(serial,bc_values):
+    def get_values(self):
         bc_values = []
         ser = self.serial.readline()
         values_abcd1 = ser.split('\n')[0].split(',')
