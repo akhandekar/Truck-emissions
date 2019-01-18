@@ -532,7 +532,6 @@ class abcd_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
         bc_sensor.__init__(self,'abcd',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
-        self.bc_peaks = self.all_area.bc_peaks[0]
 
     def get_values(serial,bc_values):
         bc_values = []
@@ -560,7 +559,6 @@ class ae16_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
         bc_sensor.__init__(self,'ae16',influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
-        self.bc_peaks = self.all_area.bc_peaks[1]
 
     def get_values(self):
         bc_values = []
@@ -588,7 +586,6 @@ class ae33_instrument(bc_sensor):
         self.sensor_name = 'ae33'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
-        self.bc_peaks = self.all_area.bc_peaks[2]
 
     def get_values(self):
         bc_values = []
@@ -612,7 +609,6 @@ class ma300_instrument(bc_sensor):
         self.sensor_name = 'ma300'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
-        self.bc_peaks = self.all_area.bc_peaks[3]
 
     def get_values(self):
         bc_values = []
@@ -639,7 +635,6 @@ class li820_instrument(co2_sensor):
         self.sensor_name = 'li820'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
-        self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values(self):
         co2_values = []
         ser = self.serial.readline()
@@ -663,7 +658,6 @@ class li7000_instrument(co2_sensor):
         self.sensor_name = 'li7000'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
-        self.co2_peaks = self.all_area.co2_peaks[1]
     def get_values(self):
         co2_values = []
         ser = self.serial.readline()
@@ -688,7 +682,6 @@ class sba5_instrument(co2_sensor):
         self.sensor_name = 'sba5'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
-        self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values(self):
         co2_values = []
         ser = self.serial.readline()
@@ -713,7 +706,6 @@ class vco2_instrument(co2_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
-        self.co2_peaks = self.all_area.co2_peaks[3]
     def get_values(self):
         co2_values = []
         ser = self.serial.readline()
@@ -738,7 +730,6 @@ class caps_instrument(nox_sensor):
         self.sensor_name = 'caps'
         nox_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
-        self.nox_peaks = self.all_area.nox_peaks[0]
 
     def get_values(self):
         nox_values = []
@@ -766,7 +757,7 @@ class ucb_instrument(nox_sensor):
                 baudrate=9600,
                 timeout = 1,
                 bytesize=serial.SEVENBITS)
-        self.nox_peaks = self.all_area.nox_peaks[1]
+
     def get_values(self):
         nox_values = []
         self.serial.write(b'\x0201RD0\x03\x26')
