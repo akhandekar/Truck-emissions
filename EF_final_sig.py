@@ -861,16 +861,16 @@ def main():
     area_thread=areaThread(all_area)
 
     # Start all threads
-    bc_abcd.start()
-    bc_ae16.start()
-    bc_ae33.start()
-    bc_ma300.start()
-    co2_li820.start()
-    co2_li7000.start()
-    co2_sba5.start()
-    co2_vco2.start()
-    nox_caps.start()
-    nox_ucb.start()
+    bc_abcd_thread.start()
+    bc_ae16_thread.start()
+    bc_ae33_thread.start()
+    bc_ma300_thread.start()
+    co2_li820_thread.start()
+    co2_li7000_thread.start()
+    co2_sba5_thread.start()
+    co2_vco2_thread.start()
+    nox_caps_thread.start()
+    nox_ucb_thread.start()
     area_thread.start()
 
     while not stop_requested: # Should terminate loop on keyboard interrupt
