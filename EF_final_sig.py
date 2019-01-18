@@ -525,7 +525,7 @@ class nox_sensor:
 
 # BC instruments
 class abcd_instrument(bc_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'abcd'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
@@ -554,7 +554,7 @@ class abcd_instrument(bc_sensor):
         return bc_values
 
 class ae16_instrument(bc_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'ae16'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
@@ -582,7 +582,7 @@ class ae16_instrument(bc_sensor):
         return bc_values
 
 class ae33_instrument(bc_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'ae33'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
@@ -606,7 +606,7 @@ class ae33_instrument(bc_sensor):
         return bc_values
 
 class ma300_instrument(bc_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'ma300'
         bc_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
@@ -633,7 +633,7 @@ class ma300_instrument(bc_sensor):
 # CO2 instruments
 
 class li820_instrument(co2_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'li820'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
@@ -657,7 +657,7 @@ class li820_instrument(co2_sensor):
         return co2_values
 
 class li7000_instrument(co2_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'li7000'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
@@ -682,7 +682,7 @@ class li7000_instrument(co2_sensor):
         return co2_values
 
 class sba5_instrument(co2_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'sba5'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
@@ -705,7 +705,7 @@ class sba5_instrument(co2_sensor):
         return co2_values
 
 class vco2_instrument(co2_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'vco2'
         co2_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
@@ -732,7 +732,7 @@ class vco2_instrument(co2_sensor):
 # NOX instruments
 
 class caps_instrument(nox_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'caps'
         nox_sensor.__init__(self,all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
@@ -757,7 +757,7 @@ class caps_instrument(nox_sensor):
         return nox_values
 
 class ucb_instrument(nox_sensor):
-    def __init__(self):
+    def __init__(self,all_area,influx_client):
         self.sensor_name = 'ucb'
         nox_sensor.__init__(self,all_area,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
