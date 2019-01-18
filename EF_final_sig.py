@@ -576,7 +576,7 @@ class ae16_instrument(bc_sensor):
             atn_ae16 = float(values_ae16[9])
             bc_values.insert(0,bc_ae16)
             bc_values.insert(1,atn_ae16)
-            bc_values.insert(time_now)
+            bc_values.insert(2,time_now)
 
         except(ValueError,IndexError) as e:
             print("ae16 index error")
