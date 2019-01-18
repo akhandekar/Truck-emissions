@@ -88,7 +88,7 @@ class area_container:
 
         # CO2 Area_Time lengths
         self.co2_peaks_amt = {}
-        self.co2_peaks_amt['li820'] = 0
+        self.co2_peaks_amt['li8z20'] = 0
         self.co2_peaks_amt['li7000'] = 0
         self.co2_peaks_amt['sba5'] = 0
         self.co2_peaks_amt['vco2'] = 0
@@ -181,7 +181,7 @@ class area_container:
 
     def EF_calc_bc(self,co2_device,start_window,end_window):
         #peak_amt = len()
-        co2_peak_amt = self.co2_peak_amt[co2_device]
+        co2_peak_amt = self.co2_peaks_amt[co2_device]
         print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
             self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device,0,start_window,end_window)
@@ -191,7 +191,7 @@ class area_container:
 
     def EF_calc_nox(self,co2_device,divisor,start_window,end_window):
         #peak_amt = len(co2_peaks)
-        co2_peak_amt = self.co2_peak_amt[co2_device]
+        co2_peak_amt = self.co2_peaks_amt[co2_device]
         print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
             self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device,0,start_window,end_window)
