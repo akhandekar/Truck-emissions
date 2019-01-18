@@ -443,7 +443,7 @@ class co2_sensor:
 
 class nox_sensor:
     def __init__(self,sensor_name,all_area,influx_client):
-        #self.sensor_name = sensor_name
+        self.sensor_name = sensor_name
         self.time_values = []
         self.nox_values = []
         self.nox_peaks = []
