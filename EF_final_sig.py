@@ -88,7 +88,7 @@ class area_container:
 
         # CO2 Area_Time lengths
         self.co2_peaks_amt = {}
-        self.co2_peaks_amt['li720'] = 0
+        self.co2_peaks_amt['li820'] = 0
         self.co2_peaks_amt['li7000'] = 0
         self.co2_peaks_amt['sba5'] = 0
         self.co2_peaks_amt['vco2'] = 0
