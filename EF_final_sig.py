@@ -164,8 +164,8 @@ class area_container:
             self.influx_client.write_json(json)
             if (abs(difference) >= start_window[dev_id]*1000000000):
                 if (abs(end_difference) >= end_window[dev_id]*1000000000):
-                    print("We have a match at EF with caps and" + divisor)
-                    EF = nox_peaks[y].area / single_co2_peak.area
+                    print("We have a match at EF with caps and" + nox_device)
+                    EF = self.nox_peaks[y].area / single_co2_peak.area
                     json =   {
                         'fields': {
                             'EF': EF
