@@ -690,7 +690,7 @@ class sba5_instrument(co2_sensor):
         self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values(self):
         co2_values = []
-        ser = serial.readline()
+        ser = self.serial.readline()
         dt_object = datetime.now()
         time_str6 = dt_object.strftime('%H:%M:%S')
         values_sba5 = ser.split('\n')[0].split(' ')
