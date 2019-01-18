@@ -316,7 +316,7 @@ class bc_sensor:
 
             if dif < self.thresh_bc:
                 # No event
-                if self.polluting_ae33[-1] == True:
+                if self.polluting == True:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
@@ -368,7 +368,7 @@ class co2_sensor:
         self.ym = []
         # Polluting state
         self.polluting= False
-        self.thresh_li820 = 700
+        self.thresh_co2 = 700
         self.temp_area = 0.0
         self.peak_start = 0
         self.peak_end = 0
@@ -498,7 +498,7 @@ class nox_sensor:
         run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
         dif = abs(run_avg - nox_value)
         self.ym.append(run_avg)
-        self.xs.append(time_str10)
+        #self.xs.append(time_str10)
         self.ys.append(nox_value)
         if dif < self.thresh_nox:
             # No event
