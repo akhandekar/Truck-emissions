@@ -652,8 +652,7 @@ class li820_instrument(co2_sensor):
 
 class li7000_instrument(co2_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'li7000'
-        co2_sensor.__init__(self,all_area,influx_client)
+        co2_sensor.__init__(self,'li7000',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
     def get_values(self):
         co2_values = []
@@ -676,8 +675,7 @@ class li7000_instrument(co2_sensor):
 
 class sba5_instrument(co2_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'sba5'
-        co2_sensor.__init__(self,all_area,influx_client)
+        co2_sensor.__init__(self,'sba5',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
         co2_values = []
@@ -698,8 +696,7 @@ class sba5_instrument(co2_sensor):
 
 class vco2_instrument(co2_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'vco2'
-        co2_sensor.__init__(self,all_area,influx_client)
+        co2_sensor.__init__(self,'vco2',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -724,8 +721,7 @@ class vco2_instrument(co2_sensor):
 
 class caps_instrument(nox_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'caps'
-        nox_sensor.__init__(self,all_area,influx_client)
+        nox_sensor.__init__(self,'caps',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
     def get_values(self):
@@ -748,8 +744,7 @@ class caps_instrument(nox_sensor):
 
 class ucb_instrument(nox_sensor):
     def __init__(self,all_area,influx_client):
-        self.sensor_name = 'ucb'
-        nox_sensor.__init__(self,all_area,influx_client)
+        nox_sensor.__init__(self,'ucb',all_area,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,
