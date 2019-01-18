@@ -742,12 +742,12 @@ class caps_instrument(nox_sensor):
 
 class ucb_instrument(nox_sensor):
     def __init__(self):
-    self.sensor_name = 'ucb'
-    self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
-            baudrate=9600,
-            timeout = 1,
-            bytesize=serial.SEVENBITS)
-    self.nox_peaks = self.all_area.nox_peaks[1]
+        self.sensor_name = 'ucb'
+        self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
+                baudrate=9600,
+                timeout = 1,
+                bytesize=serial.SEVENBITS)
+        self.nox_peaks = self.all_area.nox_peaks[1]
     def get_values():
         nox_values = []
         serial.write(b'\x0201RD0\x03\x26')
