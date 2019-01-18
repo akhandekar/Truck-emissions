@@ -816,7 +816,7 @@ def main():
     config_file = args.config
     influx_client = Influx_Dataframe_Client(config_file,'DB_config')
 
-    all_area=area_container(test_client)
+    all_area=area_container(influx_client)
 
     # Create all bc sensor objects
     abcd_sensor = abcd_instrument(influx_client)
