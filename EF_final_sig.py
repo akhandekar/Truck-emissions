@@ -55,14 +55,14 @@ class area_container:
         self.co2_peaks['vco2'] = [] #vco2 sensor
         # BC Area Values
         self.bc_peaks = {}
-        self.bc_peaks['abcd']#abcd sensor
-        self.bc_peaks['ae16'] #ae16 sensor
-        self.bc_peaks['ae33'] #ae33 sensor
-        self.bc_peaks['ma300'] #ma300 sensor
+        self.bc_peaks['abcd'] = []#abcd sensor
+        self.bc_peaks['ae16'] =[] #ae16 sensor
+        self.bc_peaks['ae33'] = []#ae33 sensor
+        self.bc_peaks['ma300'] = []#ma300 sensor
         # Nox areav values
         self.nox_peaks = {}
-        self.nox_peaks['caps'] # caps sensor
-        self.nox_peaks['ucb'] # ucb sensor
+        self.nox_peaks['caps'] = [] # caps sensor
+        self.nox_peaks['ucb'] = [] # ucb sensor
 
         # Windows for matching peaks between instruments
         self.li820_bc_start = [4,1,5,5]
