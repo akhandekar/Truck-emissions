@@ -46,22 +46,23 @@ class area_container:
     def __init__(self,influx_client):
         # create all area lists
         self.influx_client = influx_client
+        # Probably will switch this to a dictionary
         # CO2 Area Values
         self.co2_peaks = []
         self.co2_peaks.append([]) #li820 sensor
-        self.co2_peaks[1]  = [] #li7000 sensor
-        self.co2_peaks[2]  = [] #sba5 sensor
-        self.co2_peaks[3]  = [] #vco2 sensor
+        self.co2_peaks.append([]) #li7000 sensor
+        self.co2_peaks.append([]) #sba5 sensor
+        self.co2_peaks.append([]) #vco2 sensor
         # BC Area Values
         self.bc_peaks = []
-        self.bc_peaks[0]  = [] #abcd sensor
-        self.bc_peaks[1]  = [] #ae16 sensor
-        self.bc_peaks[2]  = [] #ae33 sensor
-        self.bc_peaks[3]  = [] #ma300 sensor
+        self.bc_peaks.append([]) #abcd sensor
+        self.bc_peaks.append([]) #ae16 sensor
+        self.bc_peaks.append([]) #ae33 sensor
+        self.bc_peaks.append([]) #ma300 sensor
         # Nox areav values
         self.nox_peaks = []
-        self.nox_peaks[0] = []
-        self.nox_peaks[1] = []
+        self.nox_peaks.append([]) # caps sensor
+        self.nox_peaks.append([]) # ucb sensor
 
         # Windows for matching peaks between instruments
         self.li820_bc_start = [4,1,5,5]
