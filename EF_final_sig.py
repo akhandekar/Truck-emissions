@@ -282,6 +282,7 @@ class bc_sensor:
 
     def push_values(self,bc_measurement):
             try:
+                print("co2 measurement push attempt")
                 json =   {
                     'fields': {
                         'bc': bc_measurement[0]
@@ -379,6 +380,7 @@ class co2_sensor:
 
     def push_values(self,co2_measurement):
             try:
+                print("co2 measurement push attempt")
                 json =   {
                     'fields': {
                         'co2': co2_measurement[0],
@@ -396,8 +398,6 @@ class co2_sensor:
                         json['time'] = co2_measurement[3]
                 else:
                     json['time'] = co2_measurement[1]
-
-                print("co2 measurement push attempt")
                 push(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
@@ -480,6 +480,7 @@ class nox_sensor:
 
     def push_values(self,nox_measurement):
             try:
+                print("co2 measurement push attempt")
                 json =   {
                     'fields': {
                         'nox': nox_measurement[0],
@@ -491,7 +492,6 @@ class nox_sensor:
                         },
                     'measurement': 'nox'
                     }
-                print("Nox measurement push attempt")
                 print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
