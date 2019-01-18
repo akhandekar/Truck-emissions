@@ -280,7 +280,7 @@ class bc_sensor:
         self.bc_peaks = self.all_area.bc_peaks[self.sensor_name]
 
 
-    def push_values(bc_measurement):
+    def push_values(self,bc_measurement):
             try:
                 json =   {
                     'fields': {
@@ -306,7 +306,7 @@ class bc_sensor:
             except:
                 print("Influx push failure")
 
-    def peak_area(bc_value,bc_peaks):
+    def peak_area(self,bc_value,bc_peaks):
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
             dif = abs(run_avg - bc_value)
             self.ym.append(run_avg)
@@ -376,7 +376,7 @@ class co2_sensor:
         self.all_area = all_area
         self.co2_peaks = self.all_area.co2_peaks[self.sensor_name]
 
-    def push_values(co2_measurement):
+    def push_values(self,co2_measurement):
             try:
                 json =   {
                     'fields': {
@@ -400,7 +400,7 @@ class co2_sensor:
             except:
                 print("Influx push failure")
 
-    def peak_area(co2_value):
+    def peak_area(self,co2_value):
             self.ys.append(co2_value)
 
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
@@ -476,7 +476,7 @@ class nox_sensor:
         self.all_area = all_area
         self.nox_peaks = self.all_area.nox_peaks[self.sensor_name]
 
-    def push_values(nox_measurement):
+    def push_values(self,nox_measurement):
             try:
                 json =   {
                     'fields': {
@@ -493,7 +493,7 @@ class nox_sensor:
             except:
                 print("Influx push failure")
 
-    def peak_area(nox_value):
+    def peak_area(self,nox_value):
         self.ys.append(nox_value)
         run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
         dif = abs(run_avg - nox_value)
