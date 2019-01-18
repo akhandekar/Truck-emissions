@@ -176,7 +176,7 @@ class area_container:
                     self.influx_client.write_json(json)
 
     def EF_calc_bc(self,co2_peaks,dev_id,co2_device,start_window,end_window):
-        print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
+        print("The amount of co2 peaks for " + co2_device + "is" + str(quot_len))
         peak_amt = len(self.co2_peaks)
         for x in range(peak_amt):
             bc_peak_match(self,self.co2_peaks[x],self.bc_peaks[0],'abcd',co2_device,0)
@@ -186,7 +186,7 @@ class area_container:
 
 
     def EF_calc_nox(self,co2_peaks,divisor,start_window,end_window):
-        print("The amount of co2 peaks for " + divisor + "is" + str(quot_len))
+        print("The amount of co2 peaks for " + co2_device + "is" + str(quot_len))
         peak_amt = len(co2_peaks)
         for x in range(peak_amt):
             nox_peak_match(self,self.co2_peaks[x],self.nox_peaks[0],'caps',co2_device,0)
