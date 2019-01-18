@@ -289,7 +289,7 @@ class bc_sensor:
                 if (bc_values > 2):
                     json['fields']['atn'] = 'atn': bc_measurement[1]
                     if (bc_values > 3):
-                        json['fields']['atn'] = 'atn': bc_measurement[2]
+                        json['fields']['flow'] = 'atn': bc_measurement[2]
                         json['time'] = bc_values[3]
                     else:
                         json['time'] = bc_values[2]
@@ -804,23 +804,23 @@ def main():
     parser.add_argument("config", help="config file")
     args = parser.parse_args()
     config_file = args.config
-    test_client = Influx_Dataframe_Client(config_file,'DB_config')
+    influx_client = Influx_Dataframe_Client(config_file,'DB_config')
 
     all_area=area_container(test_client)
 
     # Create all bc sensor objects
-    abcd_sensor = abcd_instrument(self.influx_client)
-    ae16_sensor = ae16_instrument(self.influx_client)
-    ae33_sensor = ae33_instrument(self.influx_client)
-    ma300_sensor = ma300_instrument(self.influx_client)
+    abcd_sensor = abcd_instrument(influx_client)
+    ae16_sensor = ae16_instrument(influx_client)
+    ae33_sensor = ae33_instrument(influx_client)
+    ma300_sensor = ma300_instrument(influx_client)
     # Create all co2 sensor objects
-    li820_sensor = li820_instrument(self.influx_client)
-    li7000_sensor = li7000_instrument(self.influx_client)
-    sba5_sensor = sba5_instrument(self.influx_client)
-    vco2_sensor = vco2_instrument(self.influx_client)
+    li820_sensor = li820_instrument(influx_client)
+    li7000_sensor = li7000_instrument(influx_client)
+    sba5_sensor = sba5_instrument(influx_client)
+    vco2_sensor = vco2_instrument(influx_client)
     # Create all nox sensor objects
-    caps_sensor = caps_instrument(self.influx_client)
-    ucb_sensor = ucb_instrument(self.influx_client)
+    caps_sensor = caps_instrument(influx_client)
+    ucb_sensor = ucb_instrument(influx_client)
 
     # Create threads for each sensor
     bc_abcd_thread=sensor_thread(abcd_sensor)
