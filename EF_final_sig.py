@@ -197,18 +197,18 @@ class area_container:
         # Retrieve lengths for all lists
 
         # CO2 Area_Time lengths
-        self.li820_len = len(self.area_time_li820)
-        self.li7000_len = len(self.area_time_li7000)
-        self.sba5_len = len(self.area_time_sba5)
-        self.vco2_len = len(self.area_time_vco2)
+        self.li820_len = len(self.co2_peaks[0])
+        self.li7000_len = len(self.co2_peaks[0])
+        self.sba5_len = len(self.co2_peaks[0])
+        self.vco2_len = len(self.co2_peaks[0])
         # BC Area_Time lengths
-        self.abcd1_len = len(self.area_time_abcd1)
-        self.ae16_len = len(self.area_time_ae16)
-        self.ae33_len = len(self.area_time_ae33)
-        self.ma300_len = len(self.area_time_ma300)
+        self.abcd1_len = len(self.bc_peaks[0])
+        self.ae16_len = len(self.bc_peaks[1])
+        self.ae33_len = len(self.bc_peaks[2])
+        self.ma300_len = len(self.bc_peaks[3])
         # NOx Area_Time length
-        self.caps_len = len(self.area_time_caps)
-        self.ucb_len = len(self.area_time_ucb)
+        self.caps_len = len(self.nox_peaks[0])
+        self.ucb_len = len(self.nox_peaks[1])
 
 
         self.EF_calc_bc(self.co2_peaks[0],self.li820_len,'li820',self.li820_bc_start,self.li820_bc_end)
