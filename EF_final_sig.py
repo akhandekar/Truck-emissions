@@ -392,7 +392,7 @@ class co2_sensor:
                     }
                 if (len(co2_measurement)>2):
                     json['fields']['press'] = co2_measurement[1]
-                    if(len(co2_measurement>3)):
+                    if(len(co2_measurement)==4):
                         json['fields']['temp'] = co2_measurement[2]
                         json['time'] = co2_measurement[3]
                     else:
@@ -484,8 +484,7 @@ class nox_sensor:
                 print("nox measurement push attempt")
                 json =   {
                     'fields': {
-                        'nox': nox_measurement[0],
-                        'area': nox_measurement[1]
+                        'nox': nox_measurement[0]
                         },
                     'time': nox_measurement[2],
                     'tags': {
