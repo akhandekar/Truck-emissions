@@ -555,7 +555,7 @@ class ae16_instrument(bc_sensor):
         self.bc_peaks = self.all_area.bc_peaks[1]
 
     def get_values():
-        bc_areas = []
+        bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str2 = dt_object.strftime('%H:%M:%S')
@@ -582,7 +582,7 @@ class ae33_instrument(bc_sensor):
         self.bc_peaks = self.all_area.bc_peaks[2]
 
     def get_values():
-        bc_areas = []
+        bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str3 = dt_object.strftime('%H:%M:%S')
@@ -592,7 +592,7 @@ class ae33_instrument(bc_sensor):
             bc2 = float(values_ae33[9])
             bc_ae33 = bc2/1000
             bc_values[0] = bc_ae33
-            bc_values[3] = time_now
+            bc_values[1] = time_now
         except(ValueError,IndexError) as e:
             print("ae33 index failure")
             continue
@@ -604,6 +604,7 @@ class ma300_instrument(bc_sensor):
         self.bc_peaks = self.all_area.bc_peaks[3]
 
     def get_values():
+        bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str7 = dt_object.strftime('%H:%M:%S')
@@ -627,6 +628,7 @@ class li820_instrument(co2_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
         self.co2_peaks = self.all_area.co2_peaks[2]
     def get_values():
+        co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str4 = dt_object.strftime('%H:%M:%S')
@@ -649,6 +651,7 @@ class li7000_instrument(co2_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
         self.co2_peaks = self.all_area.co2_peaks[1]
     def get_values():
+        co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str5 = dt_object.strftime('%H:%M:%S')
@@ -696,6 +699,7 @@ class vco2_instrument(co2_sensor):
         response=self.serial.readline()
         self.co2_peaks = self.all_area.co2_peaks[3]
     def get_values():
+        co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
         time_str8 = dt_object.strftime('%H:%M:%S')
