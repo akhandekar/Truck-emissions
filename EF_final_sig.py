@@ -545,10 +545,10 @@ class abcd_instrument(bc_sensor):
             atn_abcd1 = float(values_abcd1[3])
             bc_abcd1 = float(values_abcd1[4])
             flow_abcd1 = float(values_abcd1[7])
-            bc_values[0] = bc_abcd1
-            bc_values[1] = atn_abcd1
-            bc_values[2] = flow_abcd1
-            bc_values[3] = time_now
+            bc_values.insert(0,bc_abcd1)
+            bc_values.insert(1,atn_abcd1)
+            bc_values.insert(2,flow_abcd1)
+            bc_values.insert(3,time_now)
             #print(bc_abcd1)
 
         except (ValueError,IndexError) as e:
@@ -574,9 +574,9 @@ class ae16_instrument(bc_sensor):
             bc1 = float(values_ae16[2])
             bc_ae16 = bc1/1000
             atn_ae16 = float(values_ae16[9])
-            bc_values[0] = bc_ae16
-            bc_values[1] = atn_ae16
-            bc_values[3] = time_now
+            bc_values.insert(0,ae16)
+            bc_values.insert(1,atn_ae16)
+            bc_values.insert(time_now)
 
         except(ValueError,IndexError) as e:
             print("ae16 index error")
@@ -599,8 +599,8 @@ class ae33_instrument(bc_sensor):
             print(values_ae33)
             bc2 = float(values_ae33[9])
             bc_ae33 = bc2/1000
-            bc_values[0] = bc_ae33
-            bc_values[1] = time_now
+            bc_values.insert(0,bc_ae33)
+            bc_values.insert(1,time_now)
         except(ValueError,IndexError) as e:
             print("ae33 index failure")
             return bc_values
@@ -622,8 +622,8 @@ class ma300_instrument(bc_sensor):
         try:
             print(values_ma300)
             bc3 = float(values_ma300[44])
-            bc_values[0] = bc3/1000
-            bc_values[1] = time_now
+            bc_values.insert(0,(bc3/1000))
+            bc_values.insert(1,time_now)
 
         except (ValueError, IndexError) as e:
             print("ma300 index failure")
@@ -645,10 +645,10 @@ class li820_instrument(co2_sensor):
         try:
             values_li820 = re.split(r'[<>]', ser)
             print(values_1820)
-            co2_values[0] = float(values_li820[14]) # CO2 value
-            co2_values[1] = float(values_li820[6]) # Temperature
-            co2_values[2] = float(values_li820[10]) # Pressue
-            co2_values[3] = time_now
+            co2_values.insert(0,float(values_li820[14])) # CO2 value
+            co2_values.insert(1,float(values_li820[6])) # Temperature
+            co2_values.insert(2,float(values_li820[10])) # Pressue
+            co2_values.insert(3,time_now)
 
         except(ValueError,IndexError) as e:
             print("li820 index failure")
@@ -693,8 +693,8 @@ class sba5_instrument(co2_sensor):
 
         try:
             print(values_sba5)
-            co2_values[0] = float(values_sba5[3]) # CO2 value
-            co2_values[1] = time_now # Time is always at end of list
+            co2_values.insert(0,float(values_sba5[3])) # CO2 value
+            co2_values.insert(1,time_now)# Time is always at end of list
 
         except (ValueError, IndexError) as e:
             print("sba5 index failure")
@@ -717,9 +717,8 @@ class vco2_instrument(co2_sensor):
 
         try:
             print(values_vco2)
-            co2_values[0] = float(values_vco2[0])
-            co2_values[1] = time_now
-
+            co2_values.insert(0,float(values_vco2[0]))
+            co2_values.insert(1,time_now)
         except (ValueError, IndexError) as e:
             print("vco2 index failure")
             return co2_values
@@ -743,8 +742,8 @@ class caps_instrument(nox_sensor):
         try:
             print(values_caps)
             nox1 = float(values_caps[1])
-            nox_values[0] = nox1/1000
-            nox_values[1] = time_now
+            nox_values.insert(0,(nox1/1000))
+            nox_values.insert(1,time_now)
 
         except (ValueError, IndexError) as e:
             print("caps index failure")
@@ -772,9 +771,8 @@ class ucb_instrument(nox_sensor):
             values_ucb = output_ucb.split('\n')[0].split(',')
             print(values_ucb)
             if float(values_ucb[1])!=0:
-                nox_values[0] = float(values_ucb[1])
-                nox_values[1] = time_now
-
+                nox_values.insert(0,float(values_ucb[1]))
+                nox_values.insert(1,time_now)
 
         except Exception as e:
             print("ucb index failure")
