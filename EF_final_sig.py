@@ -534,7 +534,7 @@ class abcd_instrument(bc_sensor):
 
     def get_values(serial,bc_values):
         bc_values = []
-        ser = self.ser.readline()
+        ser = self.serial.readline()
         values_abcd1 = ser.split('\n')[0].split(',')
         #print(values_abcd1)
         time_now=int(time.time()*1000000000)
@@ -769,7 +769,7 @@ class ucb_instrument(nox_sensor):
     def get_values(self):
         nox_values = []
         self.serial.write(b'\x0201RD0\x03\x26')
-        ser = serial.readline()
+        ser = self.serial.readline()
         dt_object = datetime.now()
         time_str10 = dt_object.strftime('%H:%M:%S')
         time_now=int(time.time()*1000000000)
