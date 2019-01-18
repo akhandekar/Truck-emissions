@@ -93,11 +93,13 @@ class area_container:
         self.co2_peaks_amt['sba5'] = 0
         self.co2_peaks_amt['vco2'] = 0
         # BC Area_Time lengths
-        self.nox_peaks_amt['abcd'] = 0
-        self.nox_peaks_amt['ae16'] = 0
-        self.nox_peaks_amt['ae33'] = 0
-        self.nox_peaks_amt['ma300'] = 0
+        self.bc_peaks_amt = {}
+        self.bc_peaks_amt['abcd'] = 0
+        self.bc_peaks_amt['ae16'] = 0
+        self.bc_peaks_amt['ae33'] = 0
+        self.bc_peaks_amt['ma300'] = 0
         # NOx Area_Time length
+        self.nox_peaks_amt = {}
         self.nox_peaks_amt['caps'] = 0
         self.nox_peaks_amt['ucb'] = 0
 
