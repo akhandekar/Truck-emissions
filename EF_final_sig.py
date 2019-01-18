@@ -282,7 +282,7 @@ class bc_sensor:
 
     def push_values(self,bc_measurement):
             try:
-                print("co2 measurement push attempt")
+                print("bc measurement push attempt")
                 json =   {
                     'fields': {
                         'bc': bc_measurement[0]
@@ -292,9 +292,9 @@ class bc_sensor:
                         },
                     'measurement': 'bc'
                     }
-                if (bc_values > 2):
+                if (len(bc_measurement) > 2):
                     json['fields']['atn'] = bc_measurement[1]
-                    if (bc_values > 3):
+                    if (len(bc_measurement) > 3):
                         json['fields']['flow'] = bc_measurement[2]
                         json['time'] = bc_values[3]
                     else:
@@ -390,12 +390,13 @@ class co2_sensor:
                         },
                     'measurement': 'co2'
                     }
-                if (len(co2_values)>2):
+                if (len(co2_measurement)>2):
                     json['fields']['press'] = co2_measurement[1]
-                    json['time'] = co2_measurement[2]
-                    if(len(co2_values==3)):
+                    if(len(co2bc_measurement>3)):
                         json['fields']['temp'] = co2_measurement[2]
                         json['time'] = co2_measurement[3]
+                    else:
+                        json['time'] = co2_measurement[2]
                 else:
                     json['time'] = co2_measurement[1]
                 push(self.influx_client.write_json(json))
@@ -480,7 +481,7 @@ class nox_sensor:
 
     def push_values(self,nox_measurement):
             try:
-                print("co2 measurement push attempt")
+                print("nox measurement push attempt")
                 json =   {
                     'fields': {
                         'nox': nox_measurement[0],
