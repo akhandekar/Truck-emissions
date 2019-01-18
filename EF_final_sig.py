@@ -302,7 +302,7 @@ class bc_sensor:
                     json['time'] = bc_values[1]
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
-                self.influx_client.write_json(json)
+                print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
 
@@ -395,7 +395,8 @@ class co2_sensor:
                         json['time'] = co2_measurement[3]
                 else:
                     json['time'] = co2_measurement[1]
-                self.influx_client.write_json(json)
+
+                push(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
 
@@ -488,7 +489,7 @@ class nox_sensor:
                         },
                     'measurement': 'nox'
                     }
-                self.influx_client.write_json(json)
+                print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
 
@@ -801,6 +802,7 @@ class sensor_thread(threading.Thread):
             self.sensor.push_values(values)
             if(values == 0):
                 continue
+            print(values)
             self.sensor.peak_area(values[0])
             count+=1
 
