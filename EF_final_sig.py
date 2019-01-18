@@ -541,7 +541,7 @@ class abcd_instrument(bc_sensor):
         time_now=int(time.time()*1000000000)
         #time_str1 = dt_object.strftime('%H:%M:%S')
         try:
-            print(values_abcd1)
+            #print(values_abcd1)
             atn_abcd1 = float(values_abcd1[3])
             bc_abcd1 = float(values_abcd1[4])
             flow_abcd1 = float(values_abcd1[7])
@@ -570,7 +570,7 @@ class ae16_instrument(bc_sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_ae16)
+            #print(values_ae16)
             bc1 = float(values_ae16[2])
             bc_ae16 = bc1/1000
             atn_ae16 = float(values_ae16[9])
@@ -596,7 +596,7 @@ class ae33_instrument(bc_sensor):
         values_ae33 = ser.split('\n')[0].split(',')
         time_now=int(time.time()*1000000000)
         try:
-            print(values_ae33)
+            #print(values_ae33)
             bc2 = float(values_ae33[9])
             bc_ae33 = bc2/1000
             bc_values.insert(0,bc_ae33)
@@ -620,7 +620,7 @@ class ma300_instrument(bc_sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_ma300)
+            #print(values_ma300)
             bc3 = float(values_ma300[44])
             bc_values.insert(0,(bc3/1000))
             bc_values.insert(1,time_now)
@@ -644,7 +644,7 @@ class li820_instrument(co2_sensor):
         time_now=int(time.time()*1000000000)
         try:
             values_li820 = re.split(r'[<>]', ser)
-            print(values_1820)
+            #print(values_1820)
             co2_values.insert(0,float(values_li820[14])) # CO2 value
             co2_values.insert(1,float(values_li820[6])) # Temperature
             co2_values.insert(2,float(values_li820[10])) # Pressue
@@ -667,8 +667,8 @@ class li7000_instrument(co2_sensor):
         time_now=int(time.time()*1000000000)
         try:
             values_li7000 = ser.split('\n')[0].split('\t')
-            print("The values for li700 are:")
-            print(values_li7000)
+            #print("The values for li700 are:")
+            #print(values_li7000)
             co2_values.insert(0,float(values_li7000[2])) # CO2 value
             co2_values.insert(1,float(values_li7000[5])) # Temperature
             co2_values.insert(2,float(values_li7000[4])) # Pressue
@@ -692,7 +692,7 @@ class sba5_instrument(co2_sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_sba5)
+            #print(values_sba5)
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
             co2_values.insert(1,time_now)# Time is always at end of list
 
@@ -716,7 +716,7 @@ class vco2_instrument(co2_sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_vco2)
+            #print(values_vco2)
             co2_values.insert(0,float(values_vco2[0]))
             co2_values.insert(1,time_now)
         except (ValueError, IndexError) as e:
@@ -740,7 +740,7 @@ class caps_instrument(nox_sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_caps)
+            #print(values_caps)
             nox1 = float(values_caps[1])
             nox_values.insert(0,(nox1/1000))
             nox_values.insert(1,time_now)
@@ -769,7 +769,7 @@ class ucb_instrument(nox_sensor):
         try:
             output_ucb = ser.decode('ascii')
             values_ucb = output_ucb.split('\n')[0].split(',')
-            print(values_ucb)
+            #print(values_ucb)
             if float(values_ucb[1])!=0:
                 nox_values.insert(0,float(values_ucb[1]))
                 nox_values.insert(1,time_now)
