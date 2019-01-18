@@ -255,7 +255,7 @@ class bc_sensor:
         # All BC data
         self.ys = []
         # No pollution data
-        self.ynp = [0 for i in range(self.N1)]
+        self.ynp = [0 for i in range(self.avg_window)]
         # Timestamps for pollution data
         self.xp = []
         # Pollution data (temp, data held in memory to calculate area)
