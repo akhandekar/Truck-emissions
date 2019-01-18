@@ -853,7 +853,7 @@ def main():
     bc_ae33_thread=sensor_thread(ae33_sensor)
     bc_ma300_thread=sensor_thread(ma300_sensor)
     co2_li820_thread=sensor_thread(li820_sensor)
-    co2_li7000_thread=sensor_thread(li7000)
+    co2_li7000_thread=sensor_thread(li7000_sensor)
     co2_sba5_thread=sensor_thread(sba5_sensor)
     co2_vco2_thread=sensor_thread(vco2_sensor)
     nox_caps_thread=sensor_thread(caps_sensor)
