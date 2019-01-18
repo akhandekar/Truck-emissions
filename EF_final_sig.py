@@ -107,10 +107,10 @@ class area_container:
     # else...then remove it make sure to only check through the current members of the list
     #
     def bc_peak_match(self,single_co2_peaks,bc_peaks,bc_device,co2_device,dev_id,start_window,end_window):
-            print("The co2 timestamp start is " + co2_device + "is" + str(self.co2_peaks[dev_id].start_time))
-            for y in range(len(single_bc_peaks)):
-                difference = single_co2_peak.start_time - bc_peaks[y].start_time
-                end_difference = single_co2_peak.end_time - bc_peaks[y].end_time
+            print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
+            for y in range(len(bc_peaks[dev_id])):
+                difference = single_co2_peak.start_time - bc_peaks[dev_id][y].start_time
+                end_difference = single_co2_peak.end_time - bc_peaks[dev_id][y].end_time
                 json =   {
                     'fields': {
                         'start_difference': float(difference/1000000000),
@@ -127,7 +127,7 @@ class area_container:
                 if (abs(difference) >= start_window[dev_id]*1000000000):
                     if (abs(end_difference) >= end_window[dev_id]*1000000000):
                         print("We have a match at EF with abcd and" + divisor)
-                        EF = bc_peaks[y].area / single_co2_peak.area
+                        EF = bc_peaks[dev_id][y].area / single_co2_peak.area
                         json =   {
                             'fields': {
                                 'EF': EF
@@ -141,10 +141,10 @@ class area_container:
                             }
                         self.influx_client.write_json(json)
 
-    def nox_peak_match(self,single_co2_peaks,nox_peaks,nox_device,co2_device,dev_id,start_window,end_window):
-        for y in range(self.caps_len):
-            difference = single_co2_peak.start_time - nox_peaks[y].start_time
-            end_difference = single_co2_peak.end_time - nox_peaks[y].end_time
+    def nox_peak_match(self,single_co2_peak,nox_peaks,nox_device,co2_device,dev_id,start_window,end_window):
+        for y in range(len(nox_peaks[dev_id])):
+            difference = single_co2_peak.start_time - nox_peaks[dev_id][y].start_time
+            end_difference = single_co2_peak.end_time - nox_peaks[dev_id].end_time
             json =   {
                 'fields': {
                     'start_difference': float(difference/1000000000),
