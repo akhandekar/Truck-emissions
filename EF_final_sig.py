@@ -673,6 +673,7 @@ class li7000_instrument(co2_sensor):
             co2_values[1] = float(values_li7000[5]) # Temperature
             co2_values[2] = float(values_li7000[4]) # Pressue
             co2_values[3] = time_now # time
+            print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
             return co2_values
