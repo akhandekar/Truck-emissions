@@ -383,7 +383,7 @@ class co2_sensor:
                 print("co2 measurement push attempt")
                 json =   {
                     'fields': {
-                        'co2': co2_measurement[0],
+                        'co2': co2_measurement[0]
                         },
                     'tags': {
                         'sensor_name': self.sensor_name,
@@ -486,7 +486,7 @@ class nox_sensor:
                     'fields': {
                         'nox': nox_measurement[0]
                         },
-                    'time': nox_measurement[2],
+                    'time': nox_measurement[1]
                     'tags': {
                         'sensor_name': self.sensor_name,
                         },
