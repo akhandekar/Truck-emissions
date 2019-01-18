@@ -407,7 +407,7 @@ class co2_sensor:
                     json['time'] = co2_measurement[1]
                     print("error 5?")
                 print(json)
-                push(self.influx_client.write_json(json))
+                print(self.influx_client.write_json(json))
             except:
                 print("Influx push failure")
 
