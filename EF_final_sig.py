@@ -304,7 +304,7 @@ class bc_sensor:
 
                 #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 print(self.influx_client.write_json(json))
-                print("bc measurement push attempt")
+                print(json)
             except:
                 print("Influx push failure")
 
