@@ -486,7 +486,7 @@ class nox_sensor:
                     'fields': {
                         'nox': nox_measurement[0]
                         },
-                    'time': nox_measurement[1]
+                    'time': nox_measurement[1],
                     'tags': {
                         'sensor_name': self.sensor_name,
                         },
