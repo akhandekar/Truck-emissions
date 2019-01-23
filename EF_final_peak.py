@@ -29,10 +29,10 @@ def sig_handler(signum, frame):
 
 # Container for peak information
 
-class area_time:
+class Peak_Event:
     #switch to lists so we don't have to save elements
     def __init__(self,area,start_time,end_time):
-        # Create Area_Time object
+        # Create Peak_Event object
         self.area = area
         #self.time = time
         self.start_time = start_time
@@ -41,12 +41,10 @@ class area_time:
 
 # Storage of peaks for each instrument as well function for calculating EF
 
-class area_container:
-    #switch to lists so we don't have to save elements
+class Peak_Container:
     def __init__(self,influx_client):
         # create all area lists
         self.influx_client = influx_client
-        # Probably will switch this to a dictionary
         # CO2 peak information lists
         self.co2_peaks = {}
         self.co2_peaks['li820'] = []
@@ -70,52 +68,70 @@ class area_container:
                 'abcd':4,
                 'ae16':1,
                 'ae33':5,
-                'ma300'5:
+                'ma300':5,
+                'caps':2.5,
+                'ucb':1
             },
             'li7000':{
                 'abcd':5,
                 'ae16':1.5,
                 'ae33':6,
-                'ma300'6:
+                'ma300':6,
+                'caps':3,
+                'ucb':1.5
             },
             'sba5':{
                 'abcd':1.5,
                 'ae16':3,
                 'ae33':3,
-                'ma300'3:
+                'ma300':3,
+                'caps':1,
+                'ucb':3
             },
             'vco2':{
                 'abcd':3,
                 'ae16':6,
                 'ae33':3,
-                'ma300'3:
+                'ma300':3,
+                'caps':4.5,
+                'ucb':6
             },
 
         }
+
         self.end_window = {
             'li820':{
                 'abcd':5,
                 'ae16':5,
                 'ae33':9.5,
-                'ma300':9.5
+                'ma300':9.5,
+                'caps':2.5,
+                'ucb':1
+
             },
             'li7000':{
                 'abcd':6,
                 'ae16':6,
                 'ae33':10,
-                'ma300':10
+                'ma300':10,
+                'caps':3,
+                'ucb':2
             },
             'sba5':{
                 'abcd':2,
                 'ae16':1.5,
                 'ae33':4.5,
-                'ma300':4.5
+                'ma300':4.5,
+                'caps':2.5,
+                'ucb':4
             },
             'vco2':{
                 'abcd':2,
                 'ae16':2,
                 'ae33':4,
-                'ma300'4:
+                'ma300':4,
+                'caps':3,
+                'ucb':5
             },
 
         }
@@ -140,19 +156,19 @@ class area_container:
         self.vco2_nox_end = [3,5]
 
 
-        # CO2 Area_Time lengths
+        # CO2 Peak_Event lengths
         self.co2_peaks_amt = {}
         self.co2_peaks_amt['li820'] = 0
         self.co2_peaks_amt['li7000'] = 0
         self.co2_peaks_amt['sba5'] = 0
         self.co2_peaks_amt['vco2'] = 0
-        # BC Area_Time lengths
+        # BC Peak_Event lengths
         self.bc_peaks_amt = {}
         self.bc_peaks_amt['abcd'] = 0
         self.bc_peaks_amt['ae16'] = 0
         self.bc_peaks_amt['ae33'] = 0
         self.bc_peaks_amt['ma300'] = 0
-        # NOx Area_Time length
+        # NOx Peak_Event length
         self.nox_peaks_amt = {}
         self.nox_peaks_amt['caps'] = 0
         self.nox_peaks_amt['ucb'] = 0
@@ -234,7 +250,6 @@ class area_container:
                     self.influx_client.write_json(json)
 
     def EF_calc_bc(self,co2_device,start_window,end_window):
-        #peak_amt = len()
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
@@ -244,7 +259,6 @@ class area_container:
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device,3,start_window,end_window)
 
     def EF_calc_nox(self,co2_device,start_window,end_window):
-        #peak_amt = len(co2_peaks)
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
@@ -254,13 +268,13 @@ class area_container:
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
         # Retrieve lengths for all lists
-        # Get all CO2 Area_Time lengths
-        for key in self.co2_peaks_amt:
-            self.co2_peaks_amt[key] = len(self.co2_peaks[key])
-        # Get all BC Area_Time lengths
-        for key in self.bc_peaks_amt:
-            self.bc_peaks_amt[key] = len(self.bc_peaks[key])
-        # Get all NOx Area_Time length
+        # Get amount of Peaks from all CO2 devices
+        for instrument in self.co2_peaks_amt:
+            self.co2_peaks_amt[instrument] = len(self.co2_peaks[instrument])
+        # Get amount of Peaks from all BC devices
+        for instrument in self.bc_peaks_amt:
+            self.bc_peaks_amt[instrument] = len(self.bc_peaks[instrument])
+        # Get amount of Peaks from all NOX devices
         for key in self.nox_peaks_amt:
             self.nox_peaks_amt[key] = len(self.nox_peaks[key])
 
@@ -293,9 +307,8 @@ class area_container:
 
 # Measurement classes these are extended with instrument classes for both
 # serial and data retrieval
-class bc_sensor:
-    def __init__(self,sensor_name,all_area,influx_client):
-        # probably will put this back in
+class BC_Sensor:
+    def __init__(self,sensor_name,all_peaks,influx_client):
         self.sensor_name = sensor_name
         self.time_values = []
         self.bc_values = []
@@ -331,13 +344,22 @@ class bc_sensor:
         self.peak_end = 0
 
         self.influx_client = influx_client
-        self.all_area = all_area
-        self.bc_peaks = self.all_area.bc_peaks[self.sensor_name]
+        self.all_peaks = all_peaks
+        self.bc_peaks = self.all_peaks.bc_peaks[self.sensor_name]
 
 
     def push_values(self,bc_measurement):
             try:
-                #print("bc measurement push attempt")
+                """
+                Generate JSON specific to what information was contained in
+                in bc_measurement array. Timestamp is always the last element of
+                the array.
+                bc_measurement[0]: Black Carbon measurement
+                bc_measurement[1]: ATN (if present)
+                bc_measurement[2]: FLOW (if present)
+                bc_measurement[3]: timestamp of measurement if all fields present
+                """
+
                 json =   {
                     'fields': {
                         'bc': bc_measurement[0]
@@ -357,11 +379,9 @@ class bc_sensor:
                 else:
                     json['time'] = bc_measurement[1]
 
-                #print("The bc_abcd1 is: "+ str(bc_abcd1))
                 self.influx_client.write_json(json)
-                #print(json)
             except:
-                print("Influx push failure")
+                print("Influx push failure from: " + self.sensor_name)
 
     def peak_area(self,bc_value):
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
@@ -382,7 +402,7 @@ class bc_sensor:
                     #self.xp.append(time_str3)
                     del self.yp[:]
                     self.peak_end = int(time.time()*1000000000)
-                    new_time = area_time(bc_area,self.peak_start,self.peak_end)
+                    new_time = Peak_Event(bc_area,self.peak_start,self.peak_end)
                     self.bc_peaks.append(new_time)
 
                 self.polluting = False
@@ -397,8 +417,8 @@ class bc_sensor:
                 self.polluting = True
                 self.yp.append(bc_value)
 
-class co2_sensor:
-    def __init__(self,sensor_name,all_area,influx_client):
+class CO2_Sensor:
+    def __init__(self,sensor_name,all_peaks,influx_client):
         self.sensor_name = sensor_name
         self.time_values = []
         self.co2_values = []
@@ -430,13 +450,20 @@ class co2_sensor:
         self.peak_start = 0
         self.peak_end = 0
 
-        self.all_area = all_area
-        self.co2_peaks = self.all_area.co2_peaks[self.sensor_name]
+        self.all_peaks = all_peaks
+        self.co2_peaks = self.all_peaks.co2_peaks[self.sensor_name]
 
     def push_values(self,co2_measurement):
             try:
-                #print("co2 measurement push attempt")
-                #print(co2_measurement)
+                """
+                Generate JSON specific to what information was contained in
+                in co2_measurement array. Timestamp is always the last element of
+                the array.
+                co2_measurement[0]: CO2 measurement
+                co2_measurement[1]: Pressue (if present)
+                co2_measurement[2]: Temperature (if present)
+                co2_measurement[3]: timestamp of measurement if all fields present
+                """
                 json =   {
                     'fields': {
                         'co2': co2_measurement[0]
@@ -457,7 +484,7 @@ class co2_sensor:
                     json['time'] = co2_measurement[1]
                 self.influx_client.write_json(json)
             except:
-                print("Influx push failure")
+                print("Influx push failure from: " + self.sensor_name)
 
     def peak_area(self,co2_value):
             self.ys.append(co2_value)
@@ -482,8 +509,8 @@ class co2_sensor:
                     #self.xp_vco2.append(time_str8)
 
                     del self.yp[:]
-                    new_time = area_time(area_co2,self.peak_start,self.peak_end)
-                    #all_area.area_time.append(new_time)
+                    new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
+                    #all_peaks.Peak_Event.append(new_time)
                     self.co2_peaks.append(new_time)
 
                 self.polluting = False
@@ -500,8 +527,8 @@ class co2_sensor:
                 self.polluting = True
                 self.yp.append(co2_value)
 
-class nox_sensor:
-    def __init__(self,sensor_name,all_area,influx_client):
+class NOX_Sensor:
+    def __init__(self,sensor_name,all_peaks,influx_client):
         self.sensor_name = sensor_name
         self.time_values = []
         self.nox_values = []
@@ -532,12 +559,18 @@ class nox_sensor:
         self.peak_start = 0
         self.peak_end = 0
 
-        self.all_area = all_area
-        self.nox_peaks = self.all_area.nox_peaks[self.sensor_name]
+        self.all_peaks = all_peaks
+        self.nox_peaks = self.all_peaks.nox_peaks[self.sensor_name]
 
     def push_values(self,nox_measurement):
             try:
-                #print("nox measurement push attempt")
+                """
+                Generate JSON specific to what information was contained in
+                in nox_measurement array. Timestamp is always the last element of
+                the array.
+                nox_measurement[0]: NOX measurement
+                nox_measurement[1]: timestamp of measurement
+                """
                 json =   {
                     'fields': {
                         'nox': nox_measurement[0]
@@ -550,7 +583,7 @@ class nox_sensor:
                     }
                 self.influx_client.write_json(json)
             except:
-                print("Influx push failure")
+                print("Influx push failure from: " + self.sensor_name)
 
     def peak_area(self,nox_value):
         self.ys.append(nox_value)
@@ -573,7 +606,7 @@ class nox_sensor:
                 #self.xp.append(time_str10)
                 del self.yp[:]
                 self.peak_end = int(time.time()*1000000000)
-                new_time = area_time(peak_area,self.peak_start,self.peak_end)
+                new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
                 self.nox_peaks.append(new_time)
             self.polluting = False
             self.ynp.append(nox_value)
@@ -587,9 +620,9 @@ class nox_sensor:
             self.yp.append(nox_value)
 
 # BC instruments
-class abcd_instrument(bc_sensor):
-    def __init__(self,all_area,influx_client):
-        bc_sensor.__init__(self,'abcd',all_area,influx_client)
+class ABCD_instrument(BC_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        BC_Sensor.__init__(self,'abcd',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 
     def get_values(self):
@@ -615,9 +648,9 @@ class abcd_instrument(bc_sensor):
             return bc_values
         return bc_values
 
-class ae16_instrument(bc_sensor):
-    def __init__(self,all_area,influx_client):
-        bc_sensor.__init__(self,'ae16',all_area,influx_client)
+class AE16_Instrument(BC_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        BC_Sensor.__init__(self,'ae16',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
@@ -642,9 +675,9 @@ class ae16_instrument(bc_sensor):
             return bc_values
         return bc_values
 
-class ae33_instrument(bc_sensor):
-    def __init__(self,all_area,influx_client):
-        bc_sensor.__init__(self,'ae33',all_area,influx_client)
+class AE33_Instrument(BC_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        BC_Sensor.__init__(self,'ae33',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 
     def get_values(self):
@@ -665,9 +698,9 @@ class ae33_instrument(bc_sensor):
             return bc_values
         return bc_values
 
-class ma300_instrument(bc_sensor):
-    def __init__(self,all_area,influx_client):
-        bc_sensor.__init__(self,'ma300',all_area,influx_client)
+class MA300_Instrument(BC_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        BC_Sensor.__init__(self,'ma300',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
 
     def get_values(self):
@@ -691,9 +724,9 @@ class ma300_instrument(bc_sensor):
 
 # CO2 instruments
 
-class li820_instrument(co2_sensor):
-    def __init__(self,all_area,influx_client):
-        co2_sensor.__init__(self,'li820',all_area,influx_client)
+class LI820_Instrument(CO2_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        CO2_Sensor.__init__(self,'li820',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
     def get_values(self):
         co2_values = []
@@ -714,10 +747,11 @@ class li820_instrument(co2_sensor):
             return co2_values
         return co2_values
 
-class li7000_instrument(co2_sensor):
-    def __init__(self,all_area,influx_client):
-        co2_sensor.__init__(self,'li7000',all_area,influx_client)
-        self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)  ##li7000
+class LI7000_Instrument(CO2_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        CO2_Sensor.__init__(self,'li7000',all_peaks,influx_client)
+        self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)
+
     def get_values(self):
         co2_values = []
         ser = self.serial.readline()
@@ -738,9 +772,9 @@ class li7000_instrument(co2_sensor):
             return co2_values
         return co2_values
 
-class sba5_instrument(co2_sensor):
-    def __init__(self,all_area,influx_client):
-        co2_sensor.__init__(self,'sba5',all_area,influx_client)
+class SBA5_Instrument(CO2_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        CO2_Sensor.__init__(self,'sba5',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
         co2_values = []
@@ -760,9 +794,9 @@ class sba5_instrument(co2_sensor):
             return co2_values
         return co2_values
 
-class vco2_instrument(co2_sensor):
-    def __init__(self,all_area,influx_client):
-        co2_sensor.__init__(self,'vco2',all_area,influx_client)
+class VCO2_Instrument(CO2_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        CO2_Sensor.__init__(self,'vco2',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -785,9 +819,9 @@ class vco2_instrument(co2_sensor):
 
 # NOX instruments
 
-class caps_instrument(nox_sensor):
-    def __init__(self,all_area,influx_client):
-        nox_sensor.__init__(self,'caps',all_area,influx_client)
+class CAPS_Instrument(NOX_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        NOX_Sensor.__init__(self,'caps',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
     def get_values(self):
@@ -809,9 +843,9 @@ class caps_instrument(nox_sensor):
             return nox_values
         return nox_values
 
-class ucb_instrument(nox_sensor):
-    def __init__(self,all_area,influx_client):
-        nox_sensor.__init__(self,'ucb',all_area,influx_client)
+class UCB_Instrument(NOX_Sensor):
+    def __init__(self,all_peaks,influx_client):
+        NOX_Sensor.__init__(self,'ucb',all_peaks,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,
@@ -841,21 +875,23 @@ class ucb_instrument(nox_sensor):
 
 # Thread classes
 
-# Peak thread which generates Emission Factors
-class areaThread(threading.Thread):
-    def __init__(self,all_area):
+# Thread class which matches Peak Events and calculates the Emission Factors
+class EF_Thread(threading.Thread):
+    def __init__(self,all_peaks):
         threading.Thread.__init__(self)
-        self.all_area = all_area
+        self.all_peaks = all_peaks
         print("Started influx thread")
 
     def run(self):
         i = 0
         while not stop_requested:
             time.sleep(5)
-            self.all_area.EF_calc_all()
+            self.all_peaks.EF_calc_all()
             i+=1
 
-class sensor_thread(threading.Thread):
+# Thread class which retrieves the measurement from the device and pushes it to
+# influx database. Peak Events are found if present
+class Sensor_Thread(threading.Thread):
 
     def __init__(self, sensor):
         threading.Thread.__init__(self)
@@ -894,36 +930,36 @@ def main():
     influx_client = Influx_Dataframe_Client(config_file,'DB_config')
 
     # Peak thread object
-    all_area=area_container(influx_client)
+    all_peaks=Peak_Container(influx_client)
 
     # Create all bc sensor objects
-    abcd_sensor = abcd_instrument(all_area,influx_client)
-    ae16_sensor = ae16_instrument(all_area,influx_client)
-    ae33_sensor = ae33_instrument(all_area,influx_client)
-    ma300_sensor = ma300_instrument(all_area,influx_client)
+    abcd_sensor = ABCD_instrument(all_peaks,influx_client)
+    ae16_sensor = AE16_Instrument(all_peaks,influx_client)
+    ae33_sensor = AE33_Instrument(all_peaks,influx_client)
+    ma300_sensor = MA300_Instrument(all_peaks,influx_client)
     # Create all co2 sensor objects
-    li820_sensor = li820_instrument(all_area,influx_client)
-    li7000_sensor = li7000_instrument(all_area,influx_client)
-    sba5_sensor = sba5_instrument(all_area,influx_client)
-    vco2_sensor = vco2_instrument(all_area,influx_client)
+    li820_sensor = LI820_Instrument(all_peaks,influx_client)
+    li7000_sensor = LI7000_Instrument(all_peaks,influx_client)
+    sba5_sensor = SBA5_Instrument(all_peaks,influx_client)
+    vco2_sensor = VCO2_Instrument(all_peaks,influx_client)
     # Create all nox sensor objects
-    caps_sensor = caps_instrument(all_area,influx_client)
-    ucb_sensor = ucb_instrument(all_area,influx_client)
+    caps_sensor = CAPS_Instrument(all_peaks,influx_client)
+    ucb_sensor = UCB_Instrument(all_peaks,influx_client)
 
     # Create threads for each sensor
-    bc_abcd_thread=sensor_thread(abcd_sensor)
-    bc_ae16_thread=sensor_thread(ae16_sensor)
-    bc_ae33_thread=sensor_thread(ae33_sensor)
-    bc_ma300_thread=sensor_thread(ma300_sensor)
-    co2_li820_thread=sensor_thread(li820_sensor)
-    co2_li7000_thread=sensor_thread(li7000_sensor)
-    co2_sba5_thread=sensor_thread(sba5_sensor)
-    co2_vco2_thread=sensor_thread(vco2_sensor)
-    nox_caps_thread=sensor_thread(caps_sensor)
-    nox_ucb_thread=sensor_thread(ucb_sensor)
+    bc_abcd_thread=Sensor_Thread(abcd_sensor)
+    bc_ae16_thread=Sensor_Thread(ae16_sensor)
+    bc_ae33_thread=Sensor_Thread(ae33_sensor)
+    bc_ma300_thread=Sensor_Thread(ma300_sensor)
+    co2_li820_thread=Sensor_Thread(li820_sensor)
+    co2_li7000_thread=Sensor_Thread(li7000_sensor)
+    co2_sba5_thread=Sensor_Thread(sba5_sensor)
+    co2_vco2_thread=Sensor_Thread(vco2_sensor)
+    nox_caps_thread=Sensor_Thread(caps_sensor)
+    nox_ucb_thread=Sensor_Thread(ucb_sensor)
 
     # Create peak thread
-    area_thread=areaThread(all_area)
+    ef_thread=EF_Thread(all_peaks)
 
     # Start all threads
     bc_abcd_thread.start()
@@ -936,7 +972,7 @@ def main():
     co2_vco2_thread.start()
     nox_caps_thread.start()
     nox_ucb_thread.start()
-    area_thread.start()
+    ef_thread.start()
 
     while not stop_requested: # Should terminate loop on keyboard interrupt
         time.sleep(1)

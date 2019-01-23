@@ -20,7 +20,7 @@ def utc_to_local(utc_dt):
     local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
     return local_tz.normalize(local_dt) # .normalize might be unnecessary
 
-def sig_handler(signum, frame):
+def sig_handler(signum, frame): # Allows for the use of Ctrl+C to be handled
     sys.stdout.write("handling signal: %s\n" % signum)
     sys.stdout.flush()
 
