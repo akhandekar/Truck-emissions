@@ -200,7 +200,7 @@ class Peak_Container:
                 self.influx_client.write_json(json)
                 if (abs(difference) >= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) >= self.end_window[co2_device][bc_device]*1000000000):
-                        print("We have a match at EF with abcd and" + co2_device)
+                        print("We have a match at EF with " + bc_device + " and " + co2_device)
                         EF = self.bc_peaks[bc_device][y].area / single_co2_peak.area
                         json =   {
                             'fields': {
@@ -234,7 +234,7 @@ class Peak_Container:
             self.influx_client.write_json(json)
             if (abs(difference) >= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) >= self.end_window[co2_device][nox_device]*1000000000):
-                    print("We have a match at EF with caps and" + nox_device)
+                    print("We have a match at EF with " + bc_device + " and " + co2_device)
                     EF = self.nox_peaks[nox_device][y].area / single_co2_peak.area
                     json =   {
                         'fields': {
@@ -499,9 +499,9 @@ class CO2_Sensor:
                     'measurement': 'co2'
                     }
                 if (len(co2_measurement)>2):
-                    json['fields']['press'] = co2_measurement[1]
+                    json['fields']['temp'] = co2_measurement[1]
                     if(len(co2_measurement)==4):
-                        json['fields']['temp'] = co2_measurement[2]
+                        json['fields']['press'] = co2_measurement[2]
                         json['time'] = co2_measurement[3]
                     else:
                         json['time'] = co2_measurement[2]
@@ -811,8 +811,8 @@ class LI820_Instrument(CO2_Sensor):
             values_li820 = re.split(r'[<>]', ser)
             #print(values_1820)
             co2_values.insert(0,float(values_li820[14])) # CO2 value
-            co2_values.insert(1,float(values_li820[6])) # Temperature
-            co2_values.insert(2,float(values_li820[10])) # Pressue
+            co2_values.insert(1,float(values_li820[6])) # Pressure
+            co2_values.insert(2,float(values_li820[10])) # Temp
             co2_values.insert(3,time_now)
 
         except(ValueError,IndexError) as e:
@@ -836,8 +836,8 @@ class LI7000_Instrument(CO2_Sensor):
             #print("The values for li700 are:")
             #print(values_li7000)
             co2_values.insert(0,float(values_li7000[2])) # CO2 value
-            co2_values.insert(1,float(values_li7000[5])) # Temperature
-            co2_values.insert(2,float(values_li7000[4])) # Pressue
+            co2_values.insert(1,float(values_li7000[5])) # Pressure
+            co2_values.insert(2,float(values_li7000[4])) # Temp
             co2_values.insert(3,time_now)
             #print(co2_values)
         except (ValueError,IndexError) as e:
