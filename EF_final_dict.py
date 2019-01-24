@@ -253,17 +253,17 @@ class Peak_Container:
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device,0,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device,1,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device,2,start_window,end_window)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device,3,start_window,end_window)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
+            self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device)
 
     def EF_calc_nox(self,co2_device,start_window,end_window):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
-            self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device,0,start_window,end_window)
-            self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device,1,start_window,end_window)
+            self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device)
+            self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device)
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
