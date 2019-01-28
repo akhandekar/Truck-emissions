@@ -528,8 +528,8 @@ class CO2_Sensor:
                     del self.yp[:]
                     #new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
                     new_time = Peak_Event(area_co2,self.peak_start,self.peak_end,
-                        all_peaks.current_li7000_pressure,
-                        all_peaks.current_li7000_temp)
+                        self.all_peaks.current_li7000_pressure,
+                        self.all_peaks.current_li7000_temp)
                     #all_peaks.Peak_Event.append(new_time)
                     self.co2_peaks.append(new_time)
                     json_start =   {
