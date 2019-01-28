@@ -39,6 +39,7 @@ class Peak_Event:
         self.start_time = start_time
         self.end_time = end_time
         # Potentially may want to add in baseline for subtracting base rectangle
+
 class CO2_Peak_Event:
     def __init__(self,area,start_time,end_time,pressure,temp):
         Peak_Event.__init__(self,area,start_time,end_time,pressure,temp)
@@ -552,7 +553,7 @@ class CO2_Sensor:
 
                     del self.yp[:]
                     #new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
-                    new_time = Peak_Event(area_co2,self.peak_start,self.peak_end,
+                    new_time = CO2_Peak_Event(area_co2,self.peak_start,self.peak_end,
                         self.all_peaks.current_li7000_pressure,
                         self.all_peaks.current_li7000_temp)
                     #all_peaks.Peak_Event.append(new_time)
