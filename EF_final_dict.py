@@ -405,7 +405,8 @@ class BC_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
-                    print("Polluting y values for " + self.sensor_name + "is: " + self.yp)
+                    print("Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.yp)
                     print("Area is: " +str(bc_area))
                     #self.bc_areas.append(bc_area)
                     #self.xp.append(time_str3)
