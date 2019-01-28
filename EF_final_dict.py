@@ -878,8 +878,8 @@ class SBA5_Instrument(CO2_Sensor):
         try:
             print(values_sba5)
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
-            co2_values.insert(1,float(values_sba5[8])) # CO2 pressure
-            co2_values.insert(2,float(values_sba5[5])) # CO2 pressure
+            co2_values.insert(1,float(values_sba5[7])) # CO2 pressure
+            co2_values.insert(2,float(values_sba5[4])) # CO2 temp
             co2_values.insert(3,time_now)# Time is always at end of list
 
         except (ValueError, IndexError) as e:
@@ -905,7 +905,7 @@ class VCO2_Instrument(CO2_Sensor):
             print(values_vco2)
             co2_values.insert(0,float(values_vco2[0]))
             co2_values.insert(1,999)
-            co2_values.insert(2,float(values_vco2[2]))
+            co2_values.insert(2,float(values_vco2[1]))
             co2_values.insert(3,time_now)
         except (ValueError, IndexError) as e:
             print("vco2 index failure")
