@@ -239,7 +239,8 @@ class Peak_Container:
                         }
                     self.influx_client.write_json(json)
 
-    def EF_calc_bc(self,co2_device,start_window,end_window):
+    #    def EF_calc_bc(self,co2_device,start_window,end_window):
+    def EF_calc_bc(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
@@ -247,8 +248,8 @@ class Peak_Container:
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device)
-
-    def EF_calc_nox(self,co2_device,start_window,end_window):
+    #    def EF_calc_nox(self,co2_device,start_window,end_window):
+    def EF_calc_nox(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         for x in range(co2_peak_amt):
@@ -268,6 +269,17 @@ class Peak_Container:
         for key in self.nox_peaks_amt:
             self.nox_peaks_amt[key] = len(self.nox_peaks[key])
 
+        self.EF_calc_bc('li820')
+        self.EF_calc_bc('li7000')
+        self.EF_calc_bc('sba5')
+        self.EF_calc_bc('vco2')
+
+        self.EF_calc_nox('li820')
+        self.EF_calc_nox('li7000')
+        self.EF_calc_nox('sba5')
+        self.EF_calc_nox('vco2')
+
+        """
         self.EF_calc_bc('li820',self.li820_bc_start,self.li820_bc_end)
         self.EF_calc_bc('li7000',self.li7000_bc_start,self.li7000_bc_end)
         self.EF_calc_bc('sba5',self.sba5_bc_start,self.sba5_bc_end)
@@ -277,6 +289,7 @@ class Peak_Container:
         self.EF_calc_nox('li7000',self.li7000_nox_start,self.li7000_nox_end)
         self.EF_calc_nox('sba5',self.sba5_nox_start,self.sba5_nox_end)
         self.EF_calc_nox('vco2',self.vco2_nox_start,self.vco2_nox_end)
+        """
 
         # Removes elements from from beginning to the amount of elements that were
         # in the list before hand
