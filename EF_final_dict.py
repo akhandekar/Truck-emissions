@@ -406,6 +406,7 @@ class BC_Sensor:
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
                     print(self.yp)
+                    print(bc_area)
                     #self.bc_areas.append(bc_area)
                     #self.xp.append(time_str3)
                     del self.yp[:]
