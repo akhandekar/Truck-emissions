@@ -876,7 +876,7 @@ class SBA5_Instrument(CO2_Sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            #print(values_sba5)
+            print(values_sba5)
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
             co2_values.insert(1,float(values_sba5[8])) # CO2 pressure
             co2_values.insert(2,float(values_sba5[5])) # CO2 pressure
@@ -902,7 +902,7 @@ class VCO2_Instrument(CO2_Sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            #print(values_vco2)
+            print(values_vco2)
             co2_values.insert(0,float(values_vco2[0]))
             co2_values.insert(1,999)
             co2_values.insert(2,float(values_vco2[2]))
