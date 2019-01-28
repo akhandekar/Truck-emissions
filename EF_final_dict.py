@@ -172,7 +172,7 @@ class Peak_Container:
     # else...then remove it make sure to only check through the current members of the list
     #
     def bc_peak_match(self,single_co2_peak,bc_device,co2_device):
-            print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
+            #print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
             for y in range(len(self.bc_peaks[bc_device])):
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
                 end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
@@ -191,9 +191,9 @@ class Peak_Container:
                 self.influx_client.write_json(json)
                 if (abs(difference) >= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) >= self.end_window[co2_device][bc_device]*1000000000):
-                        print("We have a match at EF with " + bc_device + " and " + co2_device)
-                        print(self.bc_peaks[bc_device][y].area)
-                        print(single_co2_peak.area)
+                        #print("We have a match at EF with " + bc_device + " and " + co2_device)
+                        #print(self.bc_peaks[bc_device][y].area)
+                        #print(single_co2_peak.area)
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
                         json =   {
                             'fields': {
@@ -227,7 +227,7 @@ class Peak_Container:
             self.influx_client.write_json(json)
             if (abs(difference) >= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) >= self.end_window[co2_device][nox_device]*1000000000):
-                    print("We have a match at EF with " + nox_device + " and " + co2_device)
+                    #print("We have a match at EF with " + nox_device + " and " + co2_device)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
                         'fields': {
@@ -405,8 +405,8 @@ class BC_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
-                    print(self.yp)
-                    print(bc_area)
+                    print("Polluting y values for " + self.sensor_name + "is: " + self.yp)
+                    print("Area is: " +str(bc_area))
                     #self.bc_areas.append(bc_area)
                     #self.xp.append(time_str3)
                     del self.yp[:]
@@ -893,7 +893,7 @@ class SBA5_Instrument(CO2_Sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_sba5)
+            #print(values_sba5)
             print(float(values_sba5[7]))
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
             co2_values.insert(1,float(values_sba5[7])) # CO2 pressure
@@ -920,7 +920,7 @@ class VCO2_Instrument(CO2_Sensor):
         time_now=int(time.time()*1000000000)
 
         try:
-            print(values_vco2)
+            #print(values_vco2)
             co2_values.insert(0,float(values_vco2[0]))
             co2_values.insert(1,999)
             co2_values.insert(2,float(values_vco2[1]))
