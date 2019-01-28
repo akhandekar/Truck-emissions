@@ -191,8 +191,8 @@ class Peak_Container:
                 if (abs(difference) >= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) >= self.end_window[co2_device][bc_device]*1000000000):
                         print("We have a match at EF with " + bc_device + " and " + co2_device)
-                        EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area)
-                                * 0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
+                        EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) *
+                            0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
                         json =   {
                             'fields': {
                                 'EF': EF
