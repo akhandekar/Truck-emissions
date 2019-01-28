@@ -877,6 +877,7 @@ class SBA5_Instrument(CO2_Sensor):
 
         try:
             print(values_sba5)
+            print(float(values_sba5[7]))
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
             co2_values.insert(1,float(values_sba5[7])) # CO2 pressure
             co2_values.insert(2,float(values_sba5[4])) # CO2 temp
