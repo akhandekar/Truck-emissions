@@ -763,7 +763,6 @@ class AE33_Instrument(BC_Sensor):
             #print(values_ae33)
             bc2 = float(values_ae33[9])
             bc_ae33 = bc2/1000
-            AE33 - column 11 (flow)
             flow = float(values_ae33[11])
             bc_values.insert(0,bc_ae33)
             bc_values.insert(1,999)
