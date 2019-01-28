@@ -40,7 +40,7 @@ class Peak_Event:
         self.end_time = end_time
         # Potentially may want to add in baseline for subtracting base rectangle
 
-class CO2_Peak_Event:
+class CO2_Peak_Event(Peak_Event):
     def __init__(self,area,start_time,end_time,pressure,temp):
         Peak_Event.__init__(self,area,start_time,end_time,pressure,temp)
         self.pressure = pressure
