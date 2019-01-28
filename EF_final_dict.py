@@ -42,7 +42,7 @@ class Peak_Event:
 
 class CO2_Peak_Event(Peak_Event):
     def __init__(self,area,start_time,end_time,pressure,temp):
-        Peak_Event.__init__(self,area,start_time,end_time,pressure,temp)
+        Peak_Event.__init__(self,area,start_time,end_time)
         self.pressure = pressure
         self.temp = temp
 
