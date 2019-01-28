@@ -225,7 +225,7 @@ class Peak_Container:
             self.influx_client.write_json(json)
             if (abs(difference) >= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) >= self.end_window[co2_device][nox_device]*1000000000):
-                    print("We have a match at EF with " + bc_device + " and " + co2_device)
+                    print("We have a match at EF with " + nox_device + " and " + co2_device)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
                         'fields': {
