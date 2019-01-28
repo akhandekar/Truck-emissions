@@ -10,6 +10,7 @@ import os, sys, csv, re, math
 import argparse
 
 stop_requested = False # Condition flag for keyboard interrupt
+bc_correction = 0.88 # going to place this in the config file
 
 def serialGeneric(device,baudrate):
     ser = serial.Serial (port=device,
@@ -38,6 +39,12 @@ class Peak_Event:
         self.start_time = start_time
         self.end_time = end_time
         # Potentially may want to add in baseline for subtracting base rectangle
+class CO2_Peak_Event:
+    def __init__(self,area,start_time,end_time,pressure,temp):
+        Peak_Event.__init__(self,area,start_time,end_time,pressure,temp)
+        self.pressure = pressure
+        self.temp = temp
+
 
 # Storage of peaks for each instrument as well function for calculating EF
 
@@ -45,6 +52,9 @@ class Peak_Container:
     def __init__(self,influx_client):
         # create all area lists
         self.influx_client = influx_client
+        # Keep recent li7000 temperature and Pressure for other instruements to use
+        self.current_li7000_temp = 0.0
+        self.current_li7000_pressure = 0.0
         # CO2 peak information lists
         self.co2_peaks = {}
         self.co2_peaks['li820'] = []
@@ -135,26 +145,6 @@ class Peak_Container:
             },
 
         }
-        self.li820_bc_start = [4,1,5,5]
-        self.li7000_bc_start = [5,1.5,6,6]
-        self.sba5_bc_start = [1.5,3,3,3]
-        self.vco2_bc_start = [3,6,3,3]
-
-        self.li820_bc_end = [5,5,9.5,9.5]
-        self.li7000_bc_end = [6,6,10,10]
-        self.sba5_bc_end = [2,1.5,4.5,4.5]
-        self.vco2_bc_end = [2,2,4,4]
-
-        self.li820_nox_start = [2.5,1]
-        self.li7000_nox_start = [3,1.5]
-        self.sba5_nox_start = [1,3]
-        self.vco2_nox_start = [4.5,6]
-
-        self.li820_nox_end = [2.5,1]
-        self.li7000_nox_end = [3,2]
-        self.sba5_nox_end = [2.5,4]
-        self.vco2_nox_end = [3,5]
-
 
         # CO2 Peak_Event lengths
         self.co2_peaks_amt = {}
@@ -201,7 +191,8 @@ class Peak_Container:
                 if (abs(difference) >= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) >= self.end_window[co2_device][bc_device]*1000000000):
                         print("We have a match at EF with " + bc_device + " and " + co2_device)
-                        EF = self.bc_peaks[bc_device][y].area / single_co2_peak.area
+                        EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area)
+                                * 0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
                         json =   {
                             'fields': {
                                 'EF': EF
@@ -235,7 +226,7 @@ class Peak_Container:
             if (abs(difference) >= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) >= self.end_window[co2_device][nox_device]*1000000000):
                     print("We have a match at EF with " + bc_device + " and " + co2_device)
-                    EF = self.nox_peaks[nox_device][y].area / single_co2_peak.area
+                    EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
                         'fields': {
                             'EF': EF
@@ -370,7 +361,8 @@ class BC_Sensor:
                     'measurement': 'bc'
                     }
                 if (len(bc_measurement) > 2):
-                    json['fields']['atn'] = bc_measurement[1]
+                    if(bc_measurement[1] != 999):
+                        json['fields']['atn'] = bc_measurement[1]
                     if (len(bc_measurement) > 3):
                         json['fields']['flow'] = bc_measurement[2]
                         json['time'] = bc_measurement[3]
@@ -501,7 +493,8 @@ class CO2_Sensor:
                 if (len(co2_measurement)>2):
                     json['fields']['temp'] = co2_measurement[1]
                     if(len(co2_measurement)==4):
-                        json['fields']['press'] = co2_measurement[2]
+                        if(co2_measurement[2] != 999):
+                            json['fields']['press'] = co2_measurement[2]
                         json['time'] = co2_measurement[3]
                     else:
                         json['time'] = co2_measurement[2]
@@ -534,7 +527,10 @@ class CO2_Sensor:
                     #self.xp_vco2.append(time_str8)
 
                     del self.yp[:]
-                    new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
+                    #new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
+                    new_time = Peak_Event(area_co2,self.peak_start,self.peak_end,
+                        all_peaks.current_li7000_pressure,
+                        all_peaks.current_li7000_temp)
                     #all_peaks.Peak_Event.append(new_time)
                     self.co2_peaks.append(new_time)
                     json_start =   {
@@ -707,12 +703,13 @@ class ABCD_instrument(BC_Sensor):
         #time_str1 = dt_object.strftime('%H:%M:%S')
         try:
             #print(values_abcd1)
-            atn_abcd1 = float(values_abcd1[3])
-            bc_abcd1 = float(values_abcd1[4])
-            flow_abcd1 = float(values_abcd1[7])
-            bc_values.insert(0,bc_abcd1)
-            bc_values.insert(1,atn_abcd1)
-            bc_values.insert(2,flow_abcd1)
+            atn = float(values_abcd1[3])
+            bc = float(values_abcd1[4])
+            bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
+            flow = float(values_abcd1[7])
+            bc_values.insert(0,bc)
+            bc_values.insert(1,atn)
+            bc_values.insert(2,flow)
             bc_values.insert(3,time_now)
             #print(bc_abcd1)
 
@@ -737,11 +734,14 @@ class AE16_Instrument(BC_Sensor):
         try:
             #print(values_ae16)
             bc1 = float(values_ae16[2])
-            bc_ae16 = bc1/1000
-            atn_ae16 = float(values_ae16[9])
-            bc_values.insert(0,bc_ae16)
-            bc_values.insert(1,atn_ae16)
-            bc_values.insert(2,time_now)
+            bc = bc1/1000
+            atn = float(values_ae16[9])
+            bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
+            flow = float(values_ae16[4])
+            bc_values.insert(0,bc)
+            bc_values.insert(1,atn)
+            bc_values.insert(2,flow)
+            bc_values.insert(3,time_now)
 
         except(ValueError,IndexError) as e:
             print("ae16 index error")
@@ -764,8 +764,12 @@ class AE33_Instrument(BC_Sensor):
             #print(values_ae33)
             bc2 = float(values_ae33[9])
             bc_ae33 = bc2/1000
+            AE33 - column 11 (flow)
+            flow = float(values_ae33[11])
             bc_values.insert(0,bc_ae33)
-            bc_values.insert(1,time_now)
+            bc_values.insert(1,999)
+            bc_values.insert(2,flow)
+            bc_values.insert(3,time_now)
         except(ValueError,IndexError) as e:
             print("ae33 index failure")
             return bc_values
@@ -839,6 +843,9 @@ class LI7000_Instrument(CO2_Sensor):
             co2_values.insert(1,float(values_li7000[5])) # Pressure
             co2_values.insert(2,float(values_li7000[4])) # Temp
             co2_values.insert(3,time_now)
+            # Save most recent temperature and pressure from Li7000 instrument
+            all_peaks.current_li7000_temp = co2_values[1]
+            all_peaks.current_li7000_pressure = co2_values[2]
             #print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
@@ -860,7 +867,9 @@ class SBA5_Instrument(CO2_Sensor):
         try:
             #print(values_sba5)
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
-            co2_values.insert(1,time_now)# Time is always at end of list
+            co2_values.insert(1,float(values_sba5[8])) # CO2 pressure
+            co2_values.insert(2,float(values_sba5[5])) # CO2 pressure
+            co2_values.insert(3,time_now)# Time is always at end of list
 
         except (ValueError, IndexError) as e:
             print("sba5 index failure")
@@ -884,7 +893,9 @@ class VCO2_Instrument(CO2_Sensor):
         try:
             #print(values_vco2)
             co2_values.insert(0,float(values_vco2[0]))
-            co2_values.insert(1,time_now)
+            co2_values.insert(1,999)
+            co2_values.insert(2,float(values_vco2[2]))
+            co2_values.insert(3,time_now)
         except (ValueError, IndexError) as e:
             print("vco2 index failure")
             return co2_values

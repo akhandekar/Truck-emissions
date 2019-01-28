@@ -586,6 +586,7 @@ class nox_sensor:
             self.polluting = True
             self.yp.append(nox_value)
 
+
 # BC instruments
 class abcd_instrument(bc_sensor):
     def __init__(self,all_area,influx_client):
@@ -621,6 +622,7 @@ class ae16_instrument(bc_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
+        # AE 16 - column 4 (flow)
         bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -648,6 +650,7 @@ class ae33_instrument(bc_sensor):
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 
     def get_values(self):
+        # AE33 - column 11 (flow)
         bc_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -743,6 +746,8 @@ class sba5_instrument(co2_sensor):
         co2_sensor.__init__(self,'sba5',all_area,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
+        # SBA 5 - column 5 (temp)
+        # SBA 5 - column 8 (pressure)
         co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
@@ -767,6 +772,7 @@ class vco2_instrument(co2_sensor):
         self.serial.write("R\r\n")
         response=self.serial.readline()
     def get_values(self):
+        # Vco2 - column 2 (temp)
         co2_values = []
         ser = self.serial.readline()
         dt_object = datetime.now()
