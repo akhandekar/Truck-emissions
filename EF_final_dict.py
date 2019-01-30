@@ -464,7 +464,6 @@ class BC_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
-
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
@@ -630,18 +629,6 @@ class CO2_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
-                    json_center =   {
-                        'fields': {
-                            'area': new_time.area
-                            },
-                        'time': peak_center,
-                        'tags': {
-                            'sensor': self.sensor_name,
-                            'type': 'center'
-                            },
-                        'measurement': 'peak_event'
-                        }
-                    self.influx_client.write_json(json_center)
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
@@ -783,18 +770,6 @@ class NOX_Sensor:
                         },
                     'measurement': 'peak_event'
                     }
-                json_center =   {
-                    'fields': {
-                        'area': new_time.area
-                        },
-                    'time': peak_center,
-                    'tags': {
-                        'sensor': self.sensor_name,
-                        'type': 'center'
-                        },
-                    'measurement': 'peak_event'
-                    }
-                self.influx_client.write_json(json_center)
                 self.influx_client.write_json(json_start)
                 self.influx_client.write_json(json_end)
             self.polluting = False
