@@ -775,7 +775,7 @@ class NOX_Sensor:
                 self.peak_start = int(time.time()*1000000000)
 
             self.polluting = True
-                self.yp.append(nox_value)
+            self.yp.append(nox_value)
 
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
