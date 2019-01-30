@@ -43,7 +43,7 @@ class Peak_Event:
 
 class CO2_Peak_Event(Peak_Event):
     def __init__(self,area,start_time,end_time,pressure,temp):
-        super().__init__(self,area,start_time,end_time)
+        Peak_Event.__init__(self,area,start_time,end_time)
         self.pressure = pressure
         self.temp = temp
 
@@ -780,7 +780,7 @@ class NOX_Sensor:
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'abcd',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'abcd',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 
     def get_values(self):
@@ -809,7 +809,7 @@ class ABCD_Instrument(BC_Sensor):
 
 class AE16_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'ae16',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ae16',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
@@ -839,7 +839,7 @@ class AE16_Instrument(BC_Sensor):
 
 class AE33_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'ae33',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ae33',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 
     def get_values(self):
@@ -865,7 +865,7 @@ class AE33_Instrument(BC_Sensor):
 
 class MA300_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'ma300',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ma300',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
 
     def get_values(self):
@@ -891,7 +891,7 @@ class MA300_Instrument(BC_Sensor):
 
 class LI820_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'li820',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'li820',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
     def get_values(self):
         co2_values = []
@@ -914,7 +914,7 @@ class LI820_Instrument(CO2_Sensor):
 
 class LI7000_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'li7000',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'li7000',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)
 
     def get_values(self):
@@ -942,7 +942,7 @@ class LI7000_Instrument(CO2_Sensor):
 
 class SBA5_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'sba5',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'sba5',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
         co2_values = []
@@ -969,7 +969,7 @@ class SBA5_Instrument(CO2_Sensor):
 
 class VCO2_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        super().__init__(self,'vco2',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'vco2',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -999,7 +999,7 @@ class VCO2_Instrument(CO2_Sensor):
 class CAPS_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
         # Call base class constructor
-        super().__init__(self,'caps',all_peaks,influx_client)
+        NOX_Sensor.__init__(self,'caps',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
     def get_values(self):
@@ -1024,7 +1024,7 @@ class CAPS_Instrument(NOX_Sensor):
 class UCB_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
         # Call base class instructor
-        super().__init__(self,'ucb',all_peaks,influx_client)
+        NOX_Sensor.__init__(self,'ucb',all_peaks,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,
