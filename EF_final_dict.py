@@ -375,7 +375,7 @@ class BC_Sensor:
                     'tags': {
                         'sensor_name': self.sensor_name,
                         },
-                    'measurement': 'bc'
+                    'measurement': 'bc',
                     'time': bc_measurement[1]
                     }
                 if (len(bc_measurement) > 2):
