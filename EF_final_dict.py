@@ -418,7 +418,8 @@ class BC_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
                     for x in range(peak_indexes.size):
                         time_sum = polution_times[x]
-                    peak_center = float(time_sum / len(peak_indexes))
+                    if(peak_indexes.size > 0):
+                        peak_center = float(time_sum / len(peak_indexes))
                     print("Polluting y values for " + self.sensor_name + "is: ")
                     print(self.yp)
                     print("Area is: " +str(bc_area))
@@ -580,7 +581,8 @@ class CO2_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
                     for x in range(peak_indexes.size):
                         time_sum = polution_times[x]
-                    peak_center = float(time_sum / len(peak_indexes))
+                    if(peak_indexes.size > 0):
+                        peak_center = float(time_sum / len(peak_indexes))
                     #self.areas.append(area_co2)
                     #self.xp_vco2.append(time_str8)
 
@@ -721,7 +723,8 @@ class NOX_Sensor:
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
                 for x in range(peak_indexes.size):
                     time_sum = polution_times[x]
-                peak_center = float(time_sum / len(peak_indexes))
+                if(peak_indexes.size > 0):
+                    peak_center = float(time_sum / len(peak_indexes))
                 peak_area = area - base_area
                 #self.areas.append(peak_area)
                 #self.xp.append(time_str10)
