@@ -418,6 +418,21 @@ class BC_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
+                        json_center =   {
+                            'fields': {
+                                'area': bc_area,
+                                'bc': self.yp[x]
+                                },
+                            'time': self.polution_times[x],
+                            'tags': {
+                                'sensor': self.sensor_name,
+                                'type': 'center'
+                                },
+                            'measurement': 'peak_event'
+                            }
+                        self.influx_client.write_json(json_center)
+
+                    """
                     if(peak_indexes.size > 0):
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
@@ -432,6 +447,7 @@ class BC_Sensor:
                             'measurement': 'peak_event'
                             }
                         self.influx_client.write_json(json_center)
+                    """
                     print("Polluting y values for " + self.sensor_name + "is: ")
                     print(self.yp)
                     print("Area is: " +str(bc_area))
@@ -582,6 +598,20 @@ class CO2_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
+                        json_center =   {
+                            'fields': {
+                                'area': area_co2,
+                                'co2': self.yp[x]
+                                },
+                            'time': self.polution_times[x],
+                            'tags': {
+                                'sensor': self.sensor_name,
+                                'type': 'center'
+                                },
+                            'measurement': 'peak_event'
+                            }
+                        self.influx_client.write_json(json_center)
+                    """
                     if(peak_indexes.size > 0):
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
@@ -595,9 +625,8 @@ class CO2_Sensor:
                                 },
                             'measurement': 'peak_event'
                             }
-                        self.influx_client.write_json(json_center)
-                    #self.areas.append(area_co2)
-                    #self.xp_vco2.append(time_str8)
+                        #self.influx_client.write_json(json_center)
+                    """
 
                     del self.yp[:]
                     del self.polution_times[:]
@@ -728,6 +757,19 @@ class NOX_Sensor:
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
                 for x in range(peak_indexes.size):
                     time_sum = self.polution_times[x]
+                    json_center =   {
+                        'fields': {
+                            'area': area,
+                            'nox': self.yp[x]
+                            },
+                        'time': self.polution_times[x],
+                        'tags': {
+                            'sensor': self.sensor_name,
+                            'type': 'center'
+                            },
+                        'measurement': 'peak_event'
+                        }
+                    self.influx_client.write_json(json_center)
                 if(peak_indexes.size > 0):
                     peak_center = float(time_sum / len(peak_indexes))
                     json_center =   {
@@ -741,7 +783,8 @@ class NOX_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
-                    self.influx_client.write_json(json_center)
+                    print(peak_center)
+                    #self.influx_client.write_json(json_center)
 
                 peak_area = area - base_area
                 #self.areas.append(peak_area)
