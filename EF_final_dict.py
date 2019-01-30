@@ -8,6 +8,7 @@ from datetime import datetime
 import numpy as np
 import os, sys, csv, re, math
 import argparse
+import peakutils
 
 stop_requested = False # Condition flag for keyboard interrupt
 bc_correction = 0.88 # going to place this in the config file
@@ -42,7 +43,7 @@ class Peak_Event:
 
 class CO2_Peak_Event(Peak_Event):
     def __init__(self,area,start_time,end_time,pressure,temp):
-        Peak_Event.__init__(self,area,start_time,end_time)
+        super().__init__(self,area,start_time,end_time)
         self.pressure = pressure
         self.temp = temp
 
@@ -348,6 +349,7 @@ class BC_Sensor:
         #self.logfile1 = "abcd_readings.csv"
         self.peak_start = 0
         self.peak_end = 0
+        self.polution_times = []
 
         self.influx_client = influx_client
         self.all_peaks = all_peaks
@@ -361,9 +363,9 @@ class BC_Sensor:
                 in bc_measurement array. Timestamp is always the last element of
                 the array.
                 bc_measurement[0]: Black Carbon measurement
-                bc_measurement[1]: ATN (if present)
+                bc_measurement[1]: timestamp of measurement
                 bc_measurement[2]: FLOW (if present)
-                bc_measurement[3]: timestamp of measurement if all fields present
+                bc_measurement[3]: ATN (if present)
                 """
 
                 json =   {
@@ -374,23 +376,30 @@ class BC_Sensor:
                         'sensor_name': self.sensor_name,
                         },
                     'measurement': 'bc'
+                    'time': bc_measurement[1]
                     }
+                if (len(bc_measurement) > 2):
+                    json['fields']['flow'] = bc_measurement[2]
+                    if (len(bc_measurement) == 4):
+                        json['fields']['atn'] = bc_measurement[3]
+                """
                 if (len(bc_measurement) > 2):
                     if(bc_measurement[1] != 999):
                         json['fields']['atn'] = bc_measurement[1]
                     if (len(bc_measurement) > 3):
-                        json['fields']['flow'] = bc_measurement[2]
+
                         json['time'] = bc_measurement[3]
                     else:
                         json['time'] = bc_measurement[2]
                 else:
                     json['time'] = bc_measurement[1]
+                """
 
                 self.influx_client.write_json(json)
             except:
                 print("Influx push failure from: " + self.sensor_name)
 
-    def peak_area(self,bc_value):
+    def peak_area(self,bc_value,time_stamp):
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
             dif = abs(run_avg - bc_value)
             self.ym.append(run_avg)
@@ -405,12 +414,18 @@ class BC_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
+                    yp_nd_array = np.asarray(self.yp)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
+                    for x in range(peak_indexes.size):
+                        time_sum = polution_times[x]
+                    peak_center = float(time_sum / len(peak_indexes))
                     print("Polluting y values for " + self.sensor_name + "is: ")
                     print(self.yp)
                     print("Area is: " +str(bc_area))
                     #self.bc_areas.append(bc_area)
                     #self.xp.append(time_str3)
                     del self.yp[:]
+                    del self.polution_times[:]
                     self.peak_end = int(time.time()*1000000000)
                     new_time = Peak_Event(bc_area,self.peak_start,self.peak_end)
                     self.bc_peaks.append(new_time)
@@ -436,6 +451,18 @@ class BC_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
+                    json_center =   {
+                        'fields': {
+                            'area': new_time.area
+                            },
+                        'time': peak_center,
+                        'tags': {
+                            'sensor': self.sensor_name,
+                            'type': 'center'
+                            },
+                        'measurement': 'peak_event'
+                        }
+                    self.influx_client.write_json(json_center)
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
@@ -451,6 +478,7 @@ class BC_Sensor:
                     #self.xp.append(time_str3)
                 self.polluting = True
                 self.yp.append(bc_value)
+                self.polution_times.append(time_stamp)
 
 class CO2_Sensor:
     def __init__(self,sensor_name,all_peaks,influx_client):
@@ -492,12 +520,11 @@ class CO2_Sensor:
             try:
                 """
                 Generate JSON specific to what information was contained in
-                in co2_measurement array. Timestamp is always the last element of
-                the array.
+                in co2_measurement array.
                 co2_measurement[0]: CO2 measurement
-                co2_measurement[1]: Pressue (if present)
+                co2_measurement[1]: timestamp of measurement if all fields present
                 co2_measurement[2]: Temperature (if present)
-                co2_measurement[3]: timestamp of measurement if all fields present
+                co2_measurement[3]: Pressue (if present)
                 """
                 json =   {
                     'fields': {
@@ -506,18 +533,14 @@ class CO2_Sensor:
                     'tags': {
                         'sensor_name': self.sensor_name
                         },
+                    'time': co2_measurement[1]
                     'measurement': 'co2'
                     }
-                json =   {
-                    'fields': {
-                        'co2': co2_measurement[0]
-                        },
-                    'tags': {
-                        'sensor_name': self.sensor_name
-                        },
-                    'measurement': 'co2'
-                    }
-                json['time'] = co2_measurement[3]
+                if (len(co2_measurement)>2):
+                    json['fields']['temp'] = co2_measurement[2]
+                    if(len(co2_measurement)==4):
+                        json['fields']['press'] = co2_measurement[3]
+
                 """
                 if (len(co2_measurement)>2):
                     json['fields'][''] = co2_measurement[1]
@@ -534,7 +557,7 @@ class CO2_Sensor:
             except:
                 print("Influx push failure from: " + self.sensor_name)
 
-    def peak_area(self,co2_value):
+    def peak_area(self,co2_value,time_stamp):
             self.ys.append(co2_value)
 
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
@@ -553,10 +576,16 @@ class CO2_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area_co2 = np.trapz(self.yp, dx=1)
+                    yp_nd_array = np.asarray(self.yp)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
+                    for x in range(peak_indexes.size):
+                        time_sum = polution_times[x]
+                    peak_center = float(time_sum / len(peak_indexes))
                     #self.areas.append(area_co2)
                     #self.xp_vco2.append(time_str8)
 
                     del self.yp[:]
+                    del self.polution_times[:]
                     #new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
                     new_time = CO2_Peak_Event(area_co2,self.peak_start,self.peak_end,
                         self.all_peaks.current_li7000_pressure,
@@ -585,6 +614,18 @@ class CO2_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
+                    json_center =   {
+                        'fields': {
+                            'area': new_time.area
+                            },
+                        'time': peak_center,
+                        'tags': {
+                            'sensor': self.sensor_name,
+                            'type': 'center'
+                            },
+                        'measurement': 'peak_event'
+                        }
+                    self.influx_client.write_json(json_center)
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
@@ -660,7 +701,7 @@ class NOX_Sensor:
             except:
                 print("Influx push failure from: " + self.sensor_name)
 
-    def peak_area(self,nox_value):
+    def peak_area(self,nox_value,time_stamp):
         self.ys.append(nox_value)
         run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
         dif = abs(run_avg - nox_value)
@@ -676,10 +717,16 @@ class NOX_Sensor:
                 area = np.trapz(self.yp, dx=1)
                 base_line_y = [self.thresh_nox for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, dx=1)
+                yp_nd_array = np.asarray(self.yp)
+                peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
+                for x in range(peak_indexes.size):
+                    time_sum = polution_times[x]
+                peak_center = float(time_sum / len(peak_indexes))
                 peak_area = area - base_area
                 #self.areas.append(peak_area)
                 #self.xp.append(time_str10)
                 del self.yp[:]
+                del self.polution_times[:]
                 self.peak_end = int(time.time()*1000000000)
                 new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
                 self.nox_peaks.append(new_time)
@@ -705,6 +752,18 @@ class NOX_Sensor:
                         },
                     'measurement': 'peak_event'
                     }
+                json_center =   {
+                    'fields': {
+                        'area': new_time.area
+                        },
+                    'time': peak_center,
+                    'tags': {
+                        'sensor': self.sensor_name,
+                        'type': 'center'
+                        },
+                    'measurement': 'peak_event'
+                    }
+                self.influx_client.write_json(json_center)
                 self.influx_client.write_json(json_start)
                 self.influx_client.write_json(json_end)
             self.polluting = False
@@ -716,12 +775,12 @@ class NOX_Sensor:
                 self.peak_start = int(time.time()*1000000000)
 
             self.polluting = True
-            self.yp.append(nox_value)
+                self.yp.append(nox_value)
 
 # BC instruments
-class ABCD_instrument(BC_Sensor):
+class ABCD_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'abcd',all_peaks,influx_client)
+        super().__init__(self,'abcd',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 
     def get_values(self):
@@ -738,9 +797,9 @@ class ABCD_instrument(BC_Sensor):
             bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
             flow = float(values_abcd1[7])
             bc_values.insert(0,bc)
-            bc_values.insert(1,atn)
+            bc_values.insert(1,time_now)
             bc_values.insert(2,flow)
-            bc_values.insert(3,time_now)
+            bc_values.insert(3,atn)
             #print(bc_abcd1)
 
         except (ValueError,IndexError) as e:
@@ -750,7 +809,7 @@ class ABCD_instrument(BC_Sensor):
 
 class AE16_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ae16',all_peaks,influx_client)
+        super().__init__(self,'ae16',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
@@ -769,9 +828,9 @@ class AE16_Instrument(BC_Sensor):
             bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
             flow = float(values_ae16[4])
             bc_values.insert(0,bc)
-            bc_values.insert(1,atn)
+            bc_values.insert(1,time_now)
             bc_values.insert(2,flow)
-            bc_values.insert(3,time_now)
+            bc_values.insert(3,atn)
 
         except(ValueError,IndexError) as e:
             print("ae16 index error")
@@ -780,7 +839,7 @@ class AE16_Instrument(BC_Sensor):
 
 class AE33_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ae33',all_peaks,influx_client)
+        super().__init__(self,'ae33',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 
     def get_values(self):
@@ -796,9 +855,9 @@ class AE33_Instrument(BC_Sensor):
             bc_ae33 = bc2/1000
             flow = float(values_ae33[11])
             bc_values.insert(0,bc_ae33)
-            bc_values.insert(1,999)
+            bc_values.insert(1,time_now)
             bc_values.insert(2,flow)
-            bc_values.insert(3,time_now)
+            #bc_values.insert(2,999)
         except(ValueError,IndexError) as e:
             print("ae33 index failure")
             return bc_values
@@ -806,7 +865,7 @@ class AE33_Instrument(BC_Sensor):
 
 class MA300_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ma300',all_peaks,influx_client)
+        super().__init__(self,'ma300',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
 
     def get_values(self):
@@ -832,7 +891,7 @@ class MA300_Instrument(BC_Sensor):
 
 class LI820_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'li820',all_peaks,influx_client)
+        super().__init__(self,'li820',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
     def get_values(self):
         co2_values = []
@@ -844,9 +903,9 @@ class LI820_Instrument(CO2_Sensor):
             values_li820 = re.split(r'[<>]', ser)
             #print(values_1820)
             co2_values.insert(0,float(values_li820[14])) # CO2 value
-            co2_values.insert(1,float(values_li820[6])) # Pressure
+            co2_values.insert(1,time_now)
             co2_values.insert(2,float(values_li820[10])) # Temp
-            co2_values.insert(3,time_now)
+            co2_values.insert(3,float(values_li820[6])) # Pressure
 
         except(ValueError,IndexError) as e:
             print("li820 index failure")
@@ -855,7 +914,7 @@ class LI820_Instrument(CO2_Sensor):
 
 class LI7000_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'li7000',all_peaks,influx_client)
+        super().__init__(self,'li7000',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)
 
     def get_values(self):
@@ -869,9 +928,9 @@ class LI7000_Instrument(CO2_Sensor):
             #print("The values for li700 are:")
             #print(values_li7000)
             co2_values.insert(0,float(values_li7000[2])) # CO2 value
-            co2_values.insert(1,float(values_li7000[5])) # Pressure
+            co2_values.insert(1,time_now)
             co2_values.insert(2,float(values_li7000[4])) # Temp
-            co2_values.insert(3,time_now)
+            co2_values.insert(3,float(values_li7000[5])) # Pressure
             # Save most recent temperature and pressure from Li7000 instrument
             self.all_peaks.current_li7000_temp = co2_values[1]
             self.all_peaks.current_li7000_pressure = co2_values[2]
@@ -883,7 +942,7 @@ class LI7000_Instrument(CO2_Sensor):
 
 class SBA5_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'sba5',all_peaks,influx_client)
+        super().__init__(self,'sba5',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
         co2_values = []
@@ -897,9 +956,11 @@ class SBA5_Instrument(CO2_Sensor):
             #print(values_sba5)
             print(float(values_sba5[7]))
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
-            co2_values.insert(1,float(values_sba5[7])) # CO2 pressure
+            co2_values.insert(1,time_now)# Time
             co2_values.insert(2,float(values_sba5[4])) # CO2 temp
-            co2_values.insert(3,time_now)# Time is always at end of list
+            co2_values.insert(3,float(values_sba5[7])) # CO2 pressure
+
+
 
         except (ValueError, IndexError) as e:
             print("sba5 index failure")
@@ -908,7 +969,7 @@ class SBA5_Instrument(CO2_Sensor):
 
 class VCO2_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'vco2',all_peaks,influx_client)
+        super().__init__(self,'vco2',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -922,10 +983,12 @@ class VCO2_Instrument(CO2_Sensor):
 
         try:
             #print(values_vco2)
-            co2_values.insert(0,float(values_vco2[0]))
-            co2_values.insert(1,999)
-            co2_values.insert(2,float(values_vco2[1]))
-            co2_values.insert(3,time_now)
+            co2_values.insert(0,float(values_vco2[0])) # CO2
+            co2_values.insert(1,time_now) # time
+            co2_values.insert(2,float(values_vco2[1])) # temp
+            #co2_values.insert(3,float(999)) #pressure
+
+
         except (ValueError, IndexError) as e:
             print("vco2 index failure")
             return co2_values
@@ -935,7 +998,8 @@ class VCO2_Instrument(CO2_Sensor):
 
 class CAPS_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
-        NOX_Sensor.__init__(self,'caps',all_peaks,influx_client)
+        # Call base class constructor
+        super().__init__(self,'caps',all_peaks,influx_client)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
     def get_values(self):
@@ -959,7 +1023,8 @@ class CAPS_Instrument(NOX_Sensor):
 
 class UCB_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
-        NOX_Sensor.__init__(self,'ucb',all_peaks,influx_client)
+        # Call base class instructor
+        super().__init__(self,'ucb',all_peaks,influx_client)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,
@@ -1023,7 +1088,7 @@ class Sensor_Thread(threading.Thread):
             #print("The measurement value for "+self.sensor.sensor_name + "is " + str(values[0]))
             self.readings.append(values[0])
             self.sensor.push_values(values)
-            self.sensor.peak_area(values[0])
+            self.sensor.peak_area(values[0],values[1])
             count+=1
 
 # Main function will be called when file is executed
@@ -1047,7 +1112,7 @@ def main():
     all_peaks=Peak_Container(influx_client)
 
     # Create all bc sensor objects
-    abcd_sensor = ABCD_instrument(all_peaks,influx_client)
+    abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ae16_sensor = AE16_Instrument(all_peaks,influx_client)
     ae33_sensor = AE33_Instrument(all_peaks,influx_client)
     ma300_sensor = MA300_Instrument(all_peaks,influx_client)
