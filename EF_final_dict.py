@@ -533,7 +533,7 @@ class CO2_Sensor:
                     'tags': {
                         'sensor_name': self.sensor_name
                         },
-                    'time': co2_measurement[1]
+                    'time': co2_measurement[1],
                     'measurement': 'co2'
                     }
                 if (len(co2_measurement)>2):
