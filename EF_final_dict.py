@@ -422,7 +422,7 @@ class BC_Sensor:
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
                             'fields': {
-                                'area': new_time.area
+                                'area': bc_area
                                 },
                             'time': peak_center,
                             'tags': {
@@ -586,7 +586,7 @@ class CO2_Sensor:
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
                             'fields': {
-                                'area': new_time.area
+                                'area': area_co2
                                 },
                             'time': peak_center,
                             'tags': {
@@ -732,7 +732,7 @@ class NOX_Sensor:
                     peak_center = float(time_sum / len(peak_indexes))
                     json_center =   {
                         'fields': {
-                            'area': new_time.area
+                            'area': nox_area
                             },
                         'time': peak_center,
                         'tags': {
