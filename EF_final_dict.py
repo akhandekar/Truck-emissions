@@ -645,6 +645,7 @@ class CO2_Sensor:
 
                 self.polluting = True
                 self.yp.append(co2_value)
+                self.polution_times.append(time_stamp)
 
 class NOX_Sensor:
     def __init__(self,sensor_name,all_peaks,influx_client):
@@ -784,6 +785,7 @@ class NOX_Sensor:
 
             self.polluting = True
             self.yp.append(nox_value)
+            self.polution_times.append(time_stamp)
 
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
