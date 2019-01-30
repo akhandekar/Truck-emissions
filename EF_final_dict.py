@@ -416,7 +416,7 @@ class BC_Sensor:
                     bc_area = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
-                    print("Peak amount is: " +str(peak_indexes.size))
+                    print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
                         json_center =   {
@@ -597,7 +597,7 @@ class CO2_Sensor:
                     area_co2 = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
-                    print("Peak amount is: " +str(peak_indexes.size))
+                    print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
                         json_center =   {
@@ -757,7 +757,7 @@ class NOX_Sensor:
 
                 yp_nd_array = np.asarray(self.yp)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
-                print("Peak amount is: " +str(peak_indexes.size))
+                print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                 for x in range(peak_indexes.size):
                     time_sum = self.polution_times[x]
                     json_center =   {
