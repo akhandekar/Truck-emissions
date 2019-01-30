@@ -415,6 +415,8 @@ class BC_Sensor:
                     # Record ending timestamp
                     bc_area = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
+                    print("Ndarray for " + self.sensor_name)
+                    print(yp_nd_array)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
@@ -596,6 +598,8 @@ class CO2_Sensor:
                     # Record ending timestamp
                     area_co2 = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
+                    print("Ndarray for " + self.sensor_name)
+                    print(yp_nd_array)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
@@ -756,6 +760,8 @@ class NOX_Sensor:
                 base_area = np.trapz(base_line_y, dx=1)
 
                 yp_nd_array = np.asarray(self.yp)
+                print("Ndarray for " + self.sensor_name)
+                print(yp_nd_array)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                 for x in range(peak_indexes.size):
