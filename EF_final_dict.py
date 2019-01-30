@@ -732,7 +732,7 @@ class NOX_Sensor:
                     peak_center = float(time_sum / len(peak_indexes))
                     json_center =   {
                         'fields': {
-                            'area': nox_area
+                            'area': area
                             },
                         'time': peak_center,
                         'tags': {
