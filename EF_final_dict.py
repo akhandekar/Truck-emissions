@@ -417,7 +417,7 @@ class BC_Sensor:
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
                     for x in range(peak_indexes.size):
-                        time_sum = polution_times[x]
+                        time_sum = self.polution_times[x]
                     if(peak_indexes.size > 0):
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
@@ -514,6 +514,7 @@ class CO2_Sensor:
         self.temp_area = 0.0
         self.peak_start = 0
         self.peak_end = 0
+        self.polution_times = []
 
         self.all_peaks = all_peaks
         self.co2_peaks = self.all_peaks.co2_peaks[self.sensor_name]
@@ -581,7 +582,7 @@ class CO2_Sensor:
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
                     for x in range(peak_indexes.size):
-                        time_sum = polution_times[x]
+                        time_sum = self.polution_times[x]
                     if(peak_indexes.size > 0):
                         peak_center = float(time_sum / len(peak_indexes))
                         json_center =   {
@@ -732,10 +733,11 @@ class NOX_Sensor:
                 area = np.trapz(self.yp, dx=1)
                 base_line_y = [self.thresh_nox for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, dx=1)
+
                 yp_nd_array = np.asarray(self.yp)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
                 for x in range(peak_indexes.size):
-                    time_sum = polution_times[x]
+                    time_sum = self.polution_times[x]
                 if(peak_indexes.size > 0):
                     peak_center = float(time_sum / len(peak_indexes))
                     json_center =   {
