@@ -681,6 +681,8 @@ class NOX_Sensor:
         self.all_peaks = all_peaks
         self.nox_peaks = self.all_peaks.nox_peaks[self.sensor_name]
 
+        self.polution_times = []
+
     def push_values(self,nox_measurement):
             try:
                 """
