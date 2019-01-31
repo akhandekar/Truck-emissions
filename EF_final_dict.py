@@ -856,7 +856,7 @@ class ABCD_Instrument(BC_Sensor):
             #print(values_abcd1)
             atn = float(values_abcd1[3])
             bc = float(values_abcd1[4])
-            bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
+            bc = bc / (math.exp((-1*atn)/100)*bc_correction + (1-bc_correction))
             flow = float(values_abcd1[7])
             bc_values.insert(0,bc)
             bc_values.insert(1,time_now)
@@ -887,7 +887,7 @@ class AE16_Instrument(BC_Sensor):
             bc1 = float(values_ae16[2])
             bc = bc1/1000
             atn = float(values_ae16[9])
-            bc = bc / (math.exp(-1*atn)*bc_correction + (1-bc_correction))
+            bc = bc / (math.exp((-1*atn)/100)*bc_correction + (1-bc_correction))
             flow = float(values_ae16[4])
             bc_values.insert(0,bc)
             bc_values.insert(1,time_now)
