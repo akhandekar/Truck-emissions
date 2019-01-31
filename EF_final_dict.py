@@ -417,7 +417,7 @@ class BC_Sensor:
                     yp_nd_array = np.asarray(self.yp)
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
-                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_bc)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
@@ -600,7 +600,7 @@ class CO2_Sensor:
                     yp_nd_array = np.asarray(self.yp)
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
-                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_co2)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
@@ -762,7 +762,7 @@ class NOX_Sensor:
                 yp_nd_array = np.asarray(self.yp)
                 print("Ndarray for " + self.sensor_name)
                 print(yp_nd_array)
-                peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=self.thresh_nox)
+                peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                 for x in range(peak_indexes.size):
                     time_sum = self.polution_times[x]
