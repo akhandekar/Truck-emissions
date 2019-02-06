@@ -419,7 +419,7 @@ class BC_Sensor:
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     # Send all peak centers to influx
-                    for x in range(peak_indexes.size):
+                    for x in peak_indexes:
                         time_sum = self.polution_times[x]
                         json_center =   {
                             'fields': {
@@ -585,7 +585,7 @@ class CO2_Sensor:
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     # Send all peak centers to influx
-                    for x in range(peak_indexes.size):
+                    for x in peak_indexes:
                         time_sum = self.polution_times[x]
                         json_center =   {
                             'fields': {
@@ -744,7 +744,7 @@ class NOX_Sensor:
                 print("Area is: " +str(area))
 
                 # Send all peak centers to influx
-                for x in range(peak_indexes.size):
+                for x in peak_indexes:
                     time_sum = self.polution_times[x]
                     json_center =   {
                         'fields': {
