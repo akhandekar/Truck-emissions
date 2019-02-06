@@ -412,7 +412,7 @@ class BC_Sensor:
 
                     print("Polluting y values for " + self.sensor_name + "is: ")
                     print(self.yp)
-                    print("Area is: " +str(bc_area))
+                    print("Area is: " +str(area))
 
                     # Send all peak centers to influx
                     for x in range(peak_indexes.size):
