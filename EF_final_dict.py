@@ -415,7 +415,7 @@ class BC_Sensor:
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
-                    print(self.pollution_times)
+                    print(self.polution_times)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     # Send all peak centers to influx
@@ -581,7 +581,7 @@ class CO2_Sensor:
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
-                    print(self.pollution_times)
+                    print(self.polution_times)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     # Send all peak centers to influx
@@ -736,7 +736,7 @@ class NOX_Sensor:
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                 print("time array for " + self.sensor_name)
-                print(self.pollution_times)
+                print(self.polution_times)
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                 print("Polluting y values for " + self.sensor_name + "is: ")
