@@ -323,7 +323,6 @@ class BC_Sensor:
 
         self.influx_client = influx_client
 
-        self.bc_peaks = []
         # Timestamps for all data
         self.xs = []
         # All BC data
@@ -382,18 +381,7 @@ class BC_Sensor:
                     json['fields']['flow'] = bc_measurement[2]
                     if (len(bc_measurement) == 4):
                         json['fields']['atn'] = bc_measurement[3]
-                """
-                if (len(bc_measurement) > 2):
-                    if(bc_measurement[1] != 999):
-                        json['fields']['atn'] = bc_measurement[1]
-                    if (len(bc_measurement) > 3):
 
-                        json['time'] = bc_measurement[3]
-                    else:
-                        json['time'] = bc_measurement[2]
-                else:
-                    json['time'] = bc_measurement[1]
-                """
 
                 self.influx_client.write_json(json)
             except:
@@ -413,18 +401,27 @@ class BC_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
-                    bc_area = np.trapz(self.yp, dx=1)
+                    area = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+
+                    # Print diagnostic info for peak center function
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
-                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+
+                    print("Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.yp)
+                    print("Area is: " +str(bc_area))
+
+                    # Send all peak centers to influx
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
                         json_center =   {
                             'fields': {
-                                'area': bc_area,
-                                'bc': self.yp[x]
+                                # self.yp[x] maybe want them to be yp_nd_array[x]
+                                'area': area,
+                                'bc': self.yp_nd_array[x]
                                 },
                             'time': self.polution_times[x],
                             'tags': {
@@ -435,32 +432,14 @@ class BC_Sensor:
                             }
                         self.influx_client.write_json(json_center)
 
-                    """
-                    if(peak_indexes.size > 0):
-                        peak_center = float(time_sum / len(peak_indexes))
-                        json_center =   {
-                            'fields': {
-                                'area': bc_area
-                                },
-                            'time': peak_center,
-                            'tags': {
-                                'sensor': self.sensor_name,
-                                'type': 'center'
-                                },
-                            'measurement': 'peak_event'
-                            }
-                        self.influx_client.write_json(json_center)
-                    """
-                    print("Polluting y values for " + self.sensor_name + "is: ")
-                    print(self.yp)
-                    print("Area is: " +str(bc_area))
-                    #self.bc_areas.append(bc_area)
-                    #self.xp.append(time_str3)
+
+                    self.peak_end = self.polution_times[-1]
                     del self.yp[:]
                     del self.polution_times[:]
-                    self.peak_end = int(time.time()*1000000000)
-                    new_time = Peak_Event(bc_area,self.peak_start,self.peak_end)
+
+                    new_time = Peak_Event(area,self.peak_start,self.peak_end)
                     self.bc_peaks.append(new_time)
+
                     json_start =   {
                         'fields': {
                             'area': new_time.area
@@ -476,7 +455,7 @@ class BC_Sensor:
                         'fields': {
                             'area': new_time.area
                             },
-                        'time': self.peak_start,
+                        'time': self.peak_end,
                         'tags': {
                             'sensor': self.sensor_name,
                             'type': 'end'
@@ -486,16 +465,16 @@ class BC_Sensor:
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
-
+                # Not poluting currently or during last read
                 self.polluting = False
                 self.ynp.append(bc_value)
             else:
                 # Pollution event
                 if self.polluting == False:
-                    self.peak_start = int(time.time()*1000000000)
+                    # Just use start time from the function
+                    self.peak_start = time_stamp
                     # Just started polluting
                     # Record starting timestamp
-                    #self.xp.append(time_str3)
                 self.polluting = True
                 self.yp.append(bc_value)
                 self.polution_times.append(time_stamp)
@@ -562,18 +541,6 @@ class CO2_Sensor:
                     if(len(co2_measurement)==4):
                         json['fields']['press'] = co2_measurement[3]
 
-                """
-                if (len(co2_measurement)>2):
-                    json['fields'][''] = co2_measurement[1]
-                    if(len(co2_measurement)==4):
-                        if(co2_measurement[1] != 999):
-                            json['fields']['press'] = co2_measurement[1]
-                        json['time'] = co2_measurement[3]
-                    else:
-                        json['time'] = co2_measurement[2]
-                else:
-                    json['time'] = co2_measurement[1]
-                """
                 self.influx_client.write_json(json)
             except:
                 print("Influx push failure from: " + self.sensor_name)
@@ -596,18 +563,26 @@ class CO2_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
-                    area_co2 = np.trapz(self.yp, dx=1)
+                    area = np.trapz(self.yp, dx=1)
                     yp_nd_array = np.asarray(self.yp)
+                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+
+                    # Print diagnostic information for peak centers
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
-                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+
+                    print("Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.yp)
+                    print("Area is: " +str(area))
+
+                    # Send all peak centers to influx
                     for x in range(peak_indexes.size):
                         time_sum = self.polution_times[x]
                         json_center =   {
                             'fields': {
-                                'area': area_co2,
-                                'co2': self.yp[x]
+                                'area': area,
+                                'co2': self.yp_nd_array[x]
                                 },
                             'time': self.polution_times[x],
                             'tags': {
@@ -617,30 +592,15 @@ class CO2_Sensor:
                             'measurement': 'peak_event'
                             }
                         self.influx_client.write_json(json_center)
-                    """
-                    if(peak_indexes.size > 0):
-                        peak_center = float(time_sum / len(peak_indexes))
-                        json_center =   {
-                            'fields': {
-                                'area': area_co2
-                                },
-                            'time': peak_center,
-                            'tags': {
-                                'sensor': self.sensor_name,
-                                'type': 'center'
-                                },
-                            'measurement': 'peak_event'
-                            }
-                        #self.influx_client.write_json(json_center)
-                    """
 
+                    self.peak_end = self.polution_times[-1]
                     del self.yp[:]
                     del self.polution_times[:]
-                    #new_time = Peak_Event(area_co2,self.peak_start,self.peak_end)
-                    new_time = CO2_Peak_Event(area_co2,self.peak_start,self.peak_end,
+
+                    new_time = CO2_Peak_Event(area,self.peak_start,self.peak_end,
                         self.all_peaks.current_li7000_pressure,
                         self.all_peaks.current_li7000_temp)
-                    #all_peaks.Peak_Event.append(new_time)
+
                     self.co2_peaks.append(new_time)
                     json_start =   {
                         'fields': {
@@ -652,12 +612,12 @@ class CO2_Sensor:
                             'type': 'start'
                             },
                         'measurement': 'peak_event'
-                        }
+                    }
                     json_end =   {
                         'fields': {
                             'area': new_time.area
                             },
-                        'time': self.peak_start,
+                        'time': self.peak_end,
                         'tags': {
                             'sensor': self.sensor_name,
                             'type': 'end'
@@ -667,13 +627,14 @@ class CO2_Sensor:
                     self.influx_client.write_json(json_start)
                     self.influx_client.write_json(json_end)
 
+                # Not currently polluting and not polluting during previous read
                 self.polluting = False
                 self.ynp.append(co2_value)
 
             else:
                 # Pollution event
                 if self.polluting == False:
-                    self.peak_start = int(time.time()*1000000000)
+                    self.peak_start = time_stamp
                     # Just started polluting
                     # Record starting timestamp
                     #self.xp.append(time_str8)
@@ -760,16 +721,23 @@ class NOX_Sensor:
                 base_area = np.trapz(base_line_y, dx=1)
 
                 yp_nd_array = np.asarray(self.yp)
+                peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+
                 print("Ndarray for " + self.sensor_name)
                 print(yp_nd_array)
-                peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+
+                print("Polluting y values for " + self.sensor_name + "is: ")
+                print(self.yp)
+                print("Area is: " +str(area))
+
+                # Send all peak centers to influx
                 for x in range(peak_indexes.size):
                     time_sum = self.polution_times[x]
                     json_center =   {
                         'fields': {
                             'area': area,
-                            'nox': self.yp[x]
+                            'nox': self.yp_nd_array[x]
                             },
                         'time': self.polution_times[x],
                         'tags': {
@@ -779,28 +747,15 @@ class NOX_Sensor:
                         'measurement': 'peak_event'
                         }
                     self.influx_client.write_json(json_center)
-                if(peak_indexes.size > 0):
-                    peak_center = float(time_sum / len(peak_indexes))
-                    json_center =   {
-                        'fields': {
-                            'area': area
-                            },
-                        'time': peak_center,
-                        'tags': {
-                            'sensor': self.sensor_name,
-                            'type': 'center'
-                            },
-                        'measurement': 'peak_event'
-                        }
                     print(peak_center)
-                    #self.influx_client.write_json(json_center)
 
-                peak_area = area - base_area
-                #self.areas.append(peak_area)
-                #self.xp.append(time_str10)
+
+
+                self.peak_end = self.polution_times[-1]
                 del self.yp[:]
                 del self.polution_times[:]
-                self.peak_end = int(time.time()*1000000000)
+
+                peak_area = area - base_area
                 new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
                 self.nox_peaks.append(new_time)
                 json_start =   {
@@ -818,7 +773,7 @@ class NOX_Sensor:
                     'fields': {
                         'area': new_time.area
                         },
-                    'time': self.peak_start,
+                    'time': self.peak_end,
                     'tags': {
                         'sensor': self.sensor_name,
                         'type': 'end'
@@ -827,13 +782,15 @@ class NOX_Sensor:
                     }
                 self.influx_client.write_json(json_start)
                 self.influx_client.write_json(json_end)
+
+            # Not currently polluting and not polluting during previous read
             self.polluting = False
             self.ynp.append(nox_value)
 
         else:
             # Pollution event
             if self.polluting == False:
-                self.peak_start = int(time.time()*1000000000)
+                self.peak_start = time_stamp
 
             self.polluting = True
             self.yp.append(nox_value)
