@@ -434,6 +434,8 @@ class BC_Sensor:
                                 },
                             'measurement': 'peak_event'
                             }
+                        print("Time is " + str(self.polution_times[x]))
+                        print("concentration is " + str(yp_nd_array[x]))
                         self.influx_client.write_json(json_center)
 
 
@@ -599,6 +601,8 @@ class CO2_Sensor:
                                 },
                             'measurement': 'peak_event'
                             }
+                        print("Time is " + str(self.polution_times[x]))
+                        print("concentration is " + str(yp_nd_array[x]))
                         self.influx_client.write_json(json_center)
 
                     self.peak_end = self.polution_times[-1]
@@ -758,6 +762,8 @@ class NOX_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
+                    print("Time is " + str(self.polution_times[x]))
+                    print("concentration is " + str(yp_nd_array[x]))
                     self.influx_client.write_json(json_center)
 
 
