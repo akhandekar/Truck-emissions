@@ -421,7 +421,7 @@ class BC_Sensor:
                             'fields': {
                                 # self.yp[x] maybe want them to be yp_nd_array[x]
                                 'area': area,
-                                'bc': self.yp_nd_array[x]
+                                'bc': yp_nd_array[x]
                                 },
                             'time': self.polution_times[x],
                             'tags': {
@@ -582,7 +582,7 @@ class CO2_Sensor:
                         json_center =   {
                             'fields': {
                                 'area': area,
-                                'co2': self.yp_nd_array[x]
+                                'co2': yp_nd_array[x]
                                 },
                             'time': self.polution_times[x],
                             'tags': {
@@ -737,7 +737,7 @@ class NOX_Sensor:
                     json_center =   {
                         'fields': {
                             'area': area,
-                            'nox': self.yp_nd_array[x]
+                            'nox': yp_nd_array[x]
                             },
                         'time': self.polution_times[x],
                         'tags': {
