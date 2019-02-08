@@ -590,7 +590,7 @@ class Sensor_Thread(threading.Thread):
     def run(self):
         count = 0
         #self.readings[:20] = [0] * 20
-
+        next_call = time.time()
         while not stop_requested:
             values = self.sensor.get_values()
             if(len(values) == 0):
