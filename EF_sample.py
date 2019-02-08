@@ -596,7 +596,7 @@ class Sensor_Thread(threading.Thread):
             if(len(values) == 0):
                 continue
             print("The measurement value for "+self.sensor.sensor_name + "is " + str(values[0]))
-            print datetime.datetime.now()
+            print time.time()
             next_call = next_call+1;
             time.sleep(next_call - time.time())
             self.readings.append(values[0])
