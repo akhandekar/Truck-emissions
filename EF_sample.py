@@ -356,6 +356,9 @@ def main():
     # Influx client with credentials obtained from command line argument
     influx_client = Influx_Dataframe_Client(config_file,'DB_config')
 
+    # Peak thread object
+    all_peaks=Peak_Container(influx_client)
+
     # Create all co2 sensor objects
     li820_sensor = LI820_Instrument(all_peaks,influx_client)
     li7000_sensor = LI7000_Instrument(all_peaks,influx_client)
