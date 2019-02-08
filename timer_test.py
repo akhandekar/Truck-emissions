@@ -8,4 +8,5 @@ def foo():
         time.sleep(next_call - time.time())
 
 timerThread = threading.Thread(target=foo)
+timerThread.daemon = True
 timerThread.start()
