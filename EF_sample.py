@@ -603,6 +603,7 @@ class Sensor_Thread(threading.Thread):
             count+=1
             next_call = next_call+1;
             print(next_call - time.time())
+            print(self.sensor.sensor_name)
             time.sleep(next_call - time.time())
 
 # Main function will be called when file is executed
