@@ -602,6 +602,7 @@ class Sensor_Thread(threading.Thread):
             self.sensor.peak_area(values[0],values[1])
             count+=1
             next_call = next_call+1;
+            print(next_call - time.time())
             time.sleep(next_call - time.time())
 
 # Main function will be called when file is executed
