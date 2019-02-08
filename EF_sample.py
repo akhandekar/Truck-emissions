@@ -597,12 +597,12 @@ class Sensor_Thread(threading.Thread):
                 continue
             print("The measurement value for "+self.sensor.sensor_name + "is " + str(values[0]))
             print time.time()
-            next_call = next_call+1;
-            time.sleep(next_call - time.time())
             self.readings.append(values[0])
             self.sensor.push_values(values)
             self.sensor.peak_area(values[0],values[1])
             count+=1
+            next_call = next_call+1;
+            time.sleep(next_call - time.time())
 
 # Main function will be called when file is executed
 
