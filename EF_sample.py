@@ -1084,6 +1084,7 @@ class UCB_Instrument(NOX_Sensor):
 
         except Exception as e:
             print("ucb index failure")
+            print (e)
             return nox_values
         return nox_values
 
