@@ -216,8 +216,8 @@ class Peak_Container:
                     #No match found must be a clean truck
                     json =   {
                         'fields': {
-                            'EF': 0,
-                            'bc_area': 0,
+                            'EF': float(0),
+                            'bc_area': float(0),
                             'co2_area': single_co2_peak.area,
                             'co2_temp': single_co2_peak.temp,
                             'co2_pressure': single_co2_peak.pressure
