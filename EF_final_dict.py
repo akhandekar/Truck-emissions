@@ -976,8 +976,8 @@ class LI820_Instrument(CO2_Sensor):
             #print(values_1820)
             co2_values.insert(0,float(values_li820[14])) # CO2 value
             co2_values.insert(1,time_now)
-            co2_values.insert(2,float(values_li820[10])) # Temp
-            co2_values.insert(3,float(values_li820[6])) # Pressure
+            co2_values.insert(2,float(values_li820[6])) # Temp
+            co2_values.insert(3,float(values_li820[10])) # Pressure
 
         except(ValueError,IndexError) as e:
             print("li820 index failure")
@@ -1001,8 +1001,8 @@ class LI7000_Instrument(CO2_Sensor):
             #print(values_li7000)
             co2_values.insert(0,float(values_li7000[2])) # CO2 value
             co2_values.insert(1,time_now)
-            co2_values.insert(2,float(values_li7000[4])) # Temp
-            co2_values.insert(3,float(values_li7000[5])) # Pressure
+            co2_values.insert(2,float(values_li7000[5])) # Temp
+            co2_values.insert(3,float(values_li7000[4])) # Pressure
             # Save most recent temperature and pressure from Li7000 instrument
             self.all_peaks.current_li7000_temp = co2_values[1]
             self.all_peaks.current_li7000_pressure = co2_values[2]
