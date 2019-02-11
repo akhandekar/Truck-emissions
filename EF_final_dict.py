@@ -198,7 +198,11 @@ class Peak_Container:
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
                         json =   {
                             'fields': {
-                                'EF': EF
+                                'EF': EF,
+                                'bc_area': self.bc_peaks[bc_device][y].area,
+                                'co2_area': single_co2_peak.area,
+                                'co2_temp': single_co2_peak.temp,
+                                'co2_pressure': single_co2_peak.pressure
                                 },
                             'time': single_co2_peak.start_time,
                             'tags': {
@@ -208,6 +212,25 @@ class Peak_Container:
                             'measurement': 'emission_factor'
                             }
                         self.influx_client.write_json(json)
+                else:
+                    #No match found must be a clean truck
+                    json =   {
+                        'fields': {
+                            'EF': 0,
+                            'bc_area': 0,
+                            'co2_area': single_co2_peak.area,
+                            'co2_temp': single_co2_peak.temp,
+                            'co2_pressure': single_co2_peak.pressure
+                            },
+                        'time': single_co2_peak.start_time,
+                        'tags': {
+                            'co2_device': co2_device,
+                            'bc_device': bc_device
+                            },
+                        'measurement': 'emission_factor'
+                        }
+                    self.influx_client.write_json(json)
+
 
     def nox_peak_match(self,single_co2_peak,nox_device,co2_device):
         for y in range(len(self.nox_peaks[nox_device])):
@@ -232,7 +255,9 @@ class Peak_Container:
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
                         'fields': {
-                            'EF': EF
+                            'EF': EF,
+                            'nox_area': self.nox_peaks[nox_device][y].area,
+                            'co2_area': single_co2_peak.area
                             },
                         'time': single_co2_peak.start_time,
                         'tags': {
@@ -402,6 +427,10 @@ class BC_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area = np.trapz(self.yp, dx=1)
+                    base_line_y = [self.thresh_bc for s in range(len(self.yp))]
+                    base_area = np.trapz(base_line_y, dx=1)
+                    peak_area = area - base_area
+
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
@@ -443,12 +472,13 @@ class BC_Sensor:
                     del self.yp[:]
                     del self.polution_times[:]
 
-                    new_time = Peak_Event(area,self.peak_start,self.peak_end)
+                    new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
                     self.bc_peaks.append(new_time)
 
                     json_start =   {
                         'fields': {
-                            'area': new_time.area
+                            'area': new_time.area,
+                            'clean_area': area
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -570,6 +600,10 @@ class CO2_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area = np.trapz(self.yp, dx=1)
+                    base_line_y = [self.thresh_co2 for s in range(len(self.yp))]
+                    base_area = np.trapz(base_line_y, dx=1)
+                    peak_area = area - base_area
+
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
@@ -609,14 +643,15 @@ class CO2_Sensor:
                     del self.yp[:]
                     del self.polution_times[:]
 
-                    new_time = CO2_Peak_Event(area,self.peak_start,self.peak_end,
+                    new_time = CO2_Peak_Event(peak_area,self.peak_start,self.peak_end,
                         self.all_peaks.current_li7000_pressure,
                         self.all_peaks.current_li7000_temp)
 
                     self.co2_peaks.append(new_time)
                     json_start =   {
                         'fields': {
-                            'area': new_time.area
+                            'area': new_time.area,
+                            'clean_area': area
                             },
                         'time': self.peak_start,
                         'tags': {
@@ -731,6 +766,7 @@ class NOX_Sensor:
                 area = np.trapz(self.yp, dx=1)
                 base_line_y = [self.thresh_nox for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, dx=1)
+                peak_area = area - base_area
 
                 yp_nd_array = np.asarray(self.yp)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
@@ -772,12 +808,12 @@ class NOX_Sensor:
                 del self.yp[:]
                 del self.polution_times[:]
 
-                peak_area = area - base_area
                 new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
                 self.nox_peaks.append(new_time)
                 json_start =   {
                     'fields': {
-                        'area': new_time.area
+                        'area': new_time.area,
+                        'clean_area': area
                         },
                     'time': self.peak_start,
                     'tags': {
