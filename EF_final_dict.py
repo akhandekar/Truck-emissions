@@ -1206,7 +1206,7 @@ def main():
     co2_sba5_thread=Sensor_Thread(sba5_sensor)
     co2_vco2_thread=Sensor_Thread(vco2_sensor)
     nox_caps_thread=Sensor_Thread(caps_sensor)
-    #nox_ucb_thread=Sensor_Thread(ucb_sensor)
+    nox_ucb_thread=Sensor_Thread(ucb_sensor)
 
     # Create peak thread
     ef_thread=EF_Thread(all_peaks)
@@ -1221,7 +1221,7 @@ def main():
     co2_sba5_thread.start()
     co2_vco2_thread.start()
     nox_caps_thread.start()
-    #nox_ucb_thread.start()
+    nox_ucb_thread.start()
     ef_thread.start()
 
     while not stop_requested: # Should terminate loop on keyboard interrupt
