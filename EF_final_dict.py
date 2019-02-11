@@ -1004,8 +1004,8 @@ class LI7000_Instrument(CO2_Sensor):
             co2_values.insert(2,float(values_li7000[5])) # Temp
             co2_values.insert(3,float(values_li7000[4])) # Pressure
             # Save most recent temperature and pressure from Li7000 instrument
-            self.all_peaks.current_li7000_temp = co2_values[1]
-            self.all_peaks.current_li7000_pressure = co2_values[2]
+            self.all_peaks.current_li7000_temp = co2_values[5]
+            self.all_peaks.current_li7000_pressure = co2_values[4]
             #print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
