@@ -308,34 +308,6 @@ class Peak_Container:
         self.EF_calc_nox('sba5')
         self.EF_calc_nox('vco2')
 
-        """
-        self.EF_calc_bc('li820',self.li820_bc_start,self.li820_bc_end)
-        self.EF_calc_bc('li7000',self.li7000_bc_start,self.li7000_bc_end)
-        self.EF_calc_bc('sba5',self.sba5_bc_start,self.sba5_bc_end)
-        self.EF_calc_bc('vco2',self.vco2_bc_start,self.vco2_bc_end)
-
-        self.EF_calc_nox('li820',self.li820_nox_start,self.li820_nox_end)
-        self.EF_calc_nox('li7000',self.li7000_nox_start,self.li7000_nox_end)
-        self.EF_calc_nox('sba5',self.sba5_nox_start,self.sba5_nox_end)
-        self.EF_calc_nox('vco2',self.vco2_nox_start,self.vco2_nox_end)
-        """
-
-        # Removes elements from from beginning to the amount of elements that were
-        # in the list before hand
-        """
-        del self.area_time_li820[0:self.li820_len]
-        del self.area_time_li7000[0:self.li7000_len]
-        del self.area_time_sba5[0:self.sba5_len]
-        del self.area_time_vco2[0:self.vco2_len]
-
-        del self.area_time_abcd1[0:self.abcd1_len]
-        del self.area_time_ae16[0:self.ae16_len]
-        del self.area_time_ae33[0:self.ae33_len]
-        del self.area_time_ma300[0:self.ma300_len]
-
-        del self.area_time_caps[0:self.caps_len]
-        del self.area_time_ucb[0:self.ucb_len]
-        """
 
 # Measurement classes these are extended with instrument classes for both
 # serial and data retrieval
