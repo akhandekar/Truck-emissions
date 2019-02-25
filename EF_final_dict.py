@@ -968,7 +968,7 @@ class LI7000_Instrument(CO2_Sensor):
             values_li7000 = ser.split('\n')[0].split('\t')
             print("The values for li700 are:")
             print(values_li7000)
-            co2_values.insert(0,float(values_li7000[2])) # CO2 value
+            co2_values.insert(0,float(values_li7000[3])) # CO2 value
             co2_values.insert(1,time_now)
             co2_values.insert(2,float(values_li7000[6])) # Temp
             co2_values.insert(3,float(values_li7000[5])) # Pressure
