@@ -47,7 +47,6 @@ class CO2_Peak_Event(Peak_Event):
         self.pressure = pressure
         self.temp = temp
 
-
 # Storage of peaks for each instrument as well function for calculating EF
 
 class Peak_Container:
@@ -268,7 +267,6 @@ class Peak_Container:
                         }
                     self.influx_client.write_json(json)
 
-    #    def EF_calc_bc(self,co2_device,start_window,end_window):
     def EF_calc_bc(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
@@ -277,7 +275,7 @@ class Peak_Container:
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device)
-    #    def EF_calc_nox(self,co2_device,start_window,end_window):
+
     def EF_calc_nox(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
@@ -307,7 +305,6 @@ class Peak_Container:
         self.EF_calc_nox('li7000')
         self.EF_calc_nox('sba5')
         self.EF_calc_nox('vco2')
-
 
 # Measurement classes these are extended with instrument classes for both
 # serial and data retrieval
@@ -1002,7 +999,7 @@ class SBA5_Instrument(CO2_Sensor):
             co2_values.insert(0,float(values_sba5[3])) # CO2 value
             co2_values.insert(1,time_now)# Time
             co2_values.insert(2,float(values_sba5[4])) # CO2 temp
-            co2_values.insert(3,float(values_sba5[7])) # CO2 pressure
+            co2_values.insert(3,(float(values_sba5[7])/1000)) # CO2 pressure
 
 
 

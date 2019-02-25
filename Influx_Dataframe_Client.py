@@ -1,6 +1,5 @@
-#import configparser
-#import pandas as pd
-#import numpy as np
+import pandas as pd
+import numpy as np
 from influxdb import InfluxDBClient
 from influxdb import DataFrameClient
 import yaml
@@ -164,11 +163,9 @@ class Influx_Dataframe_Client(object):
         self.client = InfluxDBClient(host=self.host, port=self.port,
                     username=self.username, password=self.password,
                     database=self.database,ssl=self.use_ssl, verify_ssl=self.verify_ssl_is_on)
-        '''
         self.df_client = DataFrameClient(host=self.host, port=self.port,
                     username=self.username, password=self.password,
                     database=self.database,ssl=self.use_ssl, verify_ssl=self.verify_ssl_is_on)
-        '''
 
     def __build_json(self,data, tags, fields, measurement):
         '''
@@ -317,7 +314,7 @@ class Influx_Dataframe_Client(object):
         dataframe
         '''
         query_result = self.client.query(query, database=use_database)
-        return query_result.raw
+        return query_result
 
     def show_meta_data(self, database, measurement):
         '''
@@ -391,9 +388,9 @@ class Influx_Dataframe_Client(object):
                 #Must have a start_time for our query
                 #Check to see format of time that was specified
                 time_string = time_string + "time > "
-                if type(end_time) == str:
+                if type(start_time) == str:
                     time_string = time_string + "\'" + start_time + '\''
-                if(type(end_time) == int):
+                if(type(start_time) == int):
                     time_string = time_string + str(start_time)
 
             if (end_time != None):
@@ -411,6 +408,9 @@ class Influx_Dataframe_Client(object):
 
 
         #Create tag portion of query if it is specified
+        #for key,value in tags.items():
+
+
         if (tags != None and values != None):
             try:
                 if (len(tags) != len(values)):
@@ -449,7 +449,19 @@ class Influx_Dataframe_Client(object):
 
         print(query_string)
 
-        df = self.df_client.query(query_string, database=database,chunked=True, chunk_size=256)
+        json = self.client.query(query_string, database=database,chunked=True, chunk_size=256)
+        #print(json[0])
+        #print("Length of generator is " + str(len(json)))
+        #print("Length of generator is " + str(len(json.get_points())))
+        i=0
+        for x in json.get_points(tags = {'sensor_name':'ae33'}):
+            i+=1
+            #print(x)
+            #print(len(x))
+            #break
+        print(i)
+        df = pd.DataFrame.from_dict(json, orient='columns')
+        #print(df.head())
 
         if (measurement in df):
             return df[measurement]

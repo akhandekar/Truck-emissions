@@ -1,5 +1,5 @@
 DB_config:
-    host: localhost
+    host: 131.243.31.235
     database: ef_test
     protocol: json
     port: 8086
