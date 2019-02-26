@@ -1,6 +1,6 @@
 DB_config:
     host: 131.243.31.235
-    database: ef_test_1
+    database: ef_test_2
     protocol: json
     port: 8086
     use_ssl: False
