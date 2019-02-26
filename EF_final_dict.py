@@ -181,13 +181,14 @@ class Peak_Container:
                     'fields': {
                         'start_difference': float(difference/1000000000),
                         'end_difference': float(end_difference/1000000000),
+                        'co2co2_peak_time': single_co2_peak.start_time
                         },
-                    'time': single_co2_peak.start_time,
+                    'time': time_now=int(time.time()*1000000000),
                     'tags': {
                         'co2_device': co2_device,
                         'bc_device': bc_device
                         },
-                    'measurement': 'emission_factor'
+                    'measurement': 'window'
                     }
                 self.influx_client.write_json(json)
                 if (abs(difference) <= self.start_window[co2_device][bc_device]*1000000000):
@@ -240,14 +241,15 @@ class Peak_Container:
             json =   {
                 'fields': {
                     'start_difference': float(difference/1000000000),
-                    'end_difference': float(end_difference/1000000000)
+                    'end_difference': float(end_difference/1000000000),
+                    'co2_peak_time': single_co2_peak.start_time
                     },
-                'time': single_co2_peak.start_time,
+                'time': time_now=int(time.time()*1000000000),
                 'tags': {
                     'co2_device': co2_device,
                     'nox_device': nox_device
                     },
-                'measurement': 'emission_factor'
+                'measurement': 'window'
                 }
             self.influx_client.write_json(json)
             if (abs(difference) <= self.start_window[co2_device][nox_device]*1000000000):
