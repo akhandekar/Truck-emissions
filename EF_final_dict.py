@@ -213,6 +213,7 @@ class Peak_Container:
                             'measurement': 'emission_factor'
                             }
                         self.influx_client.write_json(json)
+                """
                 else:
                     #No match found must be a clean truck
                     json =   {
@@ -231,7 +232,7 @@ class Peak_Container:
                         'measurement': 'emission_factor'
                         }
                     self.influx_client.write_json(json)
-
+                """
 
     def nox_peak_match(self,single_co2_peak,nox_device,co2_device):
         for y in range(len(self.nox_peaks[nox_device])):
