@@ -190,8 +190,8 @@ class Peak_Container:
                     'measurement': 'emission_factor'
                     }
                 self.influx_client.write_json(json)
-                if (abs(difference) >= self.start_window[co2_device][bc_device]*1000000000):
-                    if (abs(end_difference) >= self.end_window[co2_device][bc_device]*1000000000):
+                if (abs(difference) <= self.start_window[co2_device][bc_device]*1000000000):
+                    if (abs(end_difference) <= self.end_window[co2_device][bc_device]*1000000000):
                         #print("We have a match at EF with " + bc_device + " and " + co2_device)
                         #print(self.bc_peaks[bc_device][y].area)
                         #print(single_co2_peak.area)
@@ -250,8 +250,8 @@ class Peak_Container:
                 'measurement': 'emission_factor'
                 }
             self.influx_client.write_json(json)
-            if (abs(difference) >= self.start_window[co2_device][nox_device]*1000000000):
-                if (abs(end_difference) >= self.end_window[co2_device][nox_device]*1000000000):
+            if (abs(difference) <= self.start_window[co2_device][nox_device]*1000000000):
+                if (abs(end_difference) <= self.end_window[co2_device][nox_device]*1000000000):
                     #print("We have a match at EF with " + nox_device + " and " + co2_device)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
