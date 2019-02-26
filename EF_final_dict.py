@@ -176,6 +176,7 @@ class Peak_Container:
             for y in range(len(self.bc_peaks[bc_device])):
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
                 end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
+                print("Area for sensor " + bc_device + " is " + str(self.bc_peaks[bc_device][y].area))
                 json =   {
                     'fields': {
                         'start_difference': float(difference/1000000000),
@@ -233,6 +234,7 @@ class Peak_Container:
 
     def nox_peak_match(self,single_co2_peak,nox_device,co2_device):
         for y in range(len(self.nox_peaks[nox_device])):
+            print("Area for sensor " + bc_device + " is " + str(self.nox_peaks[nox_device][y].area))
             difference = single_co2_peak.start_time - self.nox_peaks[nox_device][y].start_time
             end_difference = single_co2_peak.end_time - self.nox_peaks[nox_device][y].end_time
             json =   {
@@ -396,7 +398,7 @@ class BC_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area = np.trapz(self.yp, dx=1)
-                    base_line_y = [self.thresh_bc for s in range(len(self.yp))]
+                    base_line_y = [run_avg for s in range(len(self.yp))]
                     base_area = np.trapz(base_line_y, dx=1)
                     peak_area = area - base_area
 
@@ -441,7 +443,9 @@ class BC_Sensor:
                     del self.yp[:]
                     del self.polution_times[:]
 
+                    print("Peak area for " + self.sensor_name +" is " + str(peak_area))
                     new_time = Peak_Event(peak_area,self.peak_start,self.peak_end)
+
                     self.bc_peaks.append(new_time)
 
                     json_start =   {
@@ -569,7 +573,7 @@ class CO2_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     area = np.trapz(self.yp, dx=1)
-                    base_line_y = [self.thresh_co2 for s in range(len(self.yp))]
+                    base_line_y = [run_avg for s in range(len(self.yp))]
                     base_area = np.trapz(base_line_y, dx=1)
                     peak_area = area - base_area
 
@@ -733,7 +737,7 @@ class NOX_Sensor:
                 # Caclulate the statistics
                 # Record ending timestamp
                 area = np.trapz(self.yp, dx=1)
-                base_line_y = [self.thresh_nox for s in range(len(self.yp))]
+                base_line_y = [run_avg for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, dx=1)
                 peak_area = area - base_area
 
