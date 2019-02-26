@@ -234,7 +234,7 @@ class Peak_Container:
 
     def nox_peak_match(self,single_co2_peak,nox_device,co2_device):
         for y in range(len(self.nox_peaks[nox_device])):
-            print("Area for sensor " + bc_device + " is " + str(self.nox_peaks[nox_device][y].area))
+            print("Area for sensor " + nox_device + " is " + str(self.nox_peaks[nox_device][y].area))
             difference = single_co2_peak.start_time - self.nox_peaks[nox_device][y].start_time
             end_difference = single_co2_peak.end_time - self.nox_peaks[nox_device][y].end_time
             json =   {
