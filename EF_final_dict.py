@@ -406,6 +406,7 @@ class BC_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
                     # Print diagnostic info for peak center function
+                    """
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
@@ -417,7 +418,7 @@ class BC_Sensor:
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
-
+                    """
                     # Send all peak centers to influx
                     for x in peak_indexes:
                         time_sum = self.polution_times[x]
@@ -581,6 +582,7 @@ class CO2_Sensor:
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
                     # Print diagnostic information for peak centers
+                    """
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
@@ -592,6 +594,7 @@ class CO2_Sensor:
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+                    """
 
                     # Send all peak centers to influx
                     for x in peak_indexes:
@@ -744,6 +747,7 @@ class NOX_Sensor:
                 yp_nd_array = np.asarray(self.yp)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
+                """
                 print("Ndarray for " + self.sensor_name)
                 print(yp_nd_array)
                 print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
@@ -755,6 +759,7 @@ class NOX_Sensor:
                 print("Polluting y values for " + self.sensor_name + "is: ")
                 print(self.yp)
                 print("Area is: " +str(area))
+                """
 
                 # Send all peak centers to influx
                 for x in peak_indexes:
