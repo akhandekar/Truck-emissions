@@ -76,73 +76,73 @@ class Peak_Container:
         # Windows for matching peaks between instruments
         self.start_window = {
             'li820':{
-                'abcd':4,
-                'ae16':1,
-                'ae33':5,
-                'ma300':5,
-                'caps':2.5,
-                'ucb':1
+                'abcd':9,
+                'ae16':6,
+                'ae33':10,
+                'ma300':10,
+                'caps':7.5,
+                'ucb':6
             },
             'li7000':{
-                'abcd':5,
-                'ae16':1.5,
-                'ae33':6,
-                'ma300':6,
-                'caps':3,
-                'ucb':1.5
+                'abcd':10,
+                'ae16':6.5,
+                'ae33':11,
+                'ma300':11,
+                'caps':8,
+                'ucb':6.5
             },
             'sba5':{
-                'abcd':1.5,
-                'ae16':3,
-                'ae33':3,
-                'ma300':3,
-                'caps':1,
-                'ucb':3
+                'abcd':6.5,
+                'ae16':8,
+                'ae33':8,
+                'ma300':8,
+                'caps':6,
+                'ucb':8
             },
             'vco2':{
-                'abcd':3,
-                'ae16':6,
-                'ae33':3,
-                'ma300':3,
-                'caps':4.5,
-                'ucb':6
+                'abcd':8,
+                'ae16':11,
+                'ae33':8,
+                'ma300':8,
+                'caps':9.5,
+                'ucb':11
             },
 
         }
 
         self.end_window = {
             'li820':{
-                'abcd':5,
-                'ae16':5,
-                'ae33':9.5,
-                'ma300':9.5,
-                'caps':2.5,
-                'ucb':1
+                'abcd':10,
+                'ae16':10,
+                'ae33':14.5,
+                'ma300':14.5,
+                'caps':7.5,
+                'ucb':8
 
             },
             'li7000':{
-                'abcd':6,
-                'ae16':6,
-                'ae33':10,
-                'ma300':10,
-                'caps':3,
-                'ucb':2
+                'abcd':11,
+                'ae16':11,
+                'ae33':15,
+                'ma300':15,
+                'caps':8,
+                'ucb':7
             },
             'sba5':{
-                'abcd':2,
-                'ae16':1.5,
-                'ae33':4.5,
-                'ma300':4.5,
-                'caps':2.5,
-                'ucb':4
+                'abcd':7,
+                'ae16':6.5,
+                'ae33':9.5,
+                'ma300':9.5,
+                'caps':7.5,
+                'ucb':9
             },
             'vco2':{
-                'abcd':2,
-                'ae16':2,
-                'ae33':4,
-                'ma300':4,
-                'caps':3,
-                'ucb':5
+                'abcd':7,
+                'ae16':7,
+                'ae33':9,
+                'ma300':9,
+                'caps':8,
+                'ucb':10
             },
 
         }
