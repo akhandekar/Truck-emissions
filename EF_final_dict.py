@@ -425,11 +425,13 @@ class BC_Sensor:
                     print("Area is: " +str(area))
 
                     print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                    print(self.ynp)
+                    print(self.ynp[:-5])
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
+
+                    print("run_avg is: " + str(run_avg) + " for " +self.sensor_name)
                     #print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     # Send all peak centers to influx
                     """
@@ -637,11 +639,14 @@ class CO2_Sensor:
                     print("Area is: " +str(area))
 
                     print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                    print(self.ynp)
+                    print(self.ynp[:-5])
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
+
+                    print("run_avg is: " + str(run_avg) + " for " +self.sensor_name)
+                    print("threshold is: " + str(run_avg) + " for " +self.thresh_co2)
 
                     self.peak_end = self.polution_times[-1]
                     del self.yp[:]
@@ -816,7 +821,7 @@ class NOX_Sensor:
                 print("Area is: " +str(area))
 
                 print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                print(self.ynp)
+                print(self.ynp[:-5])
                 print("Area is: " +str(area))
 
                 print("time array for " + self.sensor_name)
