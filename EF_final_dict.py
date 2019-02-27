@@ -575,7 +575,7 @@ class CO2_Sensor:
             self.ys.append(co2_value)
 
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
-            dif = abs(run_avg - co2_value)
+            #dif = abs(run_avg - co2_value)
             self.thresh_co2 = 1.07* run_avg
             self.ym.append(run_avg)
 
@@ -583,7 +583,7 @@ class CO2_Sensor:
             self.ys.append(co2_value)
 
 
-            if dif < self.thresh_co2:
+            if co2_value < self.thresh_co2:
                 # No event
                 if self.polluting == True:
                     # Just stopped polluting
@@ -593,6 +593,7 @@ class CO2_Sensor:
                     base_line_y = [run_avg for s in range(len(self.yp))]
                     base_area = np.trapz(base_line_y, self.polution_times)
                     peak_area = area - base_area
+
                     """
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
