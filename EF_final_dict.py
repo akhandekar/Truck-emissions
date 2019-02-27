@@ -992,13 +992,13 @@ class LI7000_Instrument(CO2_Sensor):
             values_li7000 = ser.split('\n')[0].split('\t')
             print("The values for li700 are:")
             print(values_li7000)
-            co2_values.insert(0,float(values_li7000[3])) # CO2 value
+            co2_values.insert(0,float(values_li7000[7])) # CO2 value
             co2_values.insert(1,time_now)
-            co2_values.insert(2,float(values_li7000[6])) # Temp
-            co2_values.insert(3,float(values_li7000[5])) # Pressure
+            co2_values.insert(2,float(values_li7000[19])) # Temp
+            co2_values.insert(3,float(values_li7000[16])) # Pressure
             # Save most recent temperature and pressure from Li7000 instrument
-            self.all_peaks.current_li7000_temp = float(values_li7000[6])
-            self.all_peaks.current_li7000_pressure = float(values_li7000[5])
+            self.all_peaks.current_li7000_temp = float(values_li7000[19])
+            self.all_peaks.current_li7000_pressure = float(values_li7000[16])
             #print(co2_values)
         except (ValueError,IndexError) as e:
             print("li7000 index failure")
