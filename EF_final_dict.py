@@ -173,6 +173,11 @@ class Peak_Container:
     #
     def bc_peak_match(self,single_co2_peak,bc_device,co2_device):
             #print("The co2 timestamp start is " + co2_device + "is" + str(single_co2_peak.start_time))
+            # Check to see if current time is passed the max end window for the co2 peak currently being analyzed
+            # Check to see if it has matched with any BC devices, if it has any matches do not overwrite those
+            # Emission factors
+
+
             for y in range(len(self.bc_peaks[bc_device])):
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
                 end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
@@ -181,7 +186,7 @@ class Peak_Container:
                     'fields': {
                         'start_difference': float(difference/1000000000),
                         'end_difference': float(end_difference/1000000000),
-                        'co2co2_peak_time': single_co2_peak.start_time
+                        'co2_peak_time': single_co2_peak.start_time
                         },
                     'time': int(time.time()*1000000000),
                     'tags': {
@@ -400,13 +405,14 @@ class BC_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
-                    area = np.trapz(self.yp, dx=1)
+
+                    area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
-                    base_area = np.trapz(base_line_y, dx=1)
+                    base_area = np.trapz(base_line_y, self.polution_times)
                     peak_area = area - base_area
 
-                    yp_nd_array = np.asarray(self.yp)
-                    peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+                    #yp_nd_array = np.asarray(self.yp)
+                    #peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
                     # Print diagnostic info for peak center function
                     """
@@ -423,6 +429,7 @@ class BC_Sensor:
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     """
                     # Send all peak centers to influx
+                    """
                     for x in peak_indexes:
                         time_sum = self.polution_times[x]
                         json_center =   {
@@ -441,6 +448,7 @@ class BC_Sensor:
                         print("Time is " + str(self.polution_times[x]))
                         print("concentration is " + str(yp_nd_array[x]))
                         self.influx_client.write_json(json_center)
+                    """
 
 
                     self.peak_end = self.polution_times[-1]
@@ -490,7 +498,7 @@ class BC_Sensor:
                     # Record starting timestamp
                 self.polluting = True
                 self.yp.append(bc_value)
-                self.polution_times.append(time_stamp)
+                self.polution_times.append(float(time_stamp)/float(1000000000))
 
 class CO2_Sensor:
     def __init__(self,sensor_name,all_peaks,influx_client):
@@ -576,13 +584,14 @@ class CO2_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
-                    area = np.trapz(self.yp, dx=1)
+                    area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
-                    base_area = np.trapz(base_line_y, dx=1)
+                    base_area = np.trapz(base_line_y, self.polution_times)
                     peak_area = area - base_area
-
+                    """
                     yp_nd_array = np.asarray(self.yp)
                     peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+                    """
 
                     # Print diagnostic information for peak centers
                     """
@@ -600,6 +609,7 @@ class CO2_Sensor:
                     """
 
                     # Send all peak centers to influx
+                    """
                     for x in peak_indexes:
                         time_sum = self.polution_times[x]
                         json_center =   {
@@ -617,7 +627,7 @@ class CO2_Sensor:
                         print("Time is " + str(self.polution_times[x]))
                         print("concentration is " + str(yp_nd_array[x]))
                         self.influx_client.write_json(json_center)
-
+                    """
                     self.peak_end = self.polution_times[-1]
                     del self.yp[:]
                     del self.polution_times[:]
@@ -667,7 +677,7 @@ class CO2_Sensor:
 
                 self.polluting = True
                 self.yp.append(co2_value)
-                self.polution_times.append(time_stamp)
+                self.polution_times.append(float(time_stamp)/float(1000000000))
 
 class NOX_Sensor:
     def __init__(self,sensor_name,all_peaks,influx_client):
@@ -742,13 +752,14 @@ class NOX_Sensor:
                 # Just stopped polluting
                 # Caclulate the statistics
                 # Record ending timestamp
-                area = np.trapz(self.yp, dx=1)
+                area = np.trapz(self.yp, self.polution_times)
                 base_line_y = [run_avg for s in range(len(self.yp))]
-                base_area = np.trapz(base_line_y, dx=1)
+                base_area = np.trapz(base_line_y, self.polution_times)
                 peak_area = area - base_area
-
+                """
                 yp_nd_array = np.asarray(self.yp)
                 peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
+                """
 
                 """
                 print("Ndarray for " + self.sensor_name)
@@ -765,6 +776,7 @@ class NOX_Sensor:
                 """
 
                 # Send all peak centers to influx
+                """
                 for x in peak_indexes:
                     time_sum = self.polution_times[x]
                     json_center =   {
@@ -782,7 +794,7 @@ class NOX_Sensor:
                     print("Time is " + str(self.polution_times[x]))
                     print("concentration is " + str(yp_nd_array[x]))
                     self.influx_client.write_json(json_center)
-
+                """
 
 
                 self.peak_end = self.polution_times[-1]
@@ -828,7 +840,7 @@ class NOX_Sensor:
 
             self.polluting = True
             self.yp.append(nox_value)
-            self.polution_times.append(time_stamp)
+            self.polution_times.append(float(time_stamp)/float(1000000000))
 
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
