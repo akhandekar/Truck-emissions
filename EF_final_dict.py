@@ -483,8 +483,8 @@ class BC_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
-                    self.influx_client.write_json(json_start)
-                    self.influx_client.write_json(json_end)
+                    #self.influx_client.write_json(json_start)
+                    #self.influx_client.write_json(json_end)
 
                 # Not poluting currently or during last read
                 self.polluting = False
@@ -660,8 +660,8 @@ class CO2_Sensor:
                             },
                         'measurement': 'peak_event'
                         }
-                    self.influx_client.write_json(json_start)
-                    self.influx_client.write_json(json_end)
+                    #self.influx_client.write_json(json_start)
+                    #self.influx_client.write_json(json_end)
 
                 # Not currently polluting and not polluting during previous read
                 self.polluting = False
@@ -826,8 +826,8 @@ class NOX_Sensor:
                         },
                     'measurement': 'peak_event'
                     }
-                self.influx_client.write_json(json_start)
-                self.influx_client.write_json(json_end)
+                #self.influx_client.write_json(json_start)
+                #self.influx_client.write_json(json_end)
 
             # Not currently polluting and not polluting during previous read
             self.polluting = False
