@@ -407,8 +407,10 @@ class BC_Sensor:
                     # Record ending timestamp
 
                     self.polution_times.insert(0, self.first_time)
+                    self.yp.insert(0, run_avg)
                     last_time = float(time_stamp) / float(1000000000)
                     self.polution_times.append(last_time)
+                    self.yp.append(run_avg)
 
                     area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
@@ -597,8 +599,10 @@ class CO2_Sensor:
                     # Caclulate the statistics
                     # Record ending timestamp
                     self.polution_times.insert(0, self.first_time)
+                    self.yp.insert(0, run_avg)
                     last_time = float(time_stamp) / float(1000000000)
                     self.polution_times.append(last_time)
+                    self.yp.append(run_avg)
 
                     area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
@@ -788,8 +792,10 @@ class NOX_Sensor:
                 # Record ending timestamp
 
                 self.polution_times.insert(0, self.first_time)
+                self.yp.insert(0, run_avg)
                 last_time = float(time_stamp) / float(1000000000)
                 self.polution_times.append(last_time)
+                self.yp.append(run_avg)
 
                 area = np.trapz(self.yp, self.polution_times)
                 base_line_y = [run_avg for s in range(len(self.yp))]
