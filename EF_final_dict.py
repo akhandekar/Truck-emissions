@@ -418,7 +418,7 @@ class BC_Sensor:
 
                     #print("Ndarray for " + self.sensor_name)
                     #print(yp_nd_array)
-                    print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+                    #print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     print("Polluting y values for " + self.sensor_name + "is: ")
                     print(self.yp)
@@ -426,7 +426,7 @@ class BC_Sensor:
 
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
-                    print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
+                    #print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
                     # Send all peak centers to influx
                     """
                     for x in peak_indexes:
