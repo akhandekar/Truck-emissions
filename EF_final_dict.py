@@ -416,8 +416,8 @@ class BC_Sensor:
 
                     # Print diagnostic info for peak center function
 
-                    print("Ndarray for " + self.sensor_name)
-                    print(yp_nd_array)
+                    #print("Ndarray for " + self.sensor_name)
+                    #print(yp_nd_array)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
 
                     print("Polluting y values for " + self.sensor_name + "is: ")
