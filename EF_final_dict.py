@@ -639,7 +639,7 @@ class CO2_Sensor:
                     print("Area is: " +str(area))
 
                     print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                    print(self.ynp[:-5])
+                    print(self.ynp[-5:])
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
