@@ -357,7 +357,7 @@ class BC_Sensor:
         self.influx_client = influx_client
         self.all_peaks = all_peaks
         self.bc_peaks = self.all_peaks.bc_peaks[self.sensor_name]
-
+        self.first_time = 0.0
 
     def push_values(self,bc_measurement):
             try:
@@ -405,6 +405,12 @@ class BC_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
+
+
+
+                    self.polution_times.insert(0, self.first_time)
+                    last_time = float(time_stamp) / float(1000000000)
+                    self.polution_times.append(last_time)
 
                     area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
@@ -494,6 +500,7 @@ class BC_Sensor:
                 # Not poluting currently or during last read
                 self.polluting = False
                 self.ynp.append(bc_value)
+                self.first_time = float(time_stamp) / float(1000000000)
             else:
                 # Pollution event
                 if self.polluting == False:
@@ -538,6 +545,7 @@ class CO2_Sensor:
         self.peak_start = 0
         self.peak_end = 0
         self.polution_times = []
+        self.first_time = 0
 
         self.all_peaks = all_peaks
         self.co2_peaks = self.all_peaks.co2_peaks[self.sensor_name]
@@ -589,6 +597,10 @@ class CO2_Sensor:
                     # Just stopped polluting
                     # Caclulate the statistics
                     # Record ending timestamp
+                    self.polution_times.insert(0, self.first_time)
+                    last_time = float(time_stamp) / float(1000000000)
+                    self.polution_times.append(last_time)
+
                     area = np.trapz(self.yp, self.polution_times)
                     base_line_y = [run_avg for s in range(len(self.yp))]
                     base_area = np.trapz(base_line_y, self.polution_times)
@@ -687,6 +699,7 @@ class CO2_Sensor:
                 # Not currently polluting and not polluting during previous read
                 self.polluting = False
                 self.ynp.append(co2_value)
+                self.first_time = float(time_stamp) / float(1000000000)
 
             else:
                 # Pollution event
@@ -736,6 +749,7 @@ class NOX_Sensor:
         self.nox_peaks = self.all_peaks.nox_peaks[self.sensor_name]
 
         self.polution_times = []
+        self.first_time = 0.0
 
     def push_values(self,nox_measurement):
             try:
@@ -773,6 +787,11 @@ class NOX_Sensor:
                 # Just stopped polluting
                 # Caclulate the statistics
                 # Record ending timestamp
+
+                self.polution_times.insert(0, self.first_time)
+                last_time = float(time_stamp) / float(1000000000)
+                self.polution_times.append(last_time)
+
                 area = np.trapz(self.yp, self.polution_times)
                 base_line_y = [run_avg for s in range(len(self.yp))]
                 base_area = np.trapz(base_line_y, self.polution_times)
@@ -865,6 +884,7 @@ class NOX_Sensor:
             # Not currently polluting and not polluting during previous read
             self.polluting = False
             self.ynp.append(nox_value)
+            self.first_time = float(time_stamp) / float(1000000000)
 
         else:
             # Pollution event
