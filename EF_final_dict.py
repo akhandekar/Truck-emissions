@@ -1176,44 +1176,44 @@ def main():
     all_peaks=Peak_Container(influx_client)
 
     # Create all bc sensor objects
-    abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
+    #abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ae16_sensor = AE16_Instrument(all_peaks,influx_client)
     ae33_sensor = AE33_Instrument(all_peaks,influx_client)
-    ma300_sensor = MA300_Instrument(all_peaks,influx_client)
+    #ma300_sensor = MA300_Instrument(all_peaks,influx_client)
     # Create all co2 sensor objects
     li820_sensor = LI820_Instrument(all_peaks,influx_client)
     li7000_sensor = LI7000_Instrument(all_peaks,influx_client)
-    sba5_sensor = SBA5_Instrument(all_peaks,influx_client)
-    vco2_sensor = VCO2_Instrument(all_peaks,influx_client)
+    #sba5_sensor = SBA5_Instrument(all_peaks,influx_client)
+    #vco2_sensor = VCO2_Instrument(all_peaks,influx_client)
     # Create all nox sensor objects
-    caps_sensor = CAPS_Instrument(all_peaks,influx_client)
+    #caps_sensor = CAPS_Instrument(all_peaks,influx_client)
     ucb_sensor = UCB_Instrument(all_peaks,influx_client)
 
     # Create threads for each sensor
-    bc_abcd_thread=Sensor_Thread(abcd_sensor)
+    #bc_abcd_thread=Sensor_Thread(abcd_sensor)
     bc_ae16_thread=Sensor_Thread(ae16_sensor)
     bc_ae33_thread=Sensor_Thread(ae33_sensor)
-    bc_ma300_thread=Sensor_Thread(ma300_sensor)
+    #bc_ma300_thread=Sensor_Thread(ma300_sensor)
     co2_li820_thread=Sensor_Thread(li820_sensor)
     co2_li7000_thread=Sensor_Thread(li7000_sensor)
-    co2_sba5_thread=Sensor_Thread(sba5_sensor)
-    co2_vco2_thread=Sensor_Thread(vco2_sensor)
-    nox_caps_thread=Sensor_Thread(caps_sensor)
+    #co2_sba5_thread=Sensor_Thread(sba5_sensor)
+    #co2_vco2_thread=Sensor_Thread(vco2_sensor)
+    #nox_caps_thread=Sensor_Thread(caps_sensor)
     nox_ucb_thread=Sensor_Thread(ucb_sensor)
 
     # Create peak thread
     ef_thread=EF_Thread(all_peaks)
 
     # Start all threads
-    bc_abcd_thread.start()
+    #bc_abcd_thread.start()
     bc_ae16_thread.start()
     bc_ae33_thread.start()
-    bc_ma300_thread.start()
+    #bc_ma300_thread.start()
     co2_li820_thread.start()
     co2_li7000_thread.start()
-    co2_sba5_thread.start()
-    co2_vco2_thread.start()
-    nox_caps_thread.start()
+    #co2_sba5_thread.start()
+    #co2_vco2_thread.start()
+    #nox_caps_thread.start()
     nox_ucb_thread.start()
     ef_thread.start()
 
