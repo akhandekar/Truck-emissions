@@ -424,6 +424,10 @@ class BC_Sensor:
                     print(self.yp)
                     print("Area is: " +str(area))
 
+                    print("Non-Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.ynp)
+                    print("Area is: " +str(area))
+
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
                     #print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
@@ -627,6 +631,18 @@ class CO2_Sensor:
                         print("concentration is " + str(yp_nd_array[x]))
                         self.influx_client.write_json(json_center)
                     """
+
+                    print("Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.yp)
+                    print("Area is: " +str(area))
+
+                    print("Non-Polluting y values for " + self.sensor_name + "is: ")
+                    print(self.ynp)
+                    print("Area is: " +str(area))
+
+                    print("time array for " + self.sensor_name)
+                    print(self.polution_times)
+
                     self.peak_end = self.polution_times[-1]
                     del self.yp[:]
                     del self.polution_times[:]
@@ -794,6 +810,18 @@ class NOX_Sensor:
                     print("concentration is " + str(yp_nd_array[x]))
                     self.influx_client.write_json(json_center)
                 """
+
+                print("Polluting y values for " + self.sensor_name + "is: ")
+                print(self.yp)
+                print("Area is: " +str(area))
+
+                print("Non-Polluting y values for " + self.sensor_name + "is: ")
+                print(self.ynp)
+                print("Area is: " +str(area))
+
+                print("time array for " + self.sensor_name)
+                print(self.polution_times)
+
 
 
                 self.peak_end = self.polution_times[-1]
