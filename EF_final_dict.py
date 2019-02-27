@@ -425,7 +425,7 @@ class BC_Sensor:
                     print("Area is: " +str(area))
 
                     print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                    print(self.ynp[:-5])
+                    print(self.ynp[-5:])
                     print("Area is: " +str(area))
 
                     print("time array for " + self.sensor_name)
@@ -576,7 +576,7 @@ class CO2_Sensor:
 
             run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
             dif = abs(run_avg - co2_value)
-            self.thresh = 1.07* run_avg
+            self.thresh_co2 = 1.07* run_avg
             self.ym.append(run_avg)
 
             #self.xs.append(time_str8)
@@ -821,7 +821,7 @@ class NOX_Sensor:
                 print("Area is: " +str(area))
 
                 print("Non-Polluting y values for " + self.sensor_name + "is: ")
-                print(self.ynp[:-5])
+                print(self.ynp[-5:])
                 print("Area is: " +str(area))
 
                 print("time array for " + self.sensor_name)
