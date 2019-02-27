@@ -201,7 +201,7 @@ class Peak_Container:
                         #print("We have a match at EF with " + bc_device + " and " + co2_device)
                         #print(self.bc_peaks[bc_device][y].area)
                         #print(single_co2_peak.area)
-                        EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * (single_co2_peak.temp / single_co2_peak.pressure)
+                        EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * ((single_co2_peak.temp + 273) / single_co2_peak.pressure)
                         json =   {
                             'fields': {
                                 'EF': EF,
@@ -415,7 +415,7 @@ class BC_Sensor:
                     #peak_indexes = peakutils.peak.indexes(yp_nd_array, thres=.1)
 
                     # Print diagnostic info for peak center function
-                    """
+
                     print("Ndarray for " + self.sensor_name)
                     print(yp_nd_array)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
@@ -427,7 +427,6 @@ class BC_Sensor:
                     print("time array for " + self.sensor_name)
                     print(self.polution_times)
                     print("Peak amount for "+ self.sensor_name + "is: " +str(peak_indexes.size))
-                    """
                     # Send all peak centers to influx
                     """
                     for x in peak_indexes:
