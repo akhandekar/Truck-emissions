@@ -726,7 +726,7 @@ class CO2_Sensor:
                     print("run_avg is: " + str(run_avg) + " for " +self.sensor_name)
                     print("threshold is: " + str(run_avg) + " for " + str(self.thresh_co2))
 
-                    self.peak_end = self.polution_times[-1]
+                    self.peak_end = int(self.polution_times[-1] * 1000000000)
                     del self.yp[:]
                     del self.polution_times[:]
 
