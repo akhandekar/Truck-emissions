@@ -315,6 +315,7 @@ class Peak_Container:
                                 },
                             'measurement': 'emission_factor'
                             }
+                        self.influx_client.write_json(json)
             else:
                 self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
                 self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
