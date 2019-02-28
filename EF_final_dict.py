@@ -1323,6 +1323,8 @@ def main():
     # Create all nox sensor objects
     #caps_sensor = CAPS_Instrument(all_peaks,influx_client)
     ucb_sensor = UCB_Instrument(all_peaks,influx_client)
+    caps_sensor = CAPS_Instrument(all_peaks,influx_client)
+
     vco2_sensor = VCO2_Instrument(all_peaks,influx_client)
 
     # Create threads for each sensor
@@ -1338,7 +1340,7 @@ def main():
     #nox_caps_thread=Sensor_Thread(caps_sensor)
     co2_vco2_thread=Sensor_Thread(vco2_sensor)
     nox_ucb_thread=Sensor_Thread(ucb_sensor)
-
+    nox_caps_thread=Sensor_Thread(caps_sensor)
     # Create peak thread
     ef_thread=EF_Thread(all_peaks)
 
@@ -1354,6 +1356,7 @@ def main():
     #co2_vco2_thread.start()
     #nox_caps_thread.start()
     nox_ucb_thread.start()
+    nox_caps_thread.start()
     co2_vco2_thread.start()
     ef_thread.start()
 
