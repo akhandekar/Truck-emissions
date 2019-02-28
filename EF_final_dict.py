@@ -190,6 +190,10 @@ class Peak_Container:
 
 
             for y in range(len(self.bc_peaks[bc_device])):
+                print("co2 start time is "+ str(single_co2_peak.start_time))
+                print("co2 end time is "+ str(single_co2_peak.end_time))
+                print("bc start time is "+ str(self.bc_peaks[bc_device][y].start_time))
+                print("bc end time is "+ str(self.bc_peaks[bc_device][y].end_time))
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
                 end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
                 print("Area for sensor " + bc_device + " is " + str(self.bc_peaks[bc_device][y].area))
