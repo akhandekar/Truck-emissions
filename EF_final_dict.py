@@ -308,7 +308,7 @@ class Peak_Container:
                                 'co2_temp': self.co2_peaks[co2_device][x].temp,
                                 'co2_pressure': self.co2_peaks[co2_device][x].pressure
                                 },
-                            'time': self.co2_peaks[co2_device][x].end_time,
+                            'time': int(self.co2_peaks[co2_device][x].end_time),
                             'tags': {
                                 'co2_device': co2_device,
                                 'bc_device': device
