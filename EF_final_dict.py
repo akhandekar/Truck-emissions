@@ -303,7 +303,7 @@ class Peak_Container:
                         print(device)
                         json =   {
                             'fields': {
-                                'EF': 0,
+                                'EF': 0.0,
                                 'co2_area': self.co2_peaks[co2_device][x].area,
                                 'co2_temp': self.co2_peaks[co2_device][x].temp,
                                 'co2_pressure': self.co2_peaks[co2_device][x].pressure
@@ -334,8 +334,7 @@ class Peak_Container:
                         print(device)
                         json =   {
                             'fields': {
-                                'EF': 0,
-                                'nox_area': 0,
+                                'EF': 0.0,
                                 'co2_area': self.co2_peaks[co2_device][x].area,
                                 'co2_temp': self.co2_peaks[co2_device][x].temp,
                                 'co2_pressure': self.co2_peaks[co2_device][x].pressure
