@@ -213,8 +213,8 @@ class Peak_Container:
                     'measurement': 'window'
                     }
                 self.influx_client.write_json(json)
-                print(difference)
-                print(end_difference)
+                #print(difference)
+                #print(end_difference)
                 if (abs(difference) <= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) <= self.end_window[co2_device][bc_device]*1000000000):
                         #print("We have a match at EF with " + bc_device + " and " + co2_device)
@@ -311,7 +311,7 @@ class Peak_Container:
             if (time_now > (self.co2_peaks[co2_device][x].end_time + 30*1000000000)):
                 for device,value in self.co2_peaks[co2_device][x].device_bc.items():
                     if (value == False):
-                        print(device)
+                        #print(device)
                         json =   {
                             'fields': {
                                 'EF': 0.0,
@@ -340,12 +340,12 @@ class Peak_Container:
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
             if (time_now > (self.co2_peaks[co2_device][x].end_time + 30*1000000000)):
-                print("time now is " + str(time_now))
-                print("co2 end time is " + str(self.co2_peaks[co2_device][x].end_time))
+                #print("time now is " + str(time_now))
+                #print("co2 end time is " + str(self.co2_peaks[co2_device][x].end_time))
                 for device,value in self.co2_peaks[co2_device][x].device_nox.items():
                     if (value == False):
                         # Must be clean truck or disconnected
-                        print(device)
+                        #print(device)
                         json =   {
                             'fields': {
                                 'EF': 0.0,
