@@ -216,6 +216,7 @@ class Peak_Container:
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * ((single_co2_peak.temp + 273) / single_co2_peak.pressure)
                         single_co2_peak.device_bc[bc_device] = True
                         print(single_co2_peak.device_bc)
+                        print("The EF is " + str(EF))
                         json =   {
                             'fields': {
                                 'EF': EF,
