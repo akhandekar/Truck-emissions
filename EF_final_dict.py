@@ -536,7 +536,7 @@ class BC_Sensor:
                     """
 
 
-                    self.peak_end = self.polution_times[-1]
+                    self.peak_end = int(self.polution_times[-1] * 1000000000)
                     del self.yp[:]
                     del self.polution_times[:]
 
@@ -927,7 +927,7 @@ class NOX_Sensor:
 
 
 
-                self.peak_end = self.polution_times[-1]
+                self.peak_end = int(self.polution_times[-1] * 1000000000)
                 del self.yp[:]
                 del self.polution_times[:]
 
