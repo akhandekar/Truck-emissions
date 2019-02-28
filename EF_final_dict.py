@@ -297,8 +297,8 @@ class Peak_Container:
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
-            if (time_now > self.co2_peaks[co2_device][x].end_time + 20):
-                for device,value in self.co2_peaks[co2_device][x].device_nox.items():
+            if (time_now > self.co2_peaks[co2_device][x].end_time + 30):
+                for device,value in self.co2_peaks[co2_device][x].device_bc.items():
                     if (value == False):
                         print(device)
                         json =   {
@@ -308,7 +308,7 @@ class Peak_Container:
                                 'co2_temp': self.co2_peaks[co2_device][x].temp,
                                 'co2_pressure': self.co2_peaks[co2_device][x].pressure
                                 },
-                            'time': int(self.co2_peaks[co2_device][x].end_time),
+                            'time': self.co2_peaks[co2_device][x].start_time,
                             'tags': {
                                 'co2_device': co2_device,
                                 'bc_device': device
@@ -327,7 +327,7 @@ class Peak_Container:
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
-            if (time_now > self.co2_peaks[co2_device][x].end_time + 20):
+            if (time_now > self.co2_peaks[co2_device][x].end_time + 30):
                 for device,value in self.co2_peaks[co2_device][x].device_nox.items():
                     if (value == False):
                         # Must be clean truck or disconnected
