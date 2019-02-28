@@ -212,6 +212,7 @@ class Peak_Container:
                         #print("We have a match at EF with " + bc_device + " and " + co2_device)
                         #print(self.bc_peaks[bc_device][y].area)
                         #print(single_co2_peak.area)
+                        print("Are we getting a match in bc?")
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * ((single_co2_peak.temp + 273) / single_co2_peak.pressure)
                         single_co2_peak.device_bc[bc_device] = True
                         print(single_co2_peak.device_bc)
@@ -274,6 +275,7 @@ class Peak_Container:
             if (abs(difference) <= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) <= self.end_window[co2_device][nox_device]*1000000000):
                     #print("We have a match at EF with " + nox_device + " and " + co2_device)
+                    print("Are we getting a match in bc?")
                     single_co2_peak.device_nox[nox_device] = True
                     #print(single_co2_peak.device_nox)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
