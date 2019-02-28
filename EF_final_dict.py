@@ -975,6 +975,7 @@ class NOX_Sensor:
             self.yp.append(nox_value)
             self.polution_times.append(float(time_stamp)/float(1000000000))
 
+
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
@@ -1312,7 +1313,7 @@ def main():
     #abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ae16_sensor = AE16_Instrument(all_peaks,influx_client)
     ae33_sensor = AE33_Instrument(all_peaks,influx_client)
-    abcd_sensor = ABCD_instrument(all_peaks,influx_client)
+    abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ma300_sensor = MA300_Instrument(all_peaks,influx_client)
     # Create all co2 sensor objects
     li820_sensor = LI820_Instrument(all_peaks,influx_client)
