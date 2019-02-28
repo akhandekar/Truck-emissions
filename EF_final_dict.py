@@ -40,11 +40,13 @@ class Peak_Event:
         self.start_time = start_time
         self.end_time = end_time
 
-        self.device_match = {
+        self.device_bc = {
             'ae16': False,
             'ae33': False,
             'abcd': False,
-            'ma300': False,
+            'ma300': False
+        }
+        self.device_nox = {
             'ucb': False,
             'caps': False
         }
@@ -211,8 +213,8 @@ class Peak_Container:
                         #print(self.bc_peaks[bc_device][y].area)
                         #print(single_co2_peak.area)
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * ((single_co2_peak.temp + 273) / single_co2_peak.pressure)
-                        single_co2_peak.device_match[bc_device] = True
-                        print(single_co2_peak.device_match)
+                        single_co2_peak.device_bc[bc_device] = True
+                        print(single_co2_peak.device_bc)
                         json =   {
                             'fields': {
                                 'EF': EF,
@@ -272,6 +274,8 @@ class Peak_Container:
             if (abs(difference) <= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) <= self.end_window[co2_device][nox_device]*1000000000):
                     #print("We have a match at EF with " + nox_device + " and " + co2_device)
+                    single_co2_peak.device_nox[nox_device] = True
+                    #print(single_co2_peak.device_nox)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
                     json =   {
                         'fields': {
@@ -294,13 +298,28 @@ class Peak_Container:
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
             if (time_now > self.co2_peaks[co2_device][x].end_time + 20*1000000000):
-                for device,value in self.co2_peaks[co2_device][x].device_match.items():
+                for device,value in self.co2_peaks[co2_device][x].device_nox.items():
                     if (value == False):
                         print(device)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
-            self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device)
+                        json =   {
+                            'fields': {
+                                'EF': 0,
+                                'co2_area': single_co2_peak.area,
+                                'co2_temp': single_co2_peak.temp,
+                                'co2_pressure': single_co2_peak.pressure
+                                },
+                            'time': single_co2_peak.start_time,
+                            'tags': {
+                                'co2_device': co2_device,
+                                'bc_device': device
+                                },
+                            'measurement': 'emission_factor'
+                            }
+            else:
+                self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
+                self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
+                self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
+                self.bc_peak_match(self.co2_peaks[co2_device][x],'ma300',co2_device)
 
     def EF_calc_nox(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
@@ -308,11 +327,29 @@ class Peak_Container:
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
             if (time_now > self.co2_peaks[co2_device][x].end_time + 20*1000000000):
-                for device,value in self.co2_peaks[co2_device][x].device_match.items():
+                for device,value in self.co2_peaks[co2_device][x].device_nox.items():
                     if (value == False):
+                        # Must be clean truck or disconnected
                         print(device)
-            self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device)
-            self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device)
+                        json =   {
+                            'fields': {
+                                'EF': 0,
+                                'nox_area': 0,
+                                'co2_area': single_co2_peak.area,
+                                'co2_temp': single_co2_peak.temp,
+                                'co2_pressure': single_co2_peak.pressure
+                                },
+                            'time': single_co2_peak.start_time,
+                            'tags': {
+                                'co2_device': co2_device,
+                                'nox_device': device
+                                },
+                            'measurement': 'emission_factor'
+                            }
+                        self.influx_client.write_json(json)
+            else:
+                self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device)
+                self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device)
 
     def EF_calc_all(self):
         print("Entered into EF_calc_all")
