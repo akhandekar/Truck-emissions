@@ -1312,6 +1312,7 @@ def main():
     #abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ae16_sensor = AE16_Instrument(all_peaks,influx_client)
     ae33_sensor = AE33_Instrument(all_peaks,influx_client)
+    abcd_sensor = ABCD_instrument(all_peaks,influx_client)
     ma300_sensor = MA300_Instrument(all_peaks,influx_client)
     # Create all co2 sensor objects
     li820_sensor = LI820_Instrument(all_peaks,influx_client)
@@ -1326,6 +1327,7 @@ def main():
     #bc_abcd_thread=Sensor_Thread(abcd_sensor)
     bc_ae16_thread=Sensor_Thread(ae16_sensor)
     bc_ae33_thread=Sensor_Thread(ae33_sensor)
+    bc_abcd_thread=Sensor_Thread(abcd_sensor)
     bc_ma300_thread=Sensor_Thread(ma300_sensor)
     co2_li820_thread=Sensor_Thread(li820_sensor)
     co2_li7000_thread=Sensor_Thread(li7000_sensor)
@@ -1341,6 +1343,7 @@ def main():
     #bc_abcd_thread.start()
     bc_ae16_thread.start()
     bc_ae33_thread.start()
+    bc_abcd_thread.start()
     bc_ma300_thread.start()
     co2_li820_thread.start()
     co2_li7000_thread.start()
