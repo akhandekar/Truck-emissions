@@ -291,7 +291,12 @@ class Peak_Container:
     def EF_calc_bc(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
+        time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
+            if (time_now > self.co2_peaks[co2_device][x].end_time + 20*1000000000):
+                for device,value in self.co2_peaks[co2_device][x].device_match.items():
+                    if (value == False):
+                        print(device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
             self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
@@ -300,7 +305,12 @@ class Peak_Container:
     def EF_calc_nox(self,co2_device):
         co2_peak_amt = self.co2_peaks_amt[co2_device]
         #print("The amount of co2 peaks for " + co2_device + "is" + str(co2_peak_amt))
+        time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
+            if (time_now > self.co2_peaks[co2_device][x].end_time + 20*1000000000):
+                for device,value in self.co2_peaks[co2_device][x].device_match.items():
+                    if (value == False):
+                        print(device)
             self.nox_peak_match(self.co2_peaks[co2_device][x],'caps',co2_device)
             self.nox_peak_match(self.co2_peaks[co2_device][x],'ucb',co2_device)
 
@@ -326,6 +336,8 @@ class Peak_Container:
         self.EF_calc_nox('li7000')
         self.EF_calc_nox('sba5')
         self.EF_calc_nox('vco2')
+
+
 
 # Measurement classes these are extended with instrument classes for both
 # serial and data retrieval
