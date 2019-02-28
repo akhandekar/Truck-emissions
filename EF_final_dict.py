@@ -328,6 +328,8 @@ class Peak_Container:
         time_now=int(time.time()*1000000000)
         for x in range(co2_peak_amt):
             if (time_now > self.co2_peaks[co2_device][x].end_time + 30):
+                print("time now is " + str(time_now))
+                print("co2 end time is " + str(self.co2_peaks[co2_device][x].end_time))
                 for device,value in self.co2_peaks[co2_device][x].device_nox.items():
                     if (value == False):
                         # Must be clean truck or disconnected
