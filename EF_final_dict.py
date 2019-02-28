@@ -207,6 +207,8 @@ class Peak_Container:
                     'measurement': 'window'
                     }
                 self.influx_client.write_json(json)
+                print(difference)
+                print(end_difference)
                 if (abs(difference) <= self.start_window[co2_device][bc_device]*1000000000):
                     if (abs(end_difference) <= self.end_window[co2_device][bc_device]*1000000000):
                         #print("We have a match at EF with " + bc_device + " and " + co2_device)
