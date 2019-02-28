@@ -304,11 +304,11 @@ class Peak_Container:
                         json =   {
                             'fields': {
                                 'EF': 0,
-                                'co2_area': single_co2_peak.area,
-                                'co2_temp': single_co2_peak.temp,
-                                'co2_pressure': single_co2_peak.pressure
+                                'co2_area': self.co2_peaks[co2_device][x].area,
+                                'co2_temp': self.co2_peaks[co2_device][x].temp,
+                                'co2_pressure': self.co2_peaks[co2_device][x].pressure
                                 },
-                            'time': single_co2_peak.start_time,
+                            'time': self.co2_peaks[co2_device][x].end_time,
                             'tags': {
                                 'co2_device': co2_device,
                                 'bc_device': device
@@ -336,11 +336,11 @@ class Peak_Container:
                             'fields': {
                                 'EF': 0,
                                 'nox_area': 0,
-                                'co2_area': single_co2_peak.area,
-                                'co2_temp': single_co2_peak.temp,
-                                'co2_pressure': single_co2_peak.pressure
+                                'co2_area': self.co2_peaks[co2_device][x].area,
+                                'co2_temp': self.co2_peaks[co2_device][x].temp,
+                                'co2_pressure': self.co2_peaks[co2_device][x].pressure
                                 },
-                            'time': single_co2_peak.start_time,
+                            'time': self.co2_peaks[co2_device][x].start_time,
                             'tags': {
                                 'co2_device': co2_device,
                                 'nox_device': device
