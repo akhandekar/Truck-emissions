@@ -190,13 +190,15 @@ class Peak_Container:
 
 
             for y in range(len(self.bc_peaks[bc_device])):
+                """
                 print("co2 start time is "+ str(single_co2_peak.start_time))
                 print("co2 end time is "+ str(single_co2_peak.end_time))
                 print("bc start time is "+ str(self.bc_peaks[bc_device][y].start_time))
                 print("bc end time is "+ str(self.bc_peaks[bc_device][y].end_time))
+                """
                 difference = single_co2_peak.start_time - self.bc_peaks[bc_device][y].start_time
                 end_difference = single_co2_peak.end_time - self.bc_peaks[bc_device][y].end_time
-                print("Area for sensor " + bc_device + " is " + str(self.bc_peaks[bc_device][y].area))
+                #print("Area for sensor " + bc_device + " is " + str(self.bc_peaks[bc_device][y].area))
                 json =   {
                     'fields': {
                         'start_difference': float(difference/1000000000),
@@ -262,7 +264,7 @@ class Peak_Container:
 
     def nox_peak_match(self,single_co2_peak,nox_device,co2_device):
         for y in range(len(self.nox_peaks[nox_device])):
-            print("Area for sensor " + nox_device + " is " + str(self.nox_peaks[nox_device][y].area))
+            #print("Area for sensor " + nox_device + " is " + str(self.nox_peaks[nox_device][y].area))
             difference = single_co2_peak.start_time - self.nox_peaks[nox_device][y].start_time
             end_difference = single_co2_peak.end_time - self.nox_peaks[nox_device][y].end_time
             json =   {
@@ -282,7 +284,7 @@ class Peak_Container:
             if (abs(difference) <= self.start_window[co2_device][nox_device]*1000000000):
                 if (abs(end_difference) <= self.end_window[co2_device][nox_device]*1000000000):
                     #print("We have a match at EF with " + nox_device + " and " + co2_device)
-                    print("Are we getting a match in bc?")
+                    #print("Are we getting a match in bc?")
                     single_co2_peak.device_nox[nox_device] = True
                     #print(single_co2_peak.device_nox)
                     EF = (self.nox_peaks[nox_device][y].area / single_co2_peak.area) * 3335
@@ -326,7 +328,7 @@ class Peak_Container:
                             }
                         self.influx_client.write_json(json)
             else:
-                print("Do we ever get to bc match?")
+                #print("Do we ever get to bc match?")
                 self.bc_peak_match(self.co2_peaks[co2_device][x],'abcd',co2_device)
                 self.bc_peak_match(self.co2_peaks[co2_device][x],'ae16',co2_device)
                 self.bc_peak_match(self.co2_peaks[co2_device][x],'ae33',co2_device)
@@ -1310,11 +1312,11 @@ def main():
     #abcd_sensor = ABCD_Instrument(all_peaks,influx_client)
     ae16_sensor = AE16_Instrument(all_peaks,influx_client)
     ae33_sensor = AE33_Instrument(all_peaks,influx_client)
-    #ma300_sensor = MA300_Instrument(all_peaks,influx_client)
+    ma300_sensor = MA300_Instrument(all_peaks,influx_client)
     # Create all co2 sensor objects
     li820_sensor = LI820_Instrument(all_peaks,influx_client)
     li7000_sensor = LI7000_Instrument(all_peaks,influx_client)
-    #sba5_sensor = SBA5_Instrument(all_peaks,influx_client)
+    sba5_sensor = SBA5_Instrument(all_peaks,influx_client)
     #vco2_sensor = VCO2_Instrument(all_peaks,influx_client)
     # Create all nox sensor objects
     #caps_sensor = CAPS_Instrument(all_peaks,influx_client)
@@ -1324,10 +1326,10 @@ def main():
     #bc_abcd_thread=Sensor_Thread(abcd_sensor)
     bc_ae16_thread=Sensor_Thread(ae16_sensor)
     bc_ae33_thread=Sensor_Thread(ae33_sensor)
-    #bc_ma300_thread=Sensor_Thread(ma300_sensor)
+    bc_ma300_thread=Sensor_Thread(ma300_sensor)
     co2_li820_thread=Sensor_Thread(li820_sensor)
     co2_li7000_thread=Sensor_Thread(li7000_sensor)
-    #co2_sba5_thread=Sensor_Thread(sba5_sensor)
+    co2_sba5_thread=Sensor_Thread(sba5_sensor)
     #co2_vco2_thread=Sensor_Thread(vco2_sensor)
     #nox_caps_thread=Sensor_Thread(caps_sensor)
     nox_ucb_thread=Sensor_Thread(ucb_sensor)
@@ -1339,10 +1341,10 @@ def main():
     #bc_abcd_thread.start()
     bc_ae16_thread.start()
     bc_ae33_thread.start()
-    #bc_ma300_thread.start()
+    bc_ma300_thread.start()
     co2_li820_thread.start()
     co2_li7000_thread.start()
-    #co2_sba5_thread.start()
+    co2_sba5_thread.start()
     #co2_vco2_thread.start()
     #nox_caps_thread.start()
     nox_ucb_thread.start()
