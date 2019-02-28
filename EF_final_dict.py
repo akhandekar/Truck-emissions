@@ -39,6 +39,15 @@ class Peak_Event:
         #self.time = time
         self.start_time = start_time
         self.end_time = end_time
+
+        self.device_match = {
+            'ae16': False,
+            'ae33': False,
+            'abcd': False,
+            'ma300': False,
+            'ucb': False,
+            'caps': False
+        }
         # Potentially may want to add in baseline for subtracting base rectangle
 
 class CO2_Peak_Event(Peak_Event):
@@ -202,6 +211,8 @@ class Peak_Container:
                         #print(self.bc_peaks[bc_device][y].area)
                         #print(single_co2_peak.area)
                         EF = (self.bc_peaks[bc_device][y].area / single_co2_peak.area) * 0.6028 * ((single_co2_peak.temp + 273) / single_co2_peak.pressure)
+                        single_co2_peak.device_match[bc_device] = True
+                        print(single_co2_peak.device_match)
                         json =   {
                             'fields': {
                                 'EF': EF,
@@ -780,11 +791,11 @@ class NOX_Sensor:
     def peak_area(self,nox_value,time_stamp):
         self.ys.append(nox_value)
         run_avg = sum(self.ynp[-self.avg_window:])/float(self.avg_window)
-        dif = abs(run_avg - nox_value)
+        #dif = abs(run_avg - nox_value)
         self.ym.append(run_avg)
         #self.xs.append(time_str10)
         self.ys.append(nox_value)
-        if dif < self.thresh_nox:
+        if nox_value < self.thresh_nox:
             # No event
             if self.polluting == True:
                 # Just stopped polluting
