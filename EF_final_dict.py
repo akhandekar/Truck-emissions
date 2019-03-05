@@ -9,9 +9,9 @@ import numpy as np
 import os, sys, csv, re, math
 import argparse
 import peakutils
-#testing
+
 stop_requested = False # Condition flag for keyboard interrupt
-bc_correction = 0.64 # going to place this in the config file
+bc_correction = 0.88 # going to place this in the config file
 
 def serialGeneric(device,baudrate):
     ser = serial.Serial (port=device,
@@ -394,11 +394,11 @@ class Peak_Container:
 # Measurement classes these are extended with instrument classes for both
 # serial and data retrieval
 class BC_Sensor:
-    def __init__(self,sensor_name,all_peaks,influx_client):
+    def __init__(self,sensor_name,all_peaks,influx_client,peak_size,window_size):
         self.sensor_name = sensor_name
         self.time_values = []
         self.bc_values = []
-        self.avg_window = 20
+        self.avg_window = window_size
 
         self.influx_client = influx_client
 
@@ -474,7 +474,7 @@ class BC_Sensor:
             #self.xs_ae33.append(time_str3)
             self.ys.append(bc_value)
 
-            if dif < self.thresh_bc:
+            if (dif < self.thresh_bc) or (len(self.polution_times) > self.peak_size):
                 # No event
                 if self.polluting == True:
                     # Just stopped polluting
@@ -589,11 +589,12 @@ class BC_Sensor:
                 self.polution_times.append(float(time_stamp)/float(1000000000))
 
 class CO2_Sensor:
-    def __init__(self,sensor_name,all_peaks,influx_client):
+    def __init__(self,sensor_name,all_peaks,influx_client,self.peak_size,window_size):
         self.sensor_name = sensor_name
         self.time_values = []
         self.co2_values = []
-        self.avg_window = 10
+        self.avg_window = window_size
+        self.peak_size = peak_size
 
         self.influx_client = influx_client
         self.co2_peaks = []
@@ -669,7 +670,7 @@ class CO2_Sensor:
             print("threshold is: " + str(self.thresh_co2))
 
 
-            if co2_value < self.thresh_co2:
+            if (co2_value < self.thresh_co2) or (len(self.polution_times) > self.peak_size):
                 # No event
                 if self.polluting == True:
                     # Just stopped polluting
@@ -794,15 +795,16 @@ class CO2_Sensor:
                 self.yp.append(co2_value)
                 self.polution_times.append(float(time_stamp)/float(1000000000))
 
+
 class NOX_Sensor:
-    def __init__(self,sensor_name,all_peaks,influx_client):
+    def __init__(self,sensor_name,all_peaks,influx_client,peak_size,window_size):
         self.sensor_name = sensor_name
         self.time_values = []
         self.nox_values = []
         self.nox_peaks = []
 
         self.influx_client = influx_client
-        self.avg_window = 10
+        self.avg_window = window_size
 
         # Timestamps for all data
         self.xs = []
@@ -862,7 +864,7 @@ class NOX_Sensor:
         self.ym.append(run_avg)
         #self.xs.append(time_str10)
         self.ys.append(nox_value)
-        if nox_value < self.thresh_nox:
+        if nox_value < self.thresh_nox or (len(self.polution_times) > self.peak_size):
             # No event
             if self.polluting == True:
                 # Just stopped polluting
@@ -977,12 +979,13 @@ class NOX_Sensor:
             self.polluting = True
             self.yp.append(nox_value)
             self.polution_times.append(float(time_stamp)/float(1000000000))
+            if len(self.polution_times) > 30:
 
 
 # BC instruments
 class ABCD_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'abcd',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'abcd',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_abcd",57600)  ##abcd
 
     def get_values(self):
@@ -1011,7 +1014,7 @@ class ABCD_Instrument(BC_Sensor):
 
 class AE16_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ae16',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ae16',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_ae16",9600)  ##ae16
 
     def get_values(self):
@@ -1041,7 +1044,7 @@ class AE16_Instrument(BC_Sensor):
 
 class AE33_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ae33',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ae33',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_ae33",9600)  ##ae33
 
     def get_values(self):
@@ -1067,7 +1070,7 @@ class AE33_Instrument(BC_Sensor):
 
 class MA300_Instrument(BC_Sensor):
     def __init__(self,all_peaks,influx_client):
-        BC_Sensor.__init__(self,'ma300',all_peaks,influx_client)
+        BC_Sensor.__init__(self,'ma300',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_ma300",1000000)  ##ma300
 
     def get_values(self):
@@ -1093,7 +1096,7 @@ class MA300_Instrument(BC_Sensor):
 
 class LI820_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'li820',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'li820',all_peaks,influx_client,60,20)
         self.serial=serialGeneric("/dev/ttyUSB_li820",9600)  ##li820
     def get_values(self):
         co2_values = []
@@ -1116,7 +1119,7 @@ class LI820_Instrument(CO2_Sensor):
 
 class LI7000_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'li7000',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'li7000',all_peaks,influx_client,150,50)
         self.serial=serialGeneric("/dev/ttyUSB_li7000",9600)
 
     def get_values(self):
@@ -1144,7 +1147,7 @@ class LI7000_Instrument(CO2_Sensor):
 
 class SBA5_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'sba5',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'sba5',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_sba5",19200)  ##sba5
     def get_values(self):
         co2_values = []
@@ -1171,7 +1174,7 @@ class SBA5_Instrument(CO2_Sensor):
 
 class VCO2_Instrument(CO2_Sensor):
     def __init__(self,all_peaks,influx_client):
-        CO2_Sensor.__init__(self,'vco2',all_peaks,influx_client)
+        CO2_Sensor.__init__(self,'vco2',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_vco2",19200)  ##vaisala
         self.serial.write("R\r\n")
         response=self.serial.readline()
@@ -1201,7 +1204,7 @@ class VCO2_Instrument(CO2_Sensor):
 class CAPS_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
         # Call base class constructor
-        NOX_Sensor.__init__(self,'caps',all_peaks,influx_client)
+        NOX_Sensor.__init__(self,'caps',all_peaks,influx_client,30,10)
         self.serial=serialGeneric("/dev/ttyUSB_nox_caps",9600)  ##caps
 
     def get_values(self):
@@ -1226,7 +1229,7 @@ class CAPS_Instrument(NOX_Sensor):
 class UCB_Instrument(NOX_Sensor):
     def __init__(self,all_peaks,influx_client):
         # Call base class instructor
-        NOX_Sensor.__init__(self,'ucb',all_peaks,influx_client)
+        NOX_Sensor.__init__(self,'ucb',all_peaks,influx_client,30,10)
         self.serial= serial.Serial (port='/dev/ttyUSB_nox_ucb',
                 baudrate=9600,
                 timeout = 1,

@@ -52,7 +52,7 @@ def main():
 
     fields_list = ["AP_count","test_field"]
     test_client = Influx_Dataframe_Client(conf_file,'DB_config')
-    database='ef_test_1'
+    database='ef_test_4'
     df_list = []
 
     query_string = "select * from co2"
