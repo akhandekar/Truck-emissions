@@ -979,7 +979,6 @@ class NOX_Sensor:
             self.polluting = True
             self.yp.append(nox_value)
             self.polution_times.append(float(time_stamp)/float(1000000000))
-            if len(self.polution_times) > 30:
 
 
 # BC instruments
