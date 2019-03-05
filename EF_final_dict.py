@@ -665,6 +665,8 @@ class CO2_Sensor:
 
             #self.xs.append(time_str8)
             self.ys.append(co2_value)
+            print("run_avg is: " + str(run_avg) + " for " +self.sensor_name)
+            print("threshold is: " + str(self.thresh_co2))
 
 
             if co2_value < self.thresh_co2:
@@ -778,8 +780,7 @@ class CO2_Sensor:
                 self.polluting = False
                 self.ynp.append(co2_value)
                 self.first_time = float(time_stamp) / float(1000000000)
-                print("run_avg is: " + str(run_avg) + " for " +self.sensor_name)
-                print("threshold is: " + str(self.thresh_co2))
+
 
             else:
                 # Pollution event
