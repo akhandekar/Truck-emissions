@@ -1,5 +1,5 @@
 DB_config:
-    host: 131.243.31.235
+    host: 192.168.1.17
     database: ef_test_4
     protocol: json
     port: 8086
