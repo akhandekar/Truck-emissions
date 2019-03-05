@@ -589,7 +589,7 @@ class BC_Sensor:
                 self.polution_times.append(float(time_stamp)/float(1000000000))
 
 class CO2_Sensor:
-    def __init__(self,sensor_name,all_peaks,influx_client,self.peak_size,window_size):
+    def __init__(self,sensor_name,all_peaks,influx_client,peak_size,window_size):
         self.sensor_name = sensor_name
         self.time_values = []
         self.co2_values = []
