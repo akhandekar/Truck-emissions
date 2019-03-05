@@ -10,7 +10,7 @@ import datetime######################## MAIN ########################
 import pytz
 import hashlib
 import argparse
-import configparser
+#import configparser
 import subprocess
 import numpy as np
 from datetime import datetime
