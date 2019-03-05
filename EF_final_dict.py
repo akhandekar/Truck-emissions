@@ -399,6 +399,7 @@ class BC_Sensor:
         self.time_values = []
         self.bc_values = []
         self.avg_window = window_size
+        self.peak_size = peak_size
 
         self.influx_client = influx_client
 
@@ -805,6 +806,7 @@ class NOX_Sensor:
 
         self.influx_client = influx_client
         self.avg_window = window_size
+        self.peak_size = peak_size
 
         # Timestamps for all data
         self.xs = []
