@@ -11,7 +11,7 @@ import argparse
 import peakutils
 
 stop_requested = False # Condition flag for keyboard interrupt
-bc_correction = 0.88 # going to place this in the config file
+bc_correction = 0.64 # going to place this in the config file
 
 def serialGeneric(device,baudrate):
     ser = serial.Serial (port=device,
