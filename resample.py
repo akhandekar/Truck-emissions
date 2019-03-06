@@ -41,10 +41,13 @@ def main():
     # read arguments passed at .py file call
     parser = argparse.ArgumentParser()
     parser.add_argument("config", help="Need to specify config file, see example_server.ini")
-
+    parser.add_argument("time_start", help="Need to specify time start")
+    parser.add_argument("time_end", help="Need to specify time end")
 
     args = parser.parse_args()
     conf_file = args.config
+    time_start = args.time_start
+    time_end = args.time_end
     bc_sensors = ['abcd','ae16','ae33','ma300']
 
     co2_sensors = ['li820','li7000','sba5','vco2']
@@ -56,6 +59,10 @@ def main():
     df_list = []
 
     query_string = "select * from co2"
+    query_string = query_string + " where time > "
+    query_string = query_string + time_start
+    query_string = query_string + " and time < "
+    query_string = query_string + time_end
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     i=0
@@ -85,6 +92,10 @@ def main():
         i +=1
 
     query_string = "select * from nox"
+    query_string = query_string + " where time > "
+    query_string = query_string + time_start
+    query_string = query_string + " and time < "
+    query_string = query_string + time_end
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     for sensor_name in  nox_sensors:
@@ -112,6 +123,10 @@ def main():
         i +=1
 
     query_string = "select * from bc"
+    query_string = query_string + " where time > "
+    query_string = query_string + time_start
+    query_string = query_string + " and time < "
+    query_string = query_string + time_end
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     for sensor_name in  bc_sensors:
