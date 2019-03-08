@@ -63,6 +63,7 @@ def main():
     query_string = query_string + time_start
     query_string = query_string + " and time < "
     query_string = query_string + time_end
+    print(query_string)
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     i=0
@@ -96,6 +97,7 @@ def main():
     query_string = query_string + time_start
     query_string = query_string + " and time < "
     query_string = query_string + time_end
+    print(query_string)
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     for sensor_name in  nox_sensors:
@@ -127,6 +129,7 @@ def main():
     query_string = query_string + time_start
     query_string = query_string + " and time < "
     query_string = query_string + time_end
+    print(query_string)
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     for sensor_name in  bc_sensors:
