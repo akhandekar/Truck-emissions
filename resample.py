@@ -43,11 +43,12 @@ def main():
     parser.add_argument("config", help="Need to specify config file, see example_server.ini")
     parser.add_argument("time_start", help="Need to specify time start")
     parser.add_argument("time_end", help="Need to specify time end")
-
+    parser.add_argument("filename", help="Filename to put data in")
     args = parser.parse_args()
     conf_file = args.config
     time_start = args.time_start
     time_end = args.time_end
+    file_name = args.file_name
     bc_sensors = ['abcd','ae16','ae33','ma300']
 
     co2_sensors = ['li820','li7000','sba5','vco2']
@@ -118,10 +119,10 @@ def main():
         #print(json)
         df_list.append(pd.DataFrame.from_dict(json, orient='columns'))
         #df.to_csv(sensor_name + '.csv')
-        print(df_list[i].head())
+        #print(df_list[i].head())
         df_list[i] = df_list[i].set_index('time')
         df_list[i] = df_list[i].resample('1S').mean()
-        print(df_list[i].head())
+        #print(df_list[i].head())
         i +=1
 
     query_string = "select * from bc"
@@ -129,7 +130,7 @@ def main():
     query_string = query_string + time_start
     query_string = query_string + " and time < "
     query_string = query_string + time_end
-    print(query_string)
+    #print(query_string)
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
     for sensor_name in  bc_sensors:
@@ -150,10 +151,10 @@ def main():
         #print(json)
         df_list.append(pd.DataFrame.from_dict(json, orient='columns'))
         #df.to_csv(sensor_name + '.csv')
-        print(df_list[i].head())
+        #print(df_list[i].head())
         df_list[i] = df_list[i].set_index('time')
         df_list[i] = df_list[i].resample('1S').mean()
-        print(df_list[i].head())
+        #print(df_list[i].head())
         i +=1
 
 
@@ -164,6 +165,7 @@ def main():
         df_collection = pd.concat([df_collection, df_i], axis=1)
 
     print(df_collection.head(100))
+    df_collection.to_csv(filename)
 
     return
 
