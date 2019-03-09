@@ -61,9 +61,9 @@ def main():
 
     query_string = "select * from co2"
     query_string = query_string + " where time > "
-    query_string = query_string + time_start
+    query_string = query_string + time_start + "000000000"
     query_string = query_string + " and time < "
-    query_string = query_string + time_end
+    query_string = query_string + time_end + "000000000"
     print(query_string)
     iflux_result = test_client.query(query_string,database)
     iflux_gen = iflux_result.get_points()
