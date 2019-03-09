@@ -47,7 +47,9 @@ def main():
     args = parser.parse_args()
     conf_file = args.config
     time_start = args.time_start
+    time_start = time_start + "000000000"
     time_end = args.time_end
+    time_end = time_end + "000000000"
     file_name = args.file_name
     bc_sensors = ['abcd','ae16','ae33','ma300']
 
