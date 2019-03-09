@@ -43,7 +43,7 @@ def main():
     parser.add_argument("config", help="Need to specify config file, see example_server.ini")
     parser.add_argument("time_start", help="Need to specify time start")
     parser.add_argument("time_end", help="Need to specify time end")
-    parser.add_argument("filename", help="Filename to put data in")
+    parser.add_argument("file_name", help="Filename to put data in")
     args = parser.parse_args()
     conf_file = args.config
     time_start = args.time_start
