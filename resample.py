@@ -165,7 +165,7 @@ def main():
         df_collection = pd.concat([df_collection, df_i], axis=1)
 
     print(df_collection.head(100))
-    df_collection.to_csv(filename)
+    df_collection.to_csv(file_name)
 
     return
 
